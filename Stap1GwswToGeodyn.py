@@ -16,6 +16,9 @@ from qgis.core import QgsProcessingLayerPostProcessorInterface
 import processing
 import string
 import random
+# set defaults
+from processing.core.ProcessingConfig import ProcessingConfig
+default_BemalingsgebiedenTbvStap2Bem_id = r'ogr:dbname={}BemalingsgebiedenTbvStap2.gpkg table="native:fieldcalculator_1:bemalingsgebieden tbv stap 2 - bem_id" (geom)'.format(ProcessingConfig.getSetting('OUTPUTS_FOLDER'))
 
 
 class Renamer (QgsProcessingLayerPostProcessorInterface):
@@ -37,7 +40,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer_10m', 'Rioolstelsel_buffer_10m', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('LeidingenNietMeegenomen', 'leidingen niet meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindpunten', 'Eindpunten', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('BemalingsgebiedenTbvStap2Bem_id', 'BEMALINGSGEBIEDEN TBV STAP 2 - BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('BemalingsgebiedenTbvStap2Bem_id', 'BEMALINGSGEBIEDEN TBV STAP 2 - BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=default_BemalingsgebiedenTbvStap2Bem_id))
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer', 'rioolstelsel_buffer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GebiedsgegevensStap1AllAtt', 'Gebiedsgegevens - stap1 - all att', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GemengdeEnVuilwaterstelsels', 'Gemengde en vuilwaterstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))

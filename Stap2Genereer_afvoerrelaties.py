@@ -15,6 +15,10 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterFile,
                        QgsProcessingParameterVectorLayer)
+# set defaults
+import os, inspect
+cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
+default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
 
 
 class Renamer (QgsProcessingLayerPostProcessorInterface):
@@ -30,7 +34,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
+        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'gebiedsgegevens_lijn', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties', 'Bemalingsgebieden_met_afvoerrelaties', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar', 'VAN_NAAR', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))

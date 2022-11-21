@@ -13,7 +13,12 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterFeatureSource,
                        QgsProcessingParameterFile,
-                       QgsProcessingParameterVectorLayer)
+                       QgsProcessingParameterVectorLayer,
+                       QgsProject)
+# set defaults
+import os, inspect
+cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
+default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
 
 
 class Renamer (QgsProcessingLayerPostProcessorInterface):
@@ -30,7 +35,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('input', 'Bemalingsgebieden met afvoerrelaties', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
+        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterFeatureSource('inputplancap', 'Input Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves (2)', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
@@ -43,6 +48,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
+        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(25, model_feedback)
         results = {}
         outputs = {}
@@ -220,6 +226,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
+        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # calc fields onderbemaling '03_obm'
         alg_params = {
             'alleendirecteonderbemaling': False,
@@ -337,6 +344,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
+        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # calc fields onderbemaling '09_obm'
         alg_params = {
             'alleendirecteonderbemaling': False,
