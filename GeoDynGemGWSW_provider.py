@@ -49,6 +49,7 @@ from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
 from .Stap3BerekenAfvalwaterprognose import Stap3BerekenAfvalwaterprognose
 from .StapAllemaal import GeodynAlleStappen
 from .StapKoppelBgtinlooptabel import KoppelBgtinlooptabel
+from .StapKoppelOverigeBronnen import KoppelOverigeBronnen
 
 
 class GeoDynGemGWSWProvider(QgsProcessingProvider):
@@ -81,6 +82,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         self.addAlgorithm(CustomToolsBerekenOnderbemalingAlgorithm())
         self.addAlgorithm(CustomToolsVervangNoneDoor0Algorithm())
         self.addAlgorithm(KoppelBgtinlooptabel())
+        self.addAlgorithm(KoppelOverigeBronnen())
         ##self.addAlgorithm(GwswGeodynStap1())
 
         # add additional algorithms here

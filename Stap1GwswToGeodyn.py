@@ -12,13 +12,13 @@ from qgis.core import QgsProcessingParameterMapLayer
 from qgis.core import QgsProcessingParameterNumber
 from qgis.core import QgsProcessingParameterFile
 from qgis.core import QgsProcessingParameterFeatureSink
-from qgis.core import QgsProcessingLayerPostProcessorInterface
+from qgis.core import QgsProcessingLayerPostProcessorInterface, QgsProject
 import processing
 import string
 import random
 # set defaults
 from processing.core.ProcessingConfig import ProcessingConfig
-default_BemalingsgebiedenTbvStap2Bem_id = r'ogr:dbname={}BemalingsgebiedenTbvStap2.gpkg table="native:fieldcalculator_1:bemalingsgebieden tbv stap 2 - bem_id" (geom)'.format(ProcessingConfig.getSetting('OUTPUTS_FOLDER'))
+##default_Bemalingsgebieden_tbv_stap2 = r'ogr:dbname={}BemalingsgebiedenTbvStap2.gpkg table="native:fieldcalculator_1:bemalingsgebieden tbv stap 2 - bem_id" (geom)'.format(ProcessingConfig.getSetting('OUTPUTS_FOLDER'))
 
 
 class Renamer (QgsProcessingLayerPostProcessorInterface):
@@ -40,16 +40,17 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer_10m', 'Rioolstelsel_buffer_10m', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('LeidingenNietMeegenomen', 'leidingen niet meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindpunten', 'Eindpunten', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('BemalingsgebiedenTbvStap2Bem_id', 'BEMALINGSGEBIEDEN TBV STAP 2 - BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=default_BemalingsgebiedenTbvStap2Bem_id))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_tbv_stap2', 'BEMALINGSGEBIEDEN TBV STAP 2 - BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer', 'rioolstelsel_buffer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GebiedsgegevensStap1AllAtt', 'Gebiedsgegevens - stap1 - all att', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GemengdeEnVuilwaterstelsels', 'Gemengde en vuilwaterstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn', 'Gebiedsgegevens_lijn', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_tbv_stap2', 'Gebiedsgegevens_lijn_tbv_stap2', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_puntStap1', 'Gebiedsgegevens_punt - STAP 1', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
+        QgsProject.instance().reloadAllLayers() 
         feedback = QgsProcessingMultiStepFeedback(91, model_feedback)
         results = {}
         outputs = {}
@@ -264,10 +265,10 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
             'FIELD_TYPE': 2,  # String
             'FORMULA': "'BEM' || lpad( $id ,3,0)",
             'INPUT': outputs['FixGeometriesBemalingsgebieden']['OUTPUT'],
-            'OUTPUT': parameters['BemalingsgebiedenTbvStap2Bem_id']
+            'OUTPUT': parameters['Bemalingsgebieden_tbv_stap2']
         }
         outputs['FieldCalculatorBem_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['BemalingsgebiedenTbvStap2Bem_id'] = outputs['FieldCalculatorBem_id']['OUTPUT']
+        results['Bemalingsgebieden_tbv_stap2'] = outputs['FieldCalculatorBem_id']['OUTPUT']
 
         feedback.setCurrentStep(17)
         if feedback.isCanceled():
@@ -609,10 +610,10 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         alg_params = {
             'COLUMN': ['geo_id','Stelsel','naam','type','begin','eind','BreedteOpening','HoogteOpening','VormOpening','Doorlaatniveau','Contractiecoef','MaxCapDoorlaat','Pompcapaciteit','AanslagniveauBeneden','AfslagniveauBeneden','AanslagniveauBoven','AfslagniveauBoven','Drempelbreedte','Drempelniveau','Buitenwaterstand','Stromingsrichting','geo_id_2','Stelsel_2','naam_2','type_2','Maaiveldhoogte','Maaiveldschematisering','MateriaalPut','VormPut','BreedtePut','LengtePut','HoogtePut',''],
             'INPUT': outputs['FieldCalculatorTtotaal_m3']['OUTPUT'],
-            'OUTPUT': parameters['Gebiedsgegevens_lijn']
+            'OUTPUT': parameters['Gebiedsgegevens_lijn_tbv_stap2']
         }
         outputs['DropFieldsGebiedsgegevensLijn'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Gebiedsgegevens_lijn'] = outputs['DropFieldsGebiedsgegevensLijn']['OUTPUT']
+        results['Gebiedsgegevens_lijn_tbv_stap2'] = outputs['DropFieldsGebiedsgegevensLijn']['OUTPUT']
 
         feedback.setCurrentStep(41)
         if feedback.isCanceled():

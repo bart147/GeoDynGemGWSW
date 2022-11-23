@@ -14,7 +14,8 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingMultiStepFeedback,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterFile,
-                       QgsProcessingParameterVectorLayer)
+                       QgsProcessingParameterVectorLayer,
+                       QgsProject)
 # set defaults
 import os, inspect
 cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
@@ -33,10 +34,10 @@ class Renamer (QgsProcessingLayerPostProcessorInterface):
 class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('Bemalingsgebieden_tbv_stap2', 'Bemalingsgebieden_tbv_stap2', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
-        self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'gebiedsgegevens_lijn', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties', 'Bemalingsgebieden_met_afvoerrelaties', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'Gebiedsgegevens_lijn_tbv_stap2', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar', 'VAN_NAAR', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_selectie', 'Gebiedsgegevens_lijn_selectie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindpunten_in_eindgebied_selected', 'eindpunten_in_eindgebied_selected', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
@@ -47,6 +48,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
+        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(23, model_feedback)
         results = {}
         outputs = {}
@@ -54,7 +56,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         # Point on surface BEM
         alg_params = {
             'ALL_PARTS': False,
-            'INPUT': parameters['bemalingsgebieden'],
+            'INPUT': parameters['Bemalingsgebieden_tbv_stap2'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['PointOnSurfaceBem'] = processing.run('native:pointonsurface', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
@@ -120,7 +122,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'INPUT': outputs['ExtractEindpunt']['OUTPUT'],
-            'JOIN': parameters['bemalingsgebieden'],
+            'JOIN': parameters['Bemalingsgebieden_tbv_stap2'],
             'JOIN_FIELDS': ['BEM_ID'],
             'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
             'PREDICATE': [0],  # intersects
@@ -137,7 +139,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'INPUT': outputs['ExtractBeginpunt']['OUTPUT'],
-            'JOIN': parameters['bemalingsgebieden'],
+            'JOIN': parameters['Bemalingsgebieden_tbv_stap2'],
             'JOIN_FIELDS': ['BEM_ID'],
             'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
             'PREDICATE': [0],  # intersects
@@ -230,7 +232,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         # Join bemalingsgebieden to afvoer_selectie
         alg_params = {
             'DISCARD_NONMATCHING': False,
-            'INPUT': parameters['bemalingsgebieden'],
+            'INPUT': parameters['Bemalingsgebieden_tbv_stap2'],
             'JOIN': outputs['DeleteDuplicatesByAttributeVan_naar']['OUTPUT'],
             'JOIN_FIELDS': [''],
             'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
@@ -288,7 +290,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         # Join attributes by location
         alg_params = {
             'DISCARD_NONMATCHING': False,
-            'INPUT': parameters['bemalingsgebieden'],
+            'INPUT': parameters['Bemalingsgebieden_tbv_stap2'],
             'JOIN': outputs['DeleteDuplicatesByAttributeVan_naar']['OUTPUT'],
             'JOIN_FIELDS': ['VAN_KNOOPN','NAAR_KNOOP','NAAR_BEM_ID'],
             'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
@@ -390,10 +392,10 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         # lis2graph
         alg_params = {
             'inputlayer': outputs['AddFieldsSt1a']['Output_layer'],
-            'Output_layer': parameters['Bemalingsgebieden_met_afvoerrelaties']
+            'Output_layer': parameters['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3']
         }
         outputs['Lis2graph'] = processing.run('GeoDynTools:lis2graph', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Bemalingsgebieden_met_afvoerrelaties'] = outputs['Lis2graph']['Output_layer']
+        results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['Lis2graph']['Output_layer']
 
         # this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
@@ -405,6 +407,11 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
                 feedback.pushInfo("rename layer to {}".format(key))
                 globals()[global_key] = Renamer(key) #create unique global renamer instances
                 context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
+
+                # feedback.pushInfo("rename layer to {}".format(key))
+                # global renamer
+                # renamer = Renamer(key)
+                # context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(renamer)
 
         return results
 
