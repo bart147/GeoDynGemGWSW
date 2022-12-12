@@ -40,18 +40,19 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (2)', 'GWSW verbindingen', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (2) (2)', 'BGT inlooptabel', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (2) (2) (2)', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
-        self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3)', "VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3)', "VE's", types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3) (2)', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields_csv', behavior=QgsProcessingParameterFile.File, fileFilter='All Files (*.*)', defaultValue=default_inp_fields))
-        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_tbv_stap2', 'bemalingsgebieden_tbv_stap2', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields_csv', behavior=QgsProcessingParameterFile.File, fileFilter='All Files (*.*)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
         self.addParameter(QgsProcessingParameterFeatureSink('Leidingen_niet_meegenomen', 'leidingen_niet_meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Rioolgemalen_geselecteerd', 'rioolgemalen_geselecteerd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer_10m_buffer', 'rioolstelsel_buffer_10m_buffer', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelaties', 'afvoerrelaties', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelaties_bemalingsgebieden', 'afvoerrelaties_bemalingsgebieden', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelaties_knooppunten', 'afvoerrelaties_knooppunten', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Rioolgemalen_gekoppeld', 'rioolgemalen_gekoppeld', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bgt_intersect', 'bgt_intersect', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat', 'eindresultaat', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Plancap_overlap', 'plancap_overlap', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-    
+        self.addParameter(QgsProcessingParameterFeatureSink('Meerdere_plancaps_in_bemalingsgebied', 'meerdere_plancaps_in_bemalingsgebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Plancap_in_meerdere_bemalingsgebieden', 'plancap_in_meerdere_bemalingsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
@@ -67,7 +68,7 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'GWSWnetwerkkunstwerk': parameters['inputbemalingsgebieden (2) (2)'],
             'MaxzoekafstandRG': 3,
             'netwerkverbinding': parameters['inputbemalingsgebieden (2) (2) (2)'],
-            'Bemalingsgebieden_tbv_stap2': parameters['Bemalingsgebieden_tbv_stap2'],
+            'Bemalingsgebieden_tbv_stap2': QgsProcessing.TEMPORARY_OUTPUT,
             'Eindpunten': QgsProcessing.TEMPORARY_OUTPUT,
             'GebiedsgegevensStap1AllAtt': QgsProcessing.TEMPORARY_OUTPUT,
             'Gebiedsgegevens_lijn_tbv_stap2': QgsProcessing.TEMPORARY_OUTPUT,
@@ -79,7 +80,6 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
         }
         alg_params['keepName'] = True
         outputs['Stap1GwswToGeodyn'] = processing.run('GeoDynTools:stap 1.) GWSW to Geodyn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Bemalingsgebieden_tbv_stap2'] = outputs['Stap1GwswToGeodyn']['Bemalingsgebieden_tbv_stap2']
         results['Leidingen_niet_meegenomen'] = outputs['Stap1GwswToGeodyn']['LeidingenNietMeegenomen']
         results['Rioolstelsel_buffer_10m_buffer'] = outputs['Stap1GwswToGeodyn']['Rioolstelsel_buffer_10m']
 
@@ -89,24 +89,22 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
 
         # stap 2.) genereer_afvoerrelaties
         alg_params = {
-            'Eindpunten': 'TEMPORARY_OUTPUT',
             'bemalingsgebieden': outputs['Stap1GwswToGeodyn']['Bemalingsgebieden_tbv_stap2'],
             'gebiedsgegevenspunttbvstap2': outputs['Stap1GwswToGeodyn']['Gebiedsgegevens_punt_tbv_stap2'],
             'inputfieldscsv': parameters['inputfieldscsv'],
             'leidingen': outputs['Stap1GwswToGeodyn']['Gebiedsgegevens_lijn_tbv_stap2'],
-            'Afvoerboom': QgsProcessing.TEMPORARY_OUTPUT,
-            'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3': parameters['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'],
-            'Eindpunten': QgsProcessing.TEMPORARY_OUTPUT,
+            'Afvoerboom': parameters['Afvoerrelaties_bemalingsgebieden'],
+            'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3': QgsProcessing.TEMPORARY_OUTPUT,
             'Eindpunten_in_eindgebied_selected': QgsProcessing.TEMPORARY_OUTPUT,
-            'Gebiedsgegevens_lijn_selectie': parameters['Afvoerrelaties'],
+            'Gebiedsgegevens_lijn_selectie': parameters['Afvoerrelaties_knooppunten'],
             'Van_naar': QgsProcessing.TEMPORARY_OUTPUT,
-            'Van_naar_sel': parameters['Rioolgemalen_geselecteerd']
+            'Van_naar_sel': parameters['Rioolgemalen_gekoppeld']
         }
         alg_params['keepName'] = True
         outputs['Stap2Genereer_afvoerrelaties'] = processing.run('GeoDynTools:stap 2.) genereer_afvoerrelaties', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['Stap2Genereer_afvoerrelaties']['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3']
-        results['Afvoerrelaties'] = outputs['Stap2Genereer_afvoerrelaties']['Gebiedsgegevens_lijn_selectie']
-        results['Rioolgemalen_geselecteerd'] = outputs['Stap2Genereer_afvoerrelaties']['Van_naar_sel']
+        results['Afvoerrelaties_bemalingsgebieden'] = outputs['Stap2Genereer_afvoerrelaties']['Afvoerboom']
+        results['Afvoerrelaties_knooppunten'] = outputs['Stap2Genereer_afvoerrelaties']['Gebiedsgegevens_lijn_selectie']
+        results['Rioolgemalen_gekoppeld'] = outputs['Stap2Genereer_afvoerrelaties']['Van_naar_sel']
 
         feedback.setCurrentStep(2)
         if feedback.isCanceled():
@@ -116,18 +114,22 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
         alg_params = {
             'bemalingsgebiedenstats': outputs['Stap2Genereer_afvoerrelaties']['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'],
             'bgtinlooptabel': parameters['inputbemalingsgebieden (2) (2) (2) (2)'],
-            'inputdrinkwater': 'Drinkwaterverbruik_BAG_Object_2019_499b9dd2_7bdf_4afe_88f5_9d5fab2722ae',
+            'inputdrinkwater': parameters['inputbemalingsgebieden (2) (2) (3) (2)'],
             'inputfieldscsv': parameters['inputfieldscsv'],
             'inputplancap': parameters['inputbemalingsgebieden (2) (2) (2) (2) (2)'],
             'inputves': parameters['inputbemalingsgebieden (2) (2) (3)'],
-            'vesmeenemen': False,
-            'Plancap_overlap': parameters['Plancap_overlap'],
+            'Bgt_intersect': parameters['Bgt_intersect'],
+            'Meerdere_plancaps_in_bemalingsgebied': parameters['Meerdere_plancaps_in_bemalingsgebied'],
+            'Plancap_in_meerdere_bemalingsgebieden': parameters['Plancap_in_meerdere_bemalingsgebieden'],
             'Result': parameters['Eindresultaat']
         }
         alg_params['keepName'] = True
         outputs['Stap3BerekenAfvalwaterprognose'] = processing.run('GeoDynTools:stap 3.) bereken afvalwaterprognose', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bgt_intersect'] = outputs['Stap3BerekenAfvalwaterprognose']['Bgt_intersect']
         results['Eindresultaat'] = outputs['Stap3BerekenAfvalwaterprognose']['Result']
-        results['Plancap_overlap'] = outputs['Stap3BerekenAfvalwaterprognose']['Plancap_overlap']
+        results['Meerdere_plancaps_in_bemalingsgebied'] = outputs['Stap3BerekenAfvalwaterprognose']['Meerdere_plancaps_in_bemalingsgebied']
+        results['Plancap_in_meerdere_bemalingsgebieden'] = outputs['Stap3BerekenAfvalwaterprognose']['Plancap_in_meerdere_bemalingsgebieden']
+
 
         # --- add below each alg_params {} 
         # alg_params['keepName'] = True

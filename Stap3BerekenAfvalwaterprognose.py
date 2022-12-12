@@ -37,12 +37,13 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        ##self.addParameter(QgsProcessingParameterBoolean('vesmeenemen', "VE's meenemen", defaultValue=False))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterFeatureSink('Result', 'result', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Plancap_overlap', 'Plancap_overlap', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bgt_intersect', 'bgt_intersect', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Meerdere_plancaps_in_bemalingsgebied', 'meerdere_plancaps_in_bemalingsgebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Plancap_in_meerdere_bemalingsgebieden', 'plancap_in_meerdere_bemalingsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -54,20 +55,20 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
 
         # koppel overige bronnen
         alg_params = {
-            ##'hasve': parameters['vesmeenemen'],
             'input': parameters['bemalingsgebiedenstats'],
             'inputplancap': parameters['inputplancap'],
             'inputves': parameters['inputves'],
             'inputves (2)': parameters['inputdrinkwater'],
             'Bemalingsgebieden_joined_stats': QgsProcessing.TEMPORARY_OUTPUT,
-            'Plancap_overlap': parameters['Plancap_overlap'],
+            'Meerdere_plancaps_in_bemalingsgebied': parameters['Meerdere_plancaps_in_bemalingsgebied'],
+            'Plancap_in_meerdere_bemalingsgebieden': parameters['Plancap_in_meerdere_bemalingsgebieden'],
             'Stats_drinkwater': QgsProcessing.TEMPORARY_OUTPUT,
             'Stats_plancap': QgsProcessing.TEMPORARY_OUTPUT,
             'Stats_ve': QgsProcessing.TEMPORARY_OUTPUT
         }
-        alg_params['keepName'] = True
         outputs['KoppelOverigeBronnen'] = processing.run('GeoDynTools:koppel overige bronnen', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Plancap_overlap'] = outputs['KoppelOverigeBronnen']['Plancap_overlap']
+        results['Meerdere_plancaps_in_bemalingsgebied'] = outputs['KoppelOverigeBronnen']['Meerdere_plancaps_in_bemalingsgebied']
+        results['Plancap_in_meerdere_bemalingsgebieden'] = outputs['KoppelOverigeBronnen']['Plancap_in_meerdere_bemalingsgebieden']
 
         feedback.setCurrentStep(1)
         if feedback.isCanceled():
@@ -113,16 +114,28 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
+        # vervang alle None-waarden met 0 voor velden in lijst
+        alg_params = {
+            'inputlayer': outputs['CalcFieldsOnderbemaling03_obm']['Output_layer'],
+            'veldenlijst': 'X_WON_ONBG;X_WON_GEB;X_VE_ONBG;X_VE_GEB;DWR_GEBIED;DWR_ONBG;PAR_RESULT;ZAK_RESULT;AW_21_24_G;AW_25_29_G;AW_30_39_G;AW_40_50_G;AW_21_24_O;AW_25_29_O;AW_30_39_O;AW_40_50_O;AantalPompen;AantalOverstorten;AantalDoorlaaten;AantalStrengen;AantalKnopen',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['VervangAlleNonewaardenMet0VoorVeldenInLijst'] = processing.run('GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(5)
+        if feedback.isCanceled():
+            return {}
+
         # calc fields '04_ber'
         alg_params = {
             'inputfields': parameters['inputfieldscsv'],
-            'inputlayer': outputs['CalcFieldsOnderbemaling03_obm']['Output_layer'],
+            'inputlayer': outputs['VervangAlleNonewaardenMet0VoorVeldenInLijst']['Output_layer'],
             'uittevoerenstapininputfields': '04_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['CalcFields04_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(5)
+        feedback.setCurrentStep(6)
         if feedback.isCanceled():
             return {}
 
@@ -135,7 +148,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields04a_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(6)
+        feedback.setCurrentStep(7)
         if feedback.isCanceled():
             return {}
 
@@ -148,7 +161,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields05_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(7)
+        feedback.setCurrentStep(8)
         if feedback.isCanceled():
             return {}
 
@@ -156,12 +169,13 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         alg_params = {
             'input': outputs['CalcFields05_ber']['Output_layer'],
             'inputves (2)': parameters['bgtinlooptabel'],
-            'Bgt_intersect': QgsProcessing.TEMPORARY_OUTPUT,
+            'Bgt_intersect': parameters['Bgt_intersect'],
             'Bgt_intersect_stats': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['KoppelBgtinlooptabel'] = processing.run('GeoDynTools:koppel bgtInlooptabel', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bgt_intersect'] = outputs['KoppelBgtinlooptabel']['Bgt_intersect']
 
-        feedback.setCurrentStep(8)
+        feedback.setCurrentStep(9)
         if feedback.isCanceled():
             return {}
 
@@ -174,7 +188,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields06_bgt'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(9)
+        feedback.setCurrentStep(10)
         if feedback.isCanceled():
             return {}
 
@@ -186,7 +200,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['VervangAlleNonewaardenMet0VoorBgtVelden'] = processing.run('GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(10)
+        feedback.setCurrentStep(11)
         if feedback.isCanceled():
             return {}
 
@@ -199,7 +213,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields07_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(11)
+        feedback.setCurrentStep(12)
         if feedback.isCanceled():
             return {}
 
@@ -212,7 +226,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields08_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(12)
+        feedback.setCurrentStep(13)
         if feedback.isCanceled():
             return {}
 
@@ -226,7 +240,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFieldsOnderbemaling09_obm'] = processing.run('GeoDynTools:calc fields onderbemaling', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(13)
+        feedback.setCurrentStep(14)
         if feedback.isCanceled():
             return {}
 
@@ -240,7 +254,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFieldsOnderbemaling09_obm_1n'] = processing.run('GeoDynTools:calc fields onderbemaling', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(14)
+        feedback.setCurrentStep(15)
         if feedback.isCanceled():
             return {}
 
@@ -252,7 +266,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['VervangAlleNonewaardenMet0VoorPoc'] = processing.run('GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(15)
+        feedback.setCurrentStep(16)
         if feedback.isCanceled():
             return {}
 
@@ -265,7 +279,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields10_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(16)
+        feedback.setCurrentStep(17)
         if feedback.isCanceled():
             return {}
 

@@ -42,7 +42,6 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar', 'VAN_NAAR', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_selectie', 'Gebiedsgegevens_lijn_selectie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindpunten_in_eindgebied_selected', 'eindpunten_in_eindgebied_selected', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Eindpunten', 'Eindpunten', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
         self.addParameter(QgsProcessingParameterFeatureSink('Afvoerboom', 'afvoerboom', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar_sel', 'VAN_NAAR_SEL', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
@@ -98,10 +97,9 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         alg_params = {
             'INPUT': outputs['FieldCalculatorLineid']['OUTPUT'],
             'VERTICES': '-1',
-            'OUTPUT': parameters['Eindpunten']
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['ExtractEindpunt'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Eindpunten'] = outputs['ExtractEindpunt']['OUTPUT']
 
         feedback.setCurrentStep(4)
         if feedback.isCanceled():
@@ -216,7 +214,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
             return {}
 
         # Delete duplicates by attribute VAN_NAAR
-        # Hier selecteren op langste stuk? 
+        # Hier selecteren op langste stuk?
         alg_params = {
             'FIELDS': ['VAN_NAAR'],
             'INPUT': outputs['OrderByLength']['OUTPUT'],
@@ -264,51 +262,6 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Join POS van naar data
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'BEM_ID',
-            'FIELDS_TO_COPY': ['lineID','VAN_BEM_ID','NAAR_BEM_ID','VAN_NAAR'],
-            'FIELD_2': 'VAN_BEM_ID',
-            'INPUT': outputs['PointOnSurfaceBem']['OUTPUT'],
-            'INPUT_2': outputs['JoinVanNaarDataAanLijnenDezeKoppelen']['OUTPUT'],
-            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinPosVanNaarData'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(15)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract afvoerlijnen selectie
-        alg_params = {
-            'INPUT': parameters['leidingen'],
-            'INTERSECT': outputs['DeleteDuplicatesByAttributeVan_naar']['OUTPUT'],
-            'PREDICATE': [0],  # intersect
-            'OUTPUT': parameters['Gebiedsgegevens_lijn_selectie']
-        }
-        outputs['ExtractAfvoerlijnenSelectie'] = processing.run('native:extractbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Gebiedsgegevens_lijn_selectie'] = outputs['ExtractAfvoerlijnenSelectie']['OUTPUT']
-
-        feedback.setCurrentStep(16)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract eindpunt in eindgebied 
-        alg_params = {
-            'INPUT': outputs['ExtractEindpunt']['OUTPUT'],
-            'INTERSECT': outputs['JoinBemalingsgebiedenToAfvoer_selectie']['NON_MATCHING'],
-            'PREDICATE': [0],  # intersect
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractEindpuntInEindgebied'] = processing.run('native:extractbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(17)
-        if feedback.isCanceled():
-            return {}
-
         # Join attributes by location
         alg_params = {
             'DISCARD_NONMATCHING': False,
@@ -322,19 +275,66 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         }
         outputs['JoinAttributesByLocation'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(15)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculate NAAR_BEM_ID if IS NULL
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'NAAR_BEM_ID',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': ' if( "NAAR_BEM_ID" IS NULL, "BEM_ID", "NAAR_BEM_ID")',
+            'INPUT': outputs['JoinAttributesByLocation']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculateNaar_bem_idIfIsNull'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(16)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract afvoerlijnen selectie
+        alg_params = {
+            'INPUT': parameters['leidingen'],
+            'INTERSECT': outputs['DeleteDuplicatesByAttributeVan_naar']['OUTPUT'],
+            'PREDICATE': [0],  # intersect
+            'OUTPUT': parameters['Gebiedsgegevens_lijn_selectie']
+        }
+        outputs['ExtractAfvoerlijnenSelectie'] = processing.run('native:extractbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Gebiedsgegevens_lijn_selectie'] = outputs['ExtractAfvoerlijnenSelectie']['OUTPUT']
+
+        feedback.setCurrentStep(17)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract eindpunt in eindgebied 
+        alg_params = {
+            'INPUT': outputs['ExtractEindpunt']['OUTPUT'],
+            'INTERSECT': outputs['JoinBemalingsgebiedenToAfvoer_selectie']['NON_MATCHING'],
+            'PREDICATE': [0],  # intersect
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractEindpuntInEindgebied'] = processing.run('native:extractbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(18)
         if feedback.isCanceled():
             return {}
 
-        # Extract eindpunten by afvoerselectie
+        # Join POS van naar data
         alg_params = {
-            'INPUT': outputs['ExtractEindpuntInEindgebied']['OUTPUT'],
-            'INTERSECT': outputs['ExtractAfvoerlijnenSelectie']['OUTPUT'],
-            'PREDICATE': [0],  # intersect
-            'OUTPUT': parameters['Eindpunten_in_eindgebied_selected']
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID',
+            'FIELDS_TO_COPY': ['lineID','VAN_BEM_ID','NAAR_BEM_ID','VAN_NAAR'],
+            'FIELD_2': 'VAN_BEM_ID',
+            'INPUT': outputs['PointOnSurfaceBem']['OUTPUT'],
+            'INPUT_2': outputs['JoinVanNaarDataAanLijnenDezeKoppelen']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['ExtractEindpuntenByAfvoerselectie'] = processing.run('native:extractbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Eindpunten_in_eindgebied_selected'] = outputs['ExtractEindpuntenByAfvoerselectie']['OUTPUT']
+        outputs['JoinPosVanNaarData'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(19)
         if feedback.isCanceled():
@@ -360,22 +360,6 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Field calculate NAAR_BEM_ID if IS NULL
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'NAAR_BEM_ID',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # String
-            'FORMULA': ' if( "NAAR_BEM_ID" IS NULL, "BEM_ID", "NAAR_BEM_ID")',
-            'INPUT': outputs['JoinAttributesByLocation']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculateNaar_bem_idIfIsNull'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(21)
-        if feedback.isCanceled():
-            return {}
-
         # add fields st1a
         alg_params = {
             'inputfields': parameters['inputfieldscsv'],
@@ -384,6 +368,20 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['AddFieldsSt1a'] = processing.run('GeoDynTools:add fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(21)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract eindpunten by afvoerselectie
+        alg_params = {
+            'INPUT': outputs['ExtractEindpuntInEindgebied']['OUTPUT'],
+            'INTERSECT': outputs['ExtractAfvoerlijnenSelectie']['OUTPUT'],
+            'PREDICATE': [0],  # intersect
+            'OUTPUT': parameters['Eindpunten_in_eindgebied_selected']
+        }
+        outputs['ExtractEindpuntenByAfvoerselectie'] = processing.run('native:extractbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Eindpunten_in_eindgebied_selected'] = outputs['ExtractEindpuntenByAfvoerselectie']['OUTPUT']
 
         feedback.setCurrentStep(22)
         if feedback.isCanceled():
@@ -404,7 +402,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'VAN_KNOOPN',
-            'FIELDS_TO_COPY': ['BERGING_M3','CAP_INST_M','LAAGSTE_OS','POMPEN_ST','OVERSTORT_','DOORLAAT_S','STRENGEN_S','KNOPEN_ST'],
+            'FIELDS_TO_COPY': [''],
             'FIELD_2': 'VAN_KNOOPN',
             'INPUT': outputs['Lis2graph']['Output_layer'],
             'INPUT_2': parameters['gebiedsgegevenspunttbvstap2'],
@@ -423,10 +421,22 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
             'inputfields': parameters['inputfieldscsv'],
             'inputlayer': outputs['JoinAttributesPuntByFieldVan_knoopn']['OUTPUT'],
             'uittevoerenstapininputfields': '01_gwsw',
-            'Output_layer': parameters['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3']
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['CalcFields01_gwswFromCsvInputFields'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['CalcFields01_gwswFromCsvInputFields']['Output_layer']
+
+        feedback.setCurrentStep(25)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s)
+        alg_params = {
+            'COLUMN': ['BEM_ID_2','distance_2','NUMMER','VAN_KNOOPN_2','NAAR_KNOOP_2'],
+            'INPUT': outputs['CalcFields01_gwswFromCsvInputFields']['Output_layer'],
+            'OUTPUT': parameters['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3']
+        }
+        outputs['DropFields'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['DropFields']['OUTPUT']
 
         # this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
