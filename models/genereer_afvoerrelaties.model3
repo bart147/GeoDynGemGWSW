@@ -48,6 +48,79 @@
         </Option>
       </Option>
     </Option>
+    <Option name="GeoDynTools:calc fields from csv input fields_1" type="Map">
+      <Option name="active" value="true" type="bool"/>
+      <Option name="alg_config"/>
+      <Option name="alg_id" value="GeoDynTools:calc fields from csv input fields" type="QString"/>
+      <Option name="color" value="" type="QString"/>
+      <Option name="comment" type="Map">
+        <Option name="color" value="" type="QString"/>
+        <Option name="component_description" value="" type="QString"/>
+        <Option name="component_height" value="60" type="double"/>
+        <Option name="component_pos_x" value="2435" type="double"/>
+        <Option name="component_pos_y" value="1594" type="double"/>
+        <Option name="component_width" value="100" type="double"/>
+        <Option name="outputs_collapsed" value="true" type="bool"/>
+        <Option name="parameters_collapsed" value="true" type="bool"/>
+      </Option>
+      <Option name="component_description" value="calc fields '01_gwsw' from csv input fields" type="QString"/>
+      <Option name="component_height" value="30" type="double"/>
+      <Option name="component_pos_x" value="2768.5" type="double"/>
+      <Option name="component_pos_y" value="1717.5" type="double"/>
+      <Option name="component_width" value="200" type="double"/>
+      <Option name="dependencies"/>
+      <Option name="id" value="GeoDynTools:calc fields from csv input fields_1" type="QString"/>
+      <Option name="outputs" type="Map">
+        <Option name="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="Map">
+          <Option name="child_id" value="GeoDynTools:calc fields from csv input fields_1" type="QString"/>
+          <Option name="color" value="" type="QString"/>
+          <Option name="comment" type="Map">
+            <Option name="color" value="" type="QString"/>
+            <Option name="component_description" value="" type="QString"/>
+            <Option name="component_height" value="60" type="double"/>
+            <Option name="component_pos_x" value="0" type="double"/>
+            <Option name="component_pos_y" value="0" type="double"/>
+            <Option name="component_width" value="100" type="double"/>
+            <Option name="outputs_collapsed" value="true" type="bool"/>
+            <Option name="parameters_collapsed" value="true" type="bool"/>
+          </Option>
+          <Option name="component_description" value="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="QString"/>
+          <Option name="component_height" value="30" type="double"/>
+          <Option name="component_pos_x" value="2933.5" type="double"/>
+          <Option name="component_pos_y" value="1791" type="double"/>
+          <Option name="component_width" value="200" type="double"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" value="false" type="bool"/>
+          <Option name="name" value="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="QString"/>
+          <Option name="output_name" value="Output_layer" type="QString"/>
+          <Option name="outputs_collapsed" value="true" type="bool"/>
+          <Option name="parameters_collapsed" value="true" type="bool"/>
+        </Option>
+      </Option>
+      <Option name="outputs_collapsed" value="true" type="bool"/>
+      <Option name="parameters_collapsed" value="true" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="inputfields" type="List">
+          <Option type="Map">
+            <Option name="parameter_name" value="inputfieldscsv" type="QString"/>
+            <Option name="source" value="0" type="int"/>
+          </Option>
+        </Option>
+        <Option name="inputlayer" type="List">
+          <Option type="Map">
+            <Option name="child_id" value="native:joinattributestable_4" type="QString"/>
+            <Option name="output_name" value="OUTPUT" type="QString"/>
+            <Option name="source" value="1" type="int"/>
+          </Option>
+        </Option>
+        <Option name="uittevoerenstapininputfields" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" value="01_gwsw" type="QString"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
     <Option name="GeoDynTools:lis2graph_1" type="Map">
       <Option name="active" value="true" type="bool"/>
       <Option name="alg_config"/>
@@ -70,33 +143,7 @@
       <Option name="component_width" value="200" type="double"/>
       <Option name="dependencies"/>
       <Option name="id" value="GeoDynTools:lis2graph_1" type="QString"/>
-      <Option name="outputs" type="Map">
-        <Option name="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="Map">
-          <Option name="child_id" value="GeoDynTools:lis2graph_1" type="QString"/>
-          <Option name="color" value="" type="QString"/>
-          <Option name="comment" type="Map">
-            <Option name="color" value="" type="QString"/>
-            <Option name="component_description" value="" type="QString"/>
-            <Option name="component_height" value="60" type="double"/>
-            <Option name="component_pos_x" value="0" type="double"/>
-            <Option name="component_pos_y" value="0" type="double"/>
-            <Option name="component_width" value="100" type="double"/>
-            <Option name="outputs_collapsed" value="true" type="bool"/>
-            <Option name="parameters_collapsed" value="true" type="bool"/>
-          </Option>
-          <Option name="component_description" value="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="QString"/>
-          <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="2580" type="double"/>
-          <Option name="component_pos_y" value="1582" type="double"/>
-          <Option name="component_width" value="200" type="double"/>
-          <Option name="default_value" type="invalid"/>
-          <Option name="mandatory" value="false" type="bool"/>
-          <Option name="name" value="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="QString"/>
-          <Option name="output_name" value="Output_layer" type="QString"/>
-          <Option name="outputs_collapsed" value="true" type="bool"/>
-          <Option name="parameters_collapsed" value="true" type="bool"/>
-        </Option>
-      </Option>
+      <Option name="outputs"/>
       <Option name="outputs_collapsed" value="true" type="bool"/>
       <Option name="parameters_collapsed" value="true" type="bool"/>
       <Option name="params" type="Map">
@@ -193,8 +240,8 @@
       </Option>
       <Option name="component_description" value="Extract afvoerlijnen selectie" type="QString"/>
       <Option name="component_height" value="30" type="double"/>
-      <Option name="component_pos_x" value="1199.8000000000002" type="double"/>
-      <Option name="component_pos_y" value="999.7" type="double"/>
+      <Option name="component_pos_x" value="1233.8000000000002" type="double"/>
+      <Option name="component_pos_y" value="1029.7" type="double"/>
       <Option name="component_width" value="200" type="double"/>
       <Option name="dependencies"/>
       <Option name="id" value="native:extractbylocation_1" type="QString"/>
@@ -214,9 +261,9 @@
           </Option>
           <Option name="component_description" value="Gebiedsgegevens_lijn_selectie" type="QString"/>
           <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="1399.8000000000002" type="double"/>
+          <Option name="component_pos_x" value="1416.3000000000002" type="double"/>
           <Option name="component_pos_y" value="1044.7" type="double"/>
-          <Option name="component_width" value="200" type="double"/>
+          <Option name="component_width" value="233" type="double"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" value="false" type="bool"/>
           <Option name="name" value="Gebiedsgegevens_lijn_selectie" type="QString"/>
@@ -1351,6 +1398,92 @@
         </Option>
       </Option>
     </Option>
+    <Option name="native:joinattributestable_4" type="Map">
+      <Option name="active" value="true" type="bool"/>
+      <Option name="alg_config"/>
+      <Option name="alg_id" value="native:joinattributestable" type="QString"/>
+      <Option name="color" value="" type="QString"/>
+      <Option name="comment" type="Map">
+        <Option name="color" value="" type="QString"/>
+        <Option name="component_description" value="" type="QString"/>
+        <Option name="component_height" value="60" type="double"/>
+        <Option name="component_pos_x" value="2914" type="double"/>
+        <Option name="component_pos_y" value="1682" type="double"/>
+        <Option name="component_width" value="100" type="double"/>
+        <Option name="outputs_collapsed" value="true" type="bool"/>
+        <Option name="parameters_collapsed" value="true" type="bool"/>
+      </Option>
+      <Option name="component_description" value="Join attributes punt by field VAN_KNOOPN" type="QString"/>
+      <Option name="component_height" value="30" type="double"/>
+      <Option name="component_pos_x" value="2555.5" type="double"/>
+      <Option name="component_pos_y" value="1624.5" type="double"/>
+      <Option name="component_width" value="200" type="double"/>
+      <Option name="dependencies"/>
+      <Option name="id" value="native:joinattributestable_4" type="QString"/>
+      <Option name="outputs"/>
+      <Option name="outputs_collapsed" value="true" type="bool"/>
+      <Option name="parameters_collapsed" value="true" type="bool"/>
+      <Option name="params" type="Map">
+        <Option name="DISCARD_NONMATCHING" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" value="false" type="bool"/>
+          </Option>
+        </Option>
+        <Option name="FIELD" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" value="VAN_KNOOPN" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="FIELDS_TO_COPY" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" type="StringList">
+              <Option value="BERGING_M3" type="QString"/>
+              <Option value="CAP_INST_M" type="QString"/>
+              <Option value="LAAGSTE_OS" type="QString"/>
+              <Option value="POMPEN_ST" type="QString"/>
+              <Option value="OVERSTORT_" type="QString"/>
+              <Option value="DOORLAAT_S" type="QString"/>
+              <Option value="STRENGEN_S" type="QString"/>
+              <Option value="KNOPEN_ST" type="QString"/>
+            </Option>
+          </Option>
+        </Option>
+        <Option name="FIELD_2" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" value="VAN_KNOOPN" type="QString"/>
+          </Option>
+        </Option>
+        <Option name="INPUT" type="List">
+          <Option type="Map">
+            <Option name="child_id" value="GeoDynTools:lis2graph_1" type="QString"/>
+            <Option name="output_name" value="Output_layer" type="QString"/>
+            <Option name="source" value="1" type="int"/>
+          </Option>
+        </Option>
+        <Option name="INPUT_2" type="List">
+          <Option type="Map">
+            <Option name="parameter_name" value="gebiedsgegevenspunttbvstap2" type="QString"/>
+            <Option name="source" value="0" type="int"/>
+          </Option>
+        </Option>
+        <Option name="METHOD" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" value="1" type="int"/>
+          </Option>
+        </Option>
+        <Option name="PREFIX" type="List">
+          <Option type="Map">
+            <Option name="source" value="2" type="int"/>
+            <Option name="static_value" value="" type="QString"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
     <Option name="native:orderbyexpression_1" type="Map">
       <Option name="active" value="true" type="bool"/>
       <Option name="alg_config"/>
@@ -1638,7 +1771,7 @@
   <Option name="model_group" value="" type="QString"/>
   <Option name="model_name" value="stap 2.) genereer_afvoerrelaties" type="QString"/>
   <Option name="parameterDefinitions" type="Map">
-    <Option name="GeoDynTools:lis2graph_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="Map">
+    <Option name="GeoDynTools:calc fields from csv input fields_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="Map">
       <Option name="create_by_default" value="true" type="bool"/>
       <Option name="data_type" value="2" type="int"/>
       <Option name="default" type="invalid"/>
@@ -1647,7 +1780,7 @@
       <Option name="flags" value="0" type="int"/>
       <Option name="help" value="" type="QString"/>
       <Option name="metadata"/>
-      <Option name="name" value="GeoDynTools:lis2graph_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="QString"/>
+      <Option name="name" value="GeoDynTools:calc fields from csv input fields_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" type="QString"/>
       <Option name="parameter_type" value="sink" type="QString"/>
       <Option name="supports_append" value="true" type="bool"/>
       <Option name="supports_non_file_outputs" value="true" type="bool"/>
@@ -1663,6 +1796,19 @@
       <Option name="help" value="" type="QString"/>
       <Option name="metadata"/>
       <Option name="name" value="bemalingsgebieden" type="QString"/>
+      <Option name="parameter_type" value="vector" type="QString"/>
+    </Option>
+    <Option name="gebiedsgegevenspunttbvstap2" type="Map">
+      <Option name="data_types" type="List">
+        <Option value="0" type="int"/>
+      </Option>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" value="Gebiedsgegevens_punt_tbv_stap2" type="QString"/>
+      <Option name="flags" value="0" type="int"/>
+      <Option name="help" value="" type="QString"/>
+      <Option name="metadata"/>
+      <Option name="name" value="gebiedsgegevenspunttbvstap2" type="QString"/>
       <Option name="parameter_type" value="vector" type="QString"/>
     </Option>
     <Option name="inputfieldscsv" type="Map">
@@ -1807,6 +1953,27 @@
       <Option name="component_pos_y" value="618" type="double"/>
       <Option name="component_width" value="200" type="double"/>
       <Option name="name" value="bemalingsgebieden" type="QString"/>
+      <Option name="outputs_collapsed" value="true" type="bool"/>
+      <Option name="parameters_collapsed" value="true" type="bool"/>
+    </Option>
+    <Option name="gebiedsgegevenspunttbvstap2" type="Map">
+      <Option name="color" value="" type="QString"/>
+      <Option name="comment" type="Map">
+        <Option name="color" value="" type="QString"/>
+        <Option name="component_description" value="" type="QString"/>
+        <Option name="component_height" value="60" type="double"/>
+        <Option name="component_pos_x" value="444" type="double"/>
+        <Option name="component_pos_y" value="242" type="double"/>
+        <Option name="component_width" value="100" type="double"/>
+        <Option name="outputs_collapsed" value="true" type="bool"/>
+        <Option name="parameters_collapsed" value="true" type="bool"/>
+      </Option>
+      <Option name="component_description" value="gebiedsgegevenspunttbvstap2" type="QString"/>
+      <Option name="component_height" value="30" type="double"/>
+      <Option name="component_pos_x" value="2279.5" type="double"/>
+      <Option name="component_pos_y" value="1646" type="double"/>
+      <Option name="component_width" value="200" type="double"/>
+      <Option name="name" value="gebiedsgegevenspunttbvstap2" type="QString"/>
       <Option name="outputs_collapsed" value="true" type="bool"/>
       <Option name="parameters_collapsed" value="true" type="bool"/>
     </Option>

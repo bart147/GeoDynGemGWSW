@@ -34,13 +34,13 @@ class Renamer (QgsProcessingLayerPostProcessorInterface):
 class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        self.addParameter(QgsProcessingParameterBoolean('vesmeenemen', "VE's meenemen", defaultValue=False))
+        ##self.addParameter(QgsProcessingParameterBoolean('vesmeenemen', "VE's meenemen", defaultValue=False))
+        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterFeatureSink('Result', 'result', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_overlap', 'Plancap_overlap', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
@@ -54,7 +54,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
 
         # koppel overige bronnen
         alg_params = {
-            'hasve': parameters['vesmeenemen'],
+            ##'hasve': parameters['vesmeenemen'],
             'input': parameters['bemalingsgebiedenstats'],
             'inputplancap': parameters['inputplancap'],
             'inputves': parameters['inputves'],

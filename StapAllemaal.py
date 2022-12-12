@@ -16,6 +16,11 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterVectorLayer,
                        QgsProject)
 
+# set defaults
+import os, inspect
+cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
+default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
+
 
 class Renamer (QgsProcessingLayerPostProcessorInterface):
     def __init__(self, layer_name):
@@ -35,16 +40,17 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (2)', 'GWSW verbindingen', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (2) (2)', 'BGT inlooptabel', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (2) (2) (2)', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
-        self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3)', "VE's", types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3)', "VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3) (2)', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields_csv', behavior=QgsProcessingParameterFile.File, fileFilter='All Files (*.*)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_tbv_stap2', 'bemalingsgebieden_tbv_stap2', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Leidingen_niet_meegenomen', 'leidingen_niet_meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Rioolgemalen_geselecteerd', 'rioolgemalen_geselecteerd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer_10m_buffer', 'rioolstelsel_buffer_10m_buffer', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelaties', 'afvoerrelaties', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat', 'eindresultaat', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_overlap', 'plancap_overlap', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-
     
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -65,7 +71,7 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'Eindpunten': QgsProcessing.TEMPORARY_OUTPUT,
             'GebiedsgegevensStap1AllAtt': QgsProcessing.TEMPORARY_OUTPUT,
             'Gebiedsgegevens_lijn_tbv_stap2': QgsProcessing.TEMPORARY_OUTPUT,
-            'Gebiedsgegevens_puntStap1': QgsProcessing.TEMPORARY_OUTPUT,
+            'Gebiedsgegevens_punt_tbv_stap2': QgsProcessing.TEMPORARY_OUTPUT,
             'GemengdeEnVuilwaterstelsels': QgsProcessing.TEMPORARY_OUTPUT,
             'LeidingenNietMeegenomen': parameters['Leidingen_niet_meegenomen'],
             'Rioolstelsel_buffer': QgsProcessing.TEMPORARY_OUTPUT,
@@ -83,8 +89,10 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
 
         # stap 2.) genereer_afvoerrelaties
         alg_params = {
-            'Bemalingsgebieden_tbv_stap2': outputs['Stap1GwswToGeodyn']['Bemalingsgebieden_tbv_stap2'],
-            'inputfieldscsv': 'G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv',
+            'Eindpunten': 'TEMPORARY_OUTPUT',
+            'bemalingsgebieden': outputs['Stap1GwswToGeodyn']['Bemalingsgebieden_tbv_stap2'],
+            'gebiedsgegevenspunttbvstap2': outputs['Stap1GwswToGeodyn']['Gebiedsgegevens_punt_tbv_stap2'],
+            'inputfieldscsv': parameters['inputfieldscsv'],
             'leidingen': outputs['Stap1GwswToGeodyn']['Gebiedsgegevens_lijn_tbv_stap2'],
             'Afvoerboom': QgsProcessing.TEMPORARY_OUTPUT,
             'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3': parameters['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'],
@@ -92,12 +100,13 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'Eindpunten_in_eindgebied_selected': QgsProcessing.TEMPORARY_OUTPUT,
             'Gebiedsgegevens_lijn_selectie': parameters['Afvoerrelaties'],
             'Van_naar': QgsProcessing.TEMPORARY_OUTPUT,
-            'Van_naar_sel': QgsProcessing.TEMPORARY_OUTPUT
+            'Van_naar_sel': parameters['Rioolgemalen_geselecteerd']
         }
         alg_params['keepName'] = True
         outputs['Stap2Genereer_afvoerrelaties'] = processing.run('GeoDynTools:stap 2.) genereer_afvoerrelaties', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['Stap2Genereer_afvoerrelaties']['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3']
         results['Afvoerrelaties'] = outputs['Stap2Genereer_afvoerrelaties']['Gebiedsgegevens_lijn_selectie']
+        results['Rioolgemalen_geselecteerd'] = outputs['Stap2Genereer_afvoerrelaties']['Van_naar_sel']
 
         feedback.setCurrentStep(2)
         if feedback.isCanceled():
@@ -105,17 +114,15 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
 
         # stap 3.) bereken afvalwaterprognose
         alg_params = {
+            'bemalingsgebiedenstats': outputs['Stap2Genereer_afvoerrelaties']['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'],
             'bgtinlooptabel': parameters['inputbemalingsgebieden (2) (2) (2) (2)'],
-            'input': outputs['Stap2Genereer_afvoerrelaties']['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'],
-            'inputfieldscsv': 'G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv',
+            'inputdrinkwater': 'Drinkwaterverbruik_BAG_Object_2019_499b9dd2_7bdf_4afe_88f5_9d5fab2722ae',
+            'inputfieldscsv': parameters['inputfieldscsv'],
             'inputplancap': parameters['inputbemalingsgebieden (2) (2) (2) (2) (2)'],
             'inputves': parameters['inputbemalingsgebieden (2) (2) (3)'],
-            'inputves (2)': parameters['inputbemalingsgebieden (2) (2) (3) (2)'],
+            'vesmeenemen': False,
             'Plancap_overlap': parameters['Plancap_overlap'],
-            'Result': parameters['Eindresultaat'],
-            'Stats_drinkwater': QgsProcessing.TEMPORARY_OUTPUT,
-            'Stats_plancap': QgsProcessing.TEMPORARY_OUTPUT,
-            'Stats_ve': QgsProcessing.TEMPORARY_OUTPUT
+            'Result': parameters['Eindresultaat']
         }
         alg_params['keepName'] = True
         outputs['Stap3BerekenAfvalwaterprognose'] = processing.run('GeoDynTools:stap 3.) bereken afvalwaterprognose', alg_params, context=context, feedback=feedback, is_child_algorithm=True)

@@ -45,7 +45,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('GebiedsgegevensStap1AllAtt', 'Gebiedsgegevens - stap1 - all att', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GemengdeEnVuilwaterstelsels', 'Gemengde en vuilwaterstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_tbv_stap2', 'Gebiedsgegevens_lijn_tbv_stap2', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_puntStap1', 'Gebiedsgegevens_punt - STAP 1', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_punt_tbv_stap2', 'Gebiedsgegevens_punt_tbv_stap2', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -1416,10 +1416,10 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         alg_params = {
             'COLUMN': ['geo_id','Stelsel','naam','type','begin','eind','Pompcapaciteit','AanslagniveauBoven','AfslagniveauBoven','Drempelniveau_min','LEI_sum','LEI_count','KNP_sum','KNP_count','BERG_KNP_M','BERGV_KNP_','BERG_STR_M','BERGV_STR_'],
             'INPUT': outputs['FieldCalculatorBergv_str_']['OUTPUT'],
-            'OUTPUT': parameters['Gebiedsgegevens_puntStap1']
+            'OUTPUT': parameters['Gebiedsgegevens_punt_tbv_stap2']
         }
         outputs['DropFieldsNietGeodynvelden'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Gebiedsgegevens_puntStap1'] = outputs['DropFieldsNietGeodynvelden']['OUTPUT']
+        results['Gebiedsgegevens_punt_tbv_stap2'] = outputs['DropFieldsNietGeodynvelden']['OUTPUT']
 
         # this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.

@@ -38,10 +38,11 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_overlap', 'PLANCAP_OVERLAP', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        ##self.addParameter(QgsProcessingParameterBoolean('hasve', "VE's meenemen", defaultValue=False))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_drinkwater', 'STATS_DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_ve', 'STATS_VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_plancap', 'STATS_PLANCAP', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterBoolean('hasve', "VE's meenemen", defaultValue=False))
+        
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -161,7 +162,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
             'DISCARD_NONMATCHING': False,
             'INPUT': parameters['input'],
             'JOIN': outputs['FieldCalcPc_id']['OUTPUT'],
-            'JOIN_FIELDS': ['Extra_AFW_','Extra_AFW1','ExAFW2124','ExAFW_2529','ExAFW_3039','ExAFW_4050'],
+            'JOIN_FIELDS': ['ExAFW_2124','ExAFW_2529','ExAFW_3039','ExAFW_4050'],
             'PREDICATE': [0],  # intersects
             'SUMMARIES': [0,5],  # count,sum
             'OUTPUT': parameters['Stats_plancap']
@@ -177,7 +178,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID',
-            'FIELDS_TO_COPY': ['Extra_AFW__sum','Extra_AFW1_sum','ExAFW_2124_sum','ExAFW_2529_sum','ExAFW_3039_sum','ExAFW_4050_sum'],
+            'FIELDS_TO_COPY': ['ExAFW_2124_sum','ExAFW_2529_sum','ExAFW_3039_sum','ExAFW_4050_sum'],
             'FIELD_2': 'BEM_ID',
             'INPUT': outputs['JoinAttributesSumDrinkwater']['OUTPUT'],
             'INPUT_2': outputs['JoinAttributesByLocationSummaryStats_plancap']['OUTPUT'],
@@ -191,7 +192,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        if parameters['hasve']:
+        if parameters['inputves']:
             # Join attributes by location (summary) VE's
             alg_params = {
                 'DISCARD_NONMATCHING': False,
@@ -213,7 +214,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
             alg_params = {
                 'DISCARD_NONMATCHING': False,
                 'FIELD': 'BEM_ID',
-                'FIELDS_TO_COPY': ['GRONDSLAG_sum'],
+                'FIELDS_TO_COPY': ['GRONDSLAG_count','GRONDSLAG_sum'],
                 'FIELD_2': 'BEM_ID',
                 'INPUT': outputs['JoinAttributesPlancap']['OUTPUT'],
                 'INPUT_2': outputs['JoinAttributesByLocationSummaryVes']['OUTPUT'],
