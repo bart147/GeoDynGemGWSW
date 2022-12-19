@@ -435,7 +435,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
             'INPUT': outputs['CalcFields01_gwswFromCsvInputFields']['Output_layer'],
             'OUTPUT': parameters['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3']
         }
-        outputs['DropFields'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['DropFields'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['DropFields']['OUTPUT']
 
         # this is needed to rename layers. looks funky, but works!

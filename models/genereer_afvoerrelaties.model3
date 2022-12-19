@@ -130,10 +130,10 @@
         </Option>
       </Option>
     </Option>
-    <Option type="Map" name="native:deletecolumn_1">
+    <Option type="Map" name="qgis:deletecolumn_1">
       <Option type="bool" value="true" name="active"/>
       <Option name="alg_config"/>
-      <Option type="QString" value="native:deletecolumn" name="alg_id"/>
+      <Option type="QString" value="qgis:deletecolumn" name="alg_id"/>
       <Option type="QString" value="" name="color"/>
       <Option type="Map" name="comment">
         <Option type="QString" value="" name="color"/>
@@ -151,10 +151,10 @@
       <Option type="double" value="1824" name="component_pos_y"/>
       <Option type="double" value="200" name="component_width"/>
       <Option name="dependencies"/>
-      <Option type="QString" value="native:deletecolumn_1" name="id"/>
+      <Option type="QString" value="qgis:deletecolumn_1" name="id"/>
       <Option type="Map" name="outputs">
         <Option type="Map" name="Bemalingsgebieden_met_afvoerrelaties_tbv_stap3">
-          <Option type="QString" value="native:deletecolumn_1" name="child_id"/>
+          <Option type="QString" value="qgis:deletecolumn_1" name="child_id"/>
           <Option type="QString" value="" name="color"/>
           <Option type="Map" name="comment">
             <Option type="QString" value="" name="color"/>
@@ -1827,7 +1827,7 @@
       <Option type="QString" value="leidingen" name="name"/>
       <Option type="QString" value="vector" name="parameter_type"/>
     </Option>
-    <Option type="Map" name="native:deletecolumn_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3">
+    <Option type="Map" name="qgis:deletecolumn_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3">
       <Option type="bool" value="true" name="create_by_default"/>
       <Option type="int" value="-1" name="data_type"/>
       <Option type="invalid" name="default"/>
@@ -1836,7 +1836,7 @@
       <Option type="int" value="0" name="flags"/>
       <Option type="QString" value="" name="help"/>
       <Option name="metadata"/>
-      <Option type="QString" value="native:deletecolumn_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" name="name"/>
+      <Option type="QString" value="qgis:deletecolumn_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3" name="name"/>
       <Option type="QString" value="sink" name="parameter_type"/>
       <Option type="bool" value="true" name="supports_append"/>
       <Option type="bool" value="true" name="supports_non_file_outputs"/>
