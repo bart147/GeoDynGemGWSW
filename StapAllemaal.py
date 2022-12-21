@@ -134,10 +134,10 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
         return results
 
     def name(self):
-        return 'Alle stappen achter elkaar'
+        return 'Alle stappen achter elkaar GWSW'
 
     def displayName(self):
-        return 'Alle stappen achter elkaar'
+        return 'Alle stappen achter elkaar GWSW'
 
     def group(self):
         return ''
