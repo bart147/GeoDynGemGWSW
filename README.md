@@ -23,6 +23,6 @@ https://github.com/bart147/GeoDynGemGWSW/blob/master/doc/HandleidingGeoDynGemGWS
 
 # Test data
 Some imaginary data for testing can be downloaded from the repo:
-https://github.com/bart147/GeoDynGemGWSW/blob/master/test_files
+https://github.com/bart147/GeoDynGemGWSW/blob/master/input_test_gpkg
 
 
