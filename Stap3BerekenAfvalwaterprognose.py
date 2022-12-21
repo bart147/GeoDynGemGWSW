@@ -4,31 +4,16 @@ Name : genereer_afvoerrelaties
 Group : 
 With QGIS : 32207
 """
-import string
-import random
 import processing
-from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
+from qgis.core import (QgsProcessing, 
+                       QgsProcessingAlgorithm,
                        QgsProcessingLayerPostProcessorInterface,
                        QgsProcessingMultiStepFeedback,
                        QgsProcessingParameterFeatureSink,
-                       QgsProcessingParameterFeatureSource,
                        QgsProcessingParameterFile,
                        QgsProcessingParameterVectorLayer,
-                       QgsProcessingParameterBoolean,
                        QgsProject)
-# set defaults
-import os, inspect
-cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
-default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
-
-
-class Renamer (QgsProcessingLayerPostProcessorInterface):
-    def __init__(self, layer_name):
-        self.name = layer_name
-        super().__init__()
-        
-    def postProcessLayer(self, layer, context, feedback):
-        layer.setName(self.name)
+from .custom_tools import rename_layers, default_inp_fields
 
 
 class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
@@ -37,19 +22,25 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
         self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Result', 'result', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bgt_intersect', 'bgt_intersect', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Exafw_per_bem_id', 'ExAFW_per_bem_id', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Plancap_pc_id', 'PLANCAP_PC_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Stats_drinkwater', 'STATS_DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Stats_ve', 'STATS_VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Meerdere_plancaps_in_bemalingsgebied', 'meerdere_plancaps_in_bemalingsgebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_in_meerdere_bemalingsgebieden', 'plancap_in_meerdere_bemalingsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
+        parameters['inputfieldscsv'] = default_inp_fields
         QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
-        feedback = QgsProcessingMultiStepFeedback(17, model_feedback)
+        feedback = QgsProcessingMultiStepFeedback(18, model_feedback)
         results = {}
         outputs = {}
 
@@ -59,14 +50,20 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
             'inputplancap': parameters['inputplancap'],
             'inputves': parameters['inputves'],
             'inputves (2)': parameters['inputdrinkwater'],
-            'Bemalingsgebieden_joined_stats': QgsProcessing.TEMPORARY_OUTPUT,
+            'Bemalingsgebieden_joined_stats': parameters['Bemalingsgebieden_joined_stats'],
+            'Exafw_per_bem_id': parameters['Exafw_per_bem_id'],
             'Meerdere_plancaps_in_bemalingsgebied': parameters['Meerdere_plancaps_in_bemalingsgebied'],
             'Plancap_in_meerdere_bemalingsgebieden': parameters['Plancap_in_meerdere_bemalingsgebieden'],
-            'Stats_drinkwater': QgsProcessing.TEMPORARY_OUTPUT,
-            'Stats_plancap': QgsProcessing.TEMPORARY_OUTPUT,
-            'Stats_ve': QgsProcessing.TEMPORARY_OUTPUT
+            'Plancap_pc_id': parameters['Plancap_pc_id'],
+            'Stats_drinkwater': parameters['Stats_drinkwater'],
+            'Stats_ve': parameters['Stats_ve']
         }
         outputs['KoppelOverigeBronnen'] = processing.run('GeoDynTools:koppel overige bronnen', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bemalingsgebieden_joined_stats'] = outputs['KoppelOverigeBronnen']['Bemalingsgebieden_joined_stats']
+        results['Exafw_per_bem_id'] = outputs['KoppelOverigeBronnen']['Exafw_per_bem_id']
+        results['Plancap_pc_id'] = outputs['KoppelOverigeBronnen']['Plancap_pc_id']
+        results['Stats_drinkwater'] = outputs['KoppelOverigeBronnen']['Stats_drinkwater']
+        results['Stats_ve'] = outputs['KoppelOverigeBronnen']['Stats_ve']
         results['Meerdere_plancaps_in_bemalingsgebied'] = outputs['KoppelOverigeBronnen']['Meerdere_plancaps_in_bemalingsgebied']
         results['Plancap_in_meerdere_bemalingsgebieden'] = outputs['KoppelOverigeBronnen']['Plancap_in_meerdere_bemalingsgebieden']
 
@@ -292,18 +289,12 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields11_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Result'] = outputs['CalcFields11_ber']['Output_layer']
-
-        # this is needed to rename layers. looks funky, but works!
+        # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
         else:
-            for key in results:
-                random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
-                global_key = key + "_" + random_string 
-                feedback.pushInfo("rename layer to {}".format(key))
-                globals()[global_key] = Renamer(key) #create unique global renamer instances
-                context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
-
+            results, context, feedback = rename_layers(results, context, feedback)
+ 
         return results
 
     def name(self):
@@ -320,14 +311,3 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
 
     def createInstance(self):
         return Stap3BerekenAfvalwaterprognose()        
-    
-
-        # ----- copy this code before returning results in algorithm class 
-        # this is needed to rename layers. looks funky, but works!
-        # if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
-        #     feedback.pushInfo("keepName = True")
-        # else:
-        #     for key in results:
-        #         feedback.pushInfo("rename layer to {}".format(key))
-        #         globals()[key] = Renamer(key) #create unique global renamer instances
-        #         context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[key])

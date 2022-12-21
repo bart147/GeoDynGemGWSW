@@ -10,24 +10,10 @@ from qgis.core import QgsProcessingAlgorithm
 from qgis.core import QgsProcessingMultiStepFeedback
 from qgis.core import QgsProcessingParameterMapLayer
 from qgis.core import QgsProcessingParameterNumber
-from qgis.core import QgsProcessingParameterFile
 from qgis.core import QgsProcessingParameterFeatureSink
-from qgis.core import QgsProcessingLayerPostProcessorInterface, QgsProject
+from qgis.core import QgsProject
 import processing
-import string
-import random
-# set defaults
-from processing.core.ProcessingConfig import ProcessingConfig
-##default_Bemalingsgebieden_tbv_stap2 = r'ogr:dbname={}BemalingsgebiedenTbvStap2.gpkg table="native:fieldcalculator_1:bemalingsgebieden tbv stap 2 - bem_id" (geom)'.format(ProcessingConfig.getSetting('OUTPUTS_FOLDER'))
-
-
-class Renamer (QgsProcessingLayerPostProcessorInterface):
-    def __init__(self, layer_name):
-        self.name = layer_name
-        super().__init__()
-        
-    def postProcessLayer(self, layer, context, feedback):
-        layer.setName(self.name)
+from .custom_tools import rename_layers
 
         
 class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
@@ -1421,17 +1407,12 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         outputs['DropFieldsNietGeodynvelden'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Gebiedsgegevens_punt_tbv_stap2'] = outputs['DropFieldsNietGeodynvelden']['OUTPUT']
 
-        # this is needed to rename layers. looks funky, but works!
+        # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
         else:
-            for key in results:
-                random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
-                global_key = key + "_" + random_string 
-                feedback.pushInfo("rename layer {} to {}".format(results[key], key))
-                globals()[global_key] = Renamer(key) #create unique global renamer instances
-                context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
-
+            results, context, feedback = rename_layers(results, context, feedback)
+ 
         return results
 
     def name(self):
@@ -1448,12 +1429,3 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
 
     def createInstance(self):
         return Stap1GwswToGeodyn()
-
-        
-        # ----- copy this code before returning results in algorithm class 
-        # this is needed to rename layers. looks funky, but works!
-        # if not parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
-        #     for key in results:
-        #         feedback.pushInfo("rename layer to {}".format(key))
-        #         globals()[key] = Renamer(key) #create unique global renamer instances
-        #         context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[key])

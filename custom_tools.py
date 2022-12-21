@@ -11,6 +11,10 @@
 ***************************************************************************
 """
 import csv
+import os 
+import inspect
+import string
+import random
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import (QgsProcessing,
                        QgsFeatureSink,
@@ -21,10 +25,31 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterBoolean,
                        QgsProject)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
-from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingParameterFieldMapping
+from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
 from qgis import processing
 from .Dijkstra import Graph, dijkstra
+
+cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
+default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
+
+class Renamer (QgsProcessingLayerPostProcessorInterface):
+    def __init__(self, layer_name):
+        self.name = layer_name
+        super().__init__()
+        
+    def postProcessLayer(self, layer, context, feedback):
+        layer.setName(self.name)
+
+def rename_layers(results, context, feedback):
+    for key in results:
+        if context.willLoadLayerOnCompletion(results[key]):
+            random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
+            global_key = key + "_" + random_string 
+            feedback.pushInfo("rename layer to {}".format(key))
+            globals()[global_key] = Renamer(key) #create unique global renamer instances
+            context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
+    return results, context, feedback
 
 
 class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):

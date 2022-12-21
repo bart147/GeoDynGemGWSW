@@ -869,6 +869,131 @@
       <Option name="dependencies"/>
       <Option name="id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
       <Option name="outputs" type="Map">
+        <Option name="Bemalingsgebieden_joined_stats" type="Map">
+          <Option name="child_id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
+          <Option name="color" type="QString" value=""/>
+          <Option name="comment" type="Map">
+            <Option name="color" type="QString" value=""/>
+            <Option name="component_description" type="QString" value=""/>
+            <Option name="component_height" type="double" value="60"/>
+            <Option name="component_pos_x" type="double" value="0"/>
+            <Option name="component_pos_y" type="double" value="0"/>
+            <Option name="component_width" type="double" value="100"/>
+            <Option name="outputs_collapsed" type="bool" value="true"/>
+            <Option name="parameters_collapsed" type="bool" value="true"/>
+          </Option>
+          <Option name="component_description" type="QString" value="Bemalingsgebieden_joined_stats"/>
+          <Option name="component_height" type="double" value="30"/>
+          <Option name="component_pos_x" type="double" value="1006"/>
+          <Option name="component_pos_y" type="double" value="770"/>
+          <Option name="component_width" type="double" value="200"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" type="bool" value="false"/>
+          <Option name="name" type="QString" value="Bemalingsgebieden_joined_stats"/>
+          <Option name="output_name" type="QString" value="Bemalingsgebieden_joined_stats"/>
+          <Option name="outputs_collapsed" type="bool" value="true"/>
+          <Option name="parameters_collapsed" type="bool" value="true"/>
+        </Option>
+        <Option name="ExAFW_per_bem_id" type="Map">
+          <Option name="child_id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
+          <Option name="color" type="QString" value=""/>
+          <Option name="comment" type="Map">
+            <Option name="color" type="QString" value=""/>
+            <Option name="component_description" type="QString" value=""/>
+            <Option name="component_height" type="double" value="60"/>
+            <Option name="component_pos_x" type="double" value="0"/>
+            <Option name="component_pos_y" type="double" value="0"/>
+            <Option name="component_width" type="double" value="100"/>
+            <Option name="outputs_collapsed" type="bool" value="true"/>
+            <Option name="parameters_collapsed" type="bool" value="true"/>
+          </Option>
+          <Option name="component_description" type="QString" value="ExAFW_per_bem_id"/>
+          <Option name="component_height" type="double" value="30"/>
+          <Option name="component_pos_x" type="double" value="1006"/>
+          <Option name="component_pos_y" type="double" value="881"/>
+          <Option name="component_width" type="double" value="200"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" type="bool" value="false"/>
+          <Option name="name" type="QString" value="ExAFW_per_bem_id"/>
+          <Option name="output_name" type="QString" value="Exafw_per_bem_id"/>
+          <Option name="outputs_collapsed" type="bool" value="true"/>
+          <Option name="parameters_collapsed" type="bool" value="true"/>
+        </Option>
+        <Option name="PLANCAP_PC_ID" type="Map">
+          <Option name="child_id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
+          <Option name="color" type="QString" value=""/>
+          <Option name="comment" type="Map">
+            <Option name="color" type="QString" value=""/>
+            <Option name="component_description" type="QString" value=""/>
+            <Option name="component_height" type="double" value="60"/>
+            <Option name="component_pos_x" type="double" value="0"/>
+            <Option name="component_pos_y" type="double" value="0"/>
+            <Option name="component_width" type="double" value="100"/>
+            <Option name="outputs_collapsed" type="bool" value="true"/>
+            <Option name="parameters_collapsed" type="bool" value="true"/>
+          </Option>
+          <Option name="component_description" type="QString" value="PLANCAP_PC_ID"/>
+          <Option name="component_height" type="double" value="30"/>
+          <Option name="component_pos_x" type="double" value="1006"/>
+          <Option name="component_pos_y" type="double" value="917"/>
+          <Option name="component_width" type="double" value="200"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" type="bool" value="false"/>
+          <Option name="name" type="QString" value="PLANCAP_PC_ID"/>
+          <Option name="output_name" type="QString" value="Plancap_pc_id"/>
+          <Option name="outputs_collapsed" type="bool" value="true"/>
+          <Option name="parameters_collapsed" type="bool" value="true"/>
+        </Option>
+        <Option name="STATS_DRINKWATER" type="Map">
+          <Option name="child_id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
+          <Option name="color" type="QString" value=""/>
+          <Option name="comment" type="Map">
+            <Option name="color" type="QString" value=""/>
+            <Option name="component_description" type="QString" value=""/>
+            <Option name="component_height" type="double" value="60"/>
+            <Option name="component_pos_x" type="double" value="0"/>
+            <Option name="component_pos_y" type="double" value="0"/>
+            <Option name="component_width" type="double" value="100"/>
+            <Option name="outputs_collapsed" type="bool" value="true"/>
+            <Option name="parameters_collapsed" type="bool" value="true"/>
+          </Option>
+          <Option name="component_description" type="QString" value="STATS_DRINKWATER"/>
+          <Option name="component_height" type="double" value="30"/>
+          <Option name="component_pos_x" type="double" value="1003"/>
+          <Option name="component_pos_y" type="double" value="998"/>
+          <Option name="component_width" type="double" value="200"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" type="bool" value="false"/>
+          <Option name="name" type="QString" value="STATS_DRINKWATER"/>
+          <Option name="output_name" type="QString" value="Stats_drinkwater"/>
+          <Option name="outputs_collapsed" type="bool" value="true"/>
+          <Option name="parameters_collapsed" type="bool" value="true"/>
+        </Option>
+        <Option name="STATS_VE" type="Map">
+          <Option name="child_id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
+          <Option name="color" type="QString" value=""/>
+          <Option name="comment" type="Map">
+            <Option name="color" type="QString" value=""/>
+            <Option name="component_description" type="QString" value=""/>
+            <Option name="component_height" type="double" value="60"/>
+            <Option name="component_pos_x" type="double" value="0"/>
+            <Option name="component_pos_y" type="double" value="0"/>
+            <Option name="component_width" type="double" value="100"/>
+            <Option name="outputs_collapsed" type="bool" value="true"/>
+            <Option name="parameters_collapsed" type="bool" value="true"/>
+          </Option>
+          <Option name="component_description" type="QString" value="STATS_VE"/>
+          <Option name="component_height" type="double" value="30"/>
+          <Option name="component_pos_x" type="double" value="1003"/>
+          <Option name="component_pos_y" type="double" value="961"/>
+          <Option name="component_width" type="double" value="200"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" type="bool" value="false"/>
+          <Option name="name" type="QString" value="STATS_VE"/>
+          <Option name="output_name" type="QString" value="Stats_ve"/>
+          <Option name="outputs_collapsed" type="bool" value="true"/>
+          <Option name="parameters_collapsed" type="bool" value="true"/>
+        </Option>
         <Option name="meerdere_plancaps_in_bemalingsgebied" type="Map">
           <Option name="child_id" type="QString" value="GeoDynTools:koppel overige bronnen_1"/>
           <Option name="color" type="QString" value=""/>
@@ -985,13 +1110,83 @@
       <Option name="supports_append" type="bool" value="true"/>
       <Option name="supports_non_file_outputs" type="bool" value="true"/>
     </Option>
+    <Option name="GeoDynTools:koppel overige bronnen_1:Bemalingsgebieden_joined_stats" type="Map">
+      <Option name="create_by_default" type="bool" value="true"/>
+      <Option name="data_type" type="int" value="-1"/>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" type="QString" value="Bemalingsgebieden_joined_stats"/>
+      <Option name="flags" type="int" value="0"/>
+      <Option name="help" type="QString" value=""/>
+      <Option name="metadata"/>
+      <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:Bemalingsgebieden_joined_stats"/>
+      <Option name="parameter_type" type="QString" value="sink"/>
+      <Option name="supports_append" type="bool" value="true"/>
+      <Option name="supports_non_file_outputs" type="bool" value="true"/>
+    </Option>
+    <Option name="GeoDynTools:koppel overige bronnen_1:ExAFW_per_bem_id" type="Map">
+      <Option name="create_by_default" type="bool" value="true"/>
+      <Option name="data_type" type="int" value="-1"/>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" type="QString" value="ExAFW_per_bem_id"/>
+      <Option name="flags" type="int" value="8"/>
+      <Option name="help" type="QString" value=""/>
+      <Option name="metadata"/>
+      <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:ExAFW_per_bem_id"/>
+      <Option name="parameter_type" type="QString" value="sink"/>
+      <Option name="supports_append" type="bool" value="false"/>
+      <Option name="supports_non_file_outputs" type="bool" value="true"/>
+    </Option>
+    <Option name="GeoDynTools:koppel overige bronnen_1:PLANCAP_PC_ID" type="Map">
+      <Option name="create_by_default" type="bool" value="true"/>
+      <Option name="data_type" type="int" value="-1"/>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" type="QString" value="PLANCAP_PC_ID"/>
+      <Option name="flags" type="int" value="8"/>
+      <Option name="help" type="QString" value=""/>
+      <Option name="metadata"/>
+      <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:PLANCAP_PC_ID"/>
+      <Option name="parameter_type" type="QString" value="sink"/>
+      <Option name="supports_append" type="bool" value="true"/>
+      <Option name="supports_non_file_outputs" type="bool" value="true"/>
+    </Option>
+    <Option name="GeoDynTools:koppel overige bronnen_1:STATS_DRINKWATER" type="Map">
+      <Option name="create_by_default" type="bool" value="true"/>
+      <Option name="data_type" type="int" value="-1"/>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" type="QString" value="STATS_DRINKWATER"/>
+      <Option name="flags" type="int" value="8"/>
+      <Option name="help" type="QString" value=""/>
+      <Option name="metadata"/>
+      <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:STATS_DRINKWATER"/>
+      <Option name="parameter_type" type="QString" value="sink"/>
+      <Option name="supports_append" type="bool" value="false"/>
+      <Option name="supports_non_file_outputs" type="bool" value="true"/>
+    </Option>
+    <Option name="GeoDynTools:koppel overige bronnen_1:STATS_VE" type="Map">
+      <Option name="create_by_default" type="bool" value="true"/>
+      <Option name="data_type" type="int" value="-1"/>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" type="QString" value="STATS_VE"/>
+      <Option name="flags" type="int" value="8"/>
+      <Option name="help" type="QString" value=""/>
+      <Option name="metadata"/>
+      <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:STATS_VE"/>
+      <Option name="parameter_type" type="QString" value="sink"/>
+      <Option name="supports_append" type="bool" value="false"/>
+      <Option name="supports_non_file_outputs" type="bool" value="true"/>
+    </Option>
     <Option name="GeoDynTools:koppel overige bronnen_1:meerdere_plancaps_in_bemalingsgebied" type="Map">
       <Option name="create_by_default" type="bool" value="true"/>
       <Option name="data_type" type="int" value="-1"/>
       <Option name="default" type="invalid"/>
       <Option name="defaultGui" type="invalid"/>
       <Option name="description" type="QString" value="meerdere_plancaps_in_bemalingsgebied"/>
-      <Option name="flags" type="int" value="0"/>
+      <Option name="flags" type="int" value="8"/>
       <Option name="help" type="QString" value=""/>
       <Option name="metadata"/>
       <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:meerdere_plancaps_in_bemalingsgebied"/>
@@ -1005,7 +1200,7 @@
       <Option name="default" type="invalid"/>
       <Option name="defaultGui" type="invalid"/>
       <Option name="description" type="QString" value="plancap_in_meerdere_bemalingsgebieden"/>
-      <Option name="flags" type="int" value="0"/>
+      <Option name="flags" type="int" value="8"/>
       <Option name="help" type="QString" value=""/>
       <Option name="metadata"/>
       <Option name="name" type="QString" value="GeoDynTools:koppel overige bronnen_1:plancap_in_meerdere_bemalingsgebieden"/>

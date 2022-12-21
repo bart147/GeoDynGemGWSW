@@ -5,9 +5,6 @@ Group :
 With QGIS : 32207
 """
 
-##from ast import main
-import string
-import random
 import processing
 from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingLayerPostProcessorInterface,
@@ -16,28 +13,16 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterFile,
                        QgsProcessingParameterVectorLayer,
                        QgsProject)
-# set defaults
-import os, inspect
-cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
-default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
+from .custom_tools import rename_layers, default_inp_fields
 
-
-class Renamer (QgsProcessingLayerPostProcessorInterface):
-    def __init__(self, layer_name):
-        self.name = layer_name
-        super().__init__()
-        
-    def postProcessLayer(self, layer, context, feedback):
-        layer.setName(self.name)
-
-        
+       
 class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden_tbv_stap2', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('gebiedsgegevenspunttbvstap2', 'Gebiedsgegevens_punt_tbv_stap2', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'gebiedsgegevens_lijn_tbv_stap2', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar', 'VAN_NAAR', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_selectie', 'Gebiedsgegevens_lijn_selectie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
@@ -48,6 +33,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
+        parameters['inputfieldscsv'] = default_inp_fields
         QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(23, model_feedback)
         results = {}
@@ -438,22 +424,12 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
         outputs['DropFields'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Bemalingsgebieden_met_afvoerrelaties_tbv_stap3'] = outputs['DropFields']['OUTPUT']
 
-        # this is needed to rename layers. looks funky, but works!
+        # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
         else:
-            for key in results:
-                random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
-                global_key = key + "_" + random_string 
-                feedback.pushInfo("rename layer to {}".format(key))
-                globals()[global_key] = Renamer(key) #create unique global renamer instances
-                context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
-
-                # feedback.pushInfo("rename layer to {}".format(key))
-                # global renamer
-                # renamer = Renamer(key)
-                # context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(renamer)
-
+            results, context, feedback = rename_layers(results, context, feedback)
+ 
         return results
 
     def name(self):
