@@ -43,60 +43,60 @@ class Stap1KikkerToGeodyn(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Field calculator BEM_ID
-        alg_params = {
-            'FIELD_LENGTH': 20,
-            'FIELD_NAME': 'BEM_ID',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # String
-            'FORMULA': "'BEM' || lpad( $id ,3,0)",
-            'INPUT': outputs['FixGeometriesBemalingsgebieden']['OUTPUT'],
-            'OUTPUT': parameters['Bemalingsgebieden_tbv_stap2_kikker']
-        }
-        outputs['FieldCalculatorBem_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Bemalingsgebieden_tbv_stap2_kikker'] = outputs['FieldCalculatorBem_id']['OUTPUT']
-
-        feedback.setCurrentStep(2)
-        if feedback.isCanceled():
-            return {}
-
-        # Retain fields lijnen
-        alg_params = {
-            'FIELDS': ['NUMMER','VAN_KNOOPN','NAAR_KNOOP','TTOTAAL_M3'],
-            'INPUT': parameters['kikkerlijnen'],
-            'OUTPUT': parameters['Gebiedsgegevens_lijn_tbv_stap2_kikker']
-        }
-        outputs['RetainFieldsLijnen'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Gebiedsgegevens_lijn_tbv_stap2_kikker'] = outputs['RetainFieldsLijnen']['OUTPUT']
-
-        feedback.setCurrentStep(3)
-        if feedback.isCanceled():
-            return {}
-
         # Join attributes by location
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'INPUT': parameters['kikkerpunten'],
             'JOIN': parameters['bemalingsgebieden'],
             'JOIN_FIELDS': [''],
-            'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
-            'PREDICATE': [0],  # intersects
+            'METHOD': 0,
+            'PREDICATE': [0],
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinAttributesByLocation'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(2)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields punten
+        alg_params = {
+            'inputlayer': outputs['JoinAttributesByLocation']['OUTPUT'],
+            'veldenlijst': 'BEM_ID;BEM_ID_SP;BERGING_M3;POMPEN_ST;OVERSTORT_;DOORLAAT_S;NUMMER;NAAM;VAN_KNOOPN;NAAR_KNOOP;CAP_INST_M;LAAGSTE_OS;STRENGEN_S;KNOPEN_ST',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['RetainfieldsPunten'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(3)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields lijnen
+        alg_params = {
+            'inputlayer': parameters['kikkerlijnen'],
+            'veldenlijst': 'NUMMER;VAN_KNOOPN;NAAR_KNOOP;TTOTAAL_M3',
+            'Output_layer': parameters['Gebiedsgegevens_lijn_tbv_stap2_kikker']
+        }
+        outputs['RetainfieldsLijnen'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Gebiedsgegevens_lijn_tbv_stap2_kikker'] = outputs['RetainfieldsLijnen']['Output_layer']
+
         feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
-        # Retain fields punten
+        # Field calculator BEM_ID
         alg_params = {
-            'FIELDS': ['BEM_ID','BEM_ID_SP','BERGING_M3','POMPEN_ST','OVERSTORT_','DOORLAAT_S','NUMMER','NAAM','VAN_KNOOPN','NAAR_KNOOP','CAP_INST_M','LAAGSTE_OS','STRENGEN_S','KNOPEN_ST'],
-            'INPUT': outputs['JoinAttributesByLocation']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'FIELD_LENGTH': 20,
+            'FIELD_NAME': 'BEM_ID',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,
+            'FORMULA': '\'BEM\' || lpad( $id ,3,0)',
+            'INPUT': outputs['FixGeometriesBemalingsgebieden']['OUTPUT'],
+            'OUTPUT': parameters['Bemalingsgebieden_tbv_stap2_kikker']
         }
-        outputs['RetainFieldsPunten'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorBem_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bemalingsgebieden_tbv_stap2_kikker'] = outputs['FieldCalculatorBem_id']['OUTPUT']
 
         feedback.setCurrentStep(5)
         if feedback.isCanceled():
@@ -107,9 +107,9 @@ class Stap1KikkerToGeodyn(QgsProcessingAlgorithm):
             'FIELD_LENGTH': 50,
             'FIELD_NAME': 'BEM_ID_SP',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # String
-            'FORMULA': '"BEM_ID"',
-            'INPUT': outputs['RetainFieldsPunten']['OUTPUT'],
+            'FIELD_TYPE': 2,
+            'FORMULA': '\"BEM_ID\"',
+            'INPUT': outputs['RetainfieldsPunten']['Output_layer'],
             'OUTPUT': parameters['Gebiedsgegevens_punt_tbv_stap2_kikker']
         }
         outputs['FieldCalculaterBem_id_sp'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)

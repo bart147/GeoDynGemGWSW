@@ -43,7 +43,8 @@ from .custom_tools import (CustomToolsAddFieldsFromDictAlgorithm,
                            CustomToolsCalcFieldsFromDictAlgorithm,
                            CustomToolsLis2GraphAlgorithm,
                            CustomToolsBerekenOnderbemalingAlgorithm,
-                           CustomToolsVervangNoneDoor0Algorithm)
+                           CustomToolsVervangNoneDoor0Algorithm,
+                           CustomToolsRetainFieldsAlgorithm)
 from .Stap1GwswToGeodyn import Stap1GwswToGeodyn
 from .Stap1KikkerToGeodyn import Stap1KikkerToGeodyn
 from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
@@ -85,6 +86,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         self.addAlgorithm(CustomToolsCalcFieldsFromDictAlgorithm())
         self.addAlgorithm(CustomToolsBerekenOnderbemalingAlgorithm())
         self.addAlgorithm(CustomToolsVervangNoneDoor0Algorithm())
+        self.addAlgorithm(CustomToolsRetainFieldsAlgorithm())
         self.addAlgorithm(KoppelBgtinlooptabel())
         self.addAlgorithm(KoppelOverigeBronnen())
         ##self.addAlgorithm(GwswGeodynStap1())

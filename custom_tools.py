@@ -166,6 +166,18 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
     """
     CustomToolBasicAlgortim with all custom funtions added
     """
+    def retain_fields(self, fields_to_retain, layer, feedback):
+        feedback.pushInfo("fields to retain {}".format(fields_to_retain))
+        prov = layer.dataProvider()
+        field_names = [field.name() for field in prov.fields()]
+        field_names_to_delete = [fld for fld in field_names if fld not in fields_to_retain]
+        field_indexes_to_delete = [layer.fields().indexFromName(fld) for fld in field_names_to_delete]
+        feedback.pushInfo("fields to delete {}".format(field_names_to_delete))
+        layer.dataProvider().deleteAttributes(field_indexes_to_delete)
+        layer.updateFields()
+
+        return layer, feedback
+
     def get_d_velden_csv(self, INP_FIELDS_CSV):
         """dictionary field-info ophalen uit excel zonder pandas met xlrd"""
     
@@ -729,4 +741,57 @@ class CustomToolsVervangNoneDoor0Algorithm(CustomToolAllFunctionsAlgorithm):
         """
         l = parameters['veldenlijst'].split(";")
         self.vervang_None_door_0_voor_velden_in_lijst(l, layer, feedback)
+        return layer
+
+
+class CustomToolsRetainFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
+    """
+    Custom RetainFields Algorithm for compatibility with qgis versions before 3.22
+    """
+
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+
+
+    def createInstance(self):
+        return CustomToolsRetainFieldsAlgorithm()
+
+    def name(self):
+        """
+        Returns the algorithm name, used for identifying the algorithm. This
+        string should be fixed for the algorithm, and must not be localised.
+        The name should be unique within each provider. Names should contain
+        lowercase alphanumeric characters only and no spaces or other
+        formatting characters.
+        """
+        return 'retainfields'
+
+    def displayName(self):
+        """
+        Returns the translated algorithm name, which should be used for any
+        user-visible display of the algorithm name.
+        """
+        return self.tr('retainfields')
+
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))      
+        self.addParameter(QgsProcessingParameterString(
+                'veldenlijst', 
+                'velden die bewaard moeten worden, gescheiden met ;', 
+                multiLine=False, 
+                defaultValue=None
+        ))
+        
+    def customAlgorithm(self, layer, parameters, feedback):
+        """
+        Here we define our own custom algorithm.
+        """
+        l = parameters['veldenlijst'].split(";")
+        layer, feedback = self.retain_fields(l, layer, feedback)
         return layer
