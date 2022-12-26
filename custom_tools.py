@@ -49,6 +49,13 @@ def rename_layers(results, context, feedback):
             feedback.pushInfo("rename layer to {}".format(key))
             globals()[global_key] = Renamer(key) #create unique global renamer instances
             context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
+            # add style
+            style = os.path.join(cmd_folder, "styles", key + ".qml")
+            if os.path.exists(style):
+                layer = context.getMapLayer(results[key])
+                layer.loadNamedStyle(style)
+                #layer.triggerRepaint()??
+
     return results, context, feedback
 
 
