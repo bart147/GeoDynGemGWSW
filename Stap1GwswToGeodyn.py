@@ -33,6 +33,8 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('Stelselkenmerken', 'Stelselkenmerken', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_tbv_stap2', 'Gebiedsgegevens_lijn_tbv_stap2', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GemengdeEnVuilwaterstelsels', 'Gemengde en vuilwaterstelsels', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Berging_uit_knopen', 'Stap1_berging_uit_knopen', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -1094,9 +1096,10 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
             'FIELD_TYPE': 0,
             'FORMULA': 'round(\r\nif( \"VormPut\" = \'Rond\',  ((\"BreedtePut\" /1000) * (\"BreedtePut\" /1000) * pi()) * \r\n(if( \"Drempelniveau_min\" IS NULL,  abs(\"OVH_D\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" )),  abs(\"Drempelniveau_min\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" )))),\r\n(\"BreedtePut\" /1000) * (\"Lengteput\" /1000) * if( \"Drempelniveau_min\" IS NULL,  abs(\"OVH_D\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" )),  abs(\"Drempelniveau_min\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" ))))\r\n, 2)',
             'INPUT': outputs['FieldCalculatorDefaultMaxNiveauBerging']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'OUTPUT': parameters['Berging_uit_knopen']
         }
         outputs['BergingKnopenFieldCalculator'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Stap1_berging_uit_knopen'] = outputs['BergingKnopenFieldCalculator']['OUTPUT']
 
         feedback.setCurrentStep(72)
         if feedback.isCanceled():
