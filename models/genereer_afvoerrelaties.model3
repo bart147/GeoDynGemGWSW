@@ -1,47 +1,6 @@
 <!DOCTYPE model>
 <Option type="Map">
   <Option type="Map" name="children">
-    <Option type="Map" name="GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst_1">
-      <Option value="true" type="bool" name="active"/>
-      <Option name="alg_config"/>
-      <Option value="GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst" type="QString" name="alg_id"/>
-      <Option value="" type="QString" name="color"/>
-      <Option type="Map" name="comment">
-        <Option value="" type="QString" name="color"/>
-        <Option value="" type="QString" name="component_description"/>
-        <Option value="60" type="double" name="component_height"/>
-        <Option value="3138" type="double" name="component_pos_x"/>
-        <Option value="1879" type="double" name="component_pos_y"/>
-        <Option value="100" type="double" name="component_width"/>
-        <Option value="true" type="bool" name="outputs_collapsed"/>
-        <Option value="true" type="bool" name="parameters_collapsed"/>
-      </Option>
-      <Option value="vervang alle None-waarden met 0 voor BERGING_M3" type="QString" name="component_description"/>
-      <Option value="30" type="double" name="component_height"/>
-      <Option value="1077" type="double" name="component_pos_x"/>
-      <Option value="838" type="double" name="component_pos_y"/>
-      <Option value="200" type="double" name="component_width"/>
-      <Option name="dependencies"/>
-      <Option value="GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst_1" type="QString" name="id"/>
-      <Option name="outputs"/>
-      <Option value="true" type="bool" name="outputs_collapsed"/>
-      <Option value="true" type="bool" name="parameters_collapsed"/>
-      <Option type="Map" name="params">
-        <Option type="List" name="inputlayer">
-          <Option type="Map">
-            <Option value="GeoDynTools:sortfields_1" type="QString" name="child_id"/>
-            <Option value="Output_layer" type="QString" name="output_name"/>
-            <Option value="1" type="int" name="source"/>
-          </Option>
-        </Option>
-        <Option type="List" name="veldenlijst">
-          <Option type="Map">
-            <Option value="2" type="int" name="source"/>
-            <Option value="BERGING_M3" type="QString" name="static_value"/>
-          </Option>
-        </Option>
-      </Option>
-    </Option>
     <Option type="Map" name="GeoDynTools:add fields from csv input fields_1">
       <Option value="true" type="bool" name="active"/>
       <Option name="alg_config"/>
@@ -179,17 +138,17 @@
       <Option type="Map" name="comment">
         <Option value="" type="QString" name="color"/>
         <Option value="custom sort function based on VAN_NAAR, BERGING_M3 (largest), length (shortest)" type="QString" name="component_description"/>
-        <Option value="60" type="double" name="component_height"/>
-        <Option value="928" type="double" name="component_pos_x"/>
-        <Option value="769" type="double" name="component_pos_y"/>
-        <Option value="100" type="double" name="component_width"/>
+        <Option value="85" type="double" name="component_height"/>
+        <Option value="957.5" type="double" name="component_pos_x"/>
+        <Option value="798.5" type="double" name="component_pos_y"/>
+        <Option value="118.99999999999999" type="double" name="component_width"/>
         <Option value="true" type="bool" name="outputs_collapsed"/>
         <Option value="true" type="bool" name="parameters_collapsed"/>
       </Option>
       <Option value="sortfields" type="QString" name="component_description"/>
       <Option value="30" type="double" name="component_height"/>
-      <Option value="881" type="double" name="component_pos_x"/>
-      <Option value="833" type="double" name="component_pos_y"/>
+      <Option value="1121" type="double" name="component_pos_x"/>
+      <Option value="829" type="double" name="component_pos_y"/>
       <Option value="111.00000000000001" type="double" name="component_width"/>
       <Option name="dependencies"/>
       <Option value="GeoDynTools:sortfields_1" type="QString" name="id"/>
@@ -579,8 +538,8 @@
       </Option>
       <Option value="Field calculator lineID" type="QString" name="component_description"/>
       <Option value="30" type="double" name="component_height"/>
-      <Option value="650.4000000000001" type="double" name="component_pos_x"/>
-      <Option value="219.80000000000007" type="double" name="component_pos_y"/>
+      <Option value="651.4000000000001" type="double" name="component_pos_x"/>
+      <Option value="272.80000000000007" type="double" name="component_pos_y"/>
       <Option value="163.2" type="double" name="component_width"/>
       <Option name="dependencies"/>
       <Option value="native:fieldcalculator_1" type="QString" name="id"/>
@@ -1537,7 +1496,7 @@
         </Option>
         <Option type="List" name="INPUT">
           <Option type="Map">
-            <Option value="GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst_1" type="QString" name="child_id"/>
+            <Option value="GeoDynTools:sortfields_1" type="QString" name="child_id"/>
             <Option value="Output_layer" type="QString" name="output_name"/>
             <Option value="1" type="int" name="source"/>
           </Option>
@@ -1749,8 +1708,8 @@
       </Option>
       <Option value="Add geometry attributes" type="QString" name="component_description"/>
       <Option value="30" type="double" name="component_height"/>
-      <Option value="576" type="double" name="component_pos_x"/>
-      <Option value="115" type="double" name="component_pos_y"/>
+      <Option value="598" type="double" name="component_pos_x"/>
+      <Option value="192" type="double" name="component_pos_y"/>
       <Option value="200" type="double" name="component_width"/>
       <Option name="dependencies"/>
       <Option value="qgis:exportaddgeometrycolumns_1" type="QString" name="id"/>
@@ -1774,11 +1733,48 @@
     </Option>
   </Option>
   <Option type="Map" name="designerParameterValues">
+    <Option type="QgsProcessingOutputLayerDefinition" name="GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst_1:BERGING_M3">
+      <Option type="Map">
+        <Option type="Map" name="create_options">
+          <Option value="System" type="QString" name="fileEncoding"/>
+        </Option>
+        <Option type="Map" name="sink">
+          <Option value="true" type="bool" name="active"/>
+          <Option value="1" type="int" name="type"/>
+          <Option value="TEMPORARY_OUTPUT" type="QString" name="val"/>
+        </Option>
+      </Option>
+    </Option>
     <Option value="true" type="bool" name="VERBOSE_LOG"/>
-    <Option value="Calculated_fc32d9b6_3c7f_400a_9d9e_9127e22a561d" type="QString" name="bemalingsgebieden"/>
-    <Option value="Remaining_fields_b147198e_e825_4f7e_86f9_6c6eaf339349" type="QString" name="gebiedsgegevenspuntstap1"/>
-    <Option value="Remaining_fields_eda7805c_2f3f_420e_afbd_088f1d35aca9" type="QString" name="leidingen"/>
-    <Option type="QgsProcessingOutputLayerDefinition" name="native:fieldcalculator_15:Field calculator - onderbemalingen goed zetten">
+    <Option value="Calculated_c952631a_bec5_4a87_86a6_e13a2bef464a" type="QString" name="bemalingsgebieden"/>
+    <Option value="Matching_features_536e742f_7198_46bc_b7d6_8dbe47054079" type="QString" name="gebiedsgegevenspunttbvstap2"/>
+    <Option value="G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\inp_fields.csv" type="QString" name="inputfieldscsv"/>
+    <Option value="Joined_layer_9c96ca31_49f4_4b68_9916_1cec4686f33a" type="QString" name="leidingen"/>
+    <Option type="QgsProcessingOutputLayerDefinition" name="native:extractbyexpression_1:VAN_NAAR">
+      <Option type="Map">
+        <Option type="Map" name="create_options">
+          <Option value="System" type="QString" name="fileEncoding"/>
+        </Option>
+        <Option type="Map" name="sink">
+          <Option value="true" type="bool" name="active"/>
+          <Option value="1" type="int" name="type"/>
+          <Option value="TEMPORARY_OUTPUT" type="QString" name="val"/>
+        </Option>
+      </Option>
+    </Option>
+    <Option type="QgsProcessingOutputLayerDefinition" name="native:extractbylocation_1:Gebiedsgegevens_lijn_selectie">
+      <Option type="Map">
+        <Option type="Map" name="create_options">
+          <Option value="System" type="QString" name="fileEncoding"/>
+        </Option>
+        <Option type="Map" name="sink">
+          <Option value="true" type="bool" name="active"/>
+          <Option value="1" type="int" name="type"/>
+          <Option value="TEMPORARY_OUTPUT" type="QString" name="val"/>
+        </Option>
+      </Option>
+    </Option>
+    <Option type="QgsProcessingOutputLayerDefinition" name="native:extractbylocation_2:eindpunten_in_eindgebied_selected">
       <Option type="Map">
         <Option type="Map" name="create_options">
           <Option value="System" type="QString" name="fileEncoding"/>
@@ -1802,7 +1798,7 @@
         </Option>
       </Option>
     </Option>
-    <Option type="QgsProcessingOutputLayerDefinition" name="native:joinattributesbylocation_17:Gebiedsgegevens_stap2 - Join attributes by location - NIEAU, n_OBE_MAL, OBE_MAL aan gebiedsgegevens plakken">
+    <Option type="QgsProcessingOutputLayerDefinition" name="native:removeduplicatesbyattribute_1:VAN_NAAR_SEL">
       <Option type="Map">
         <Option type="Map" name="create_options">
           <Option value="System" type="QString" name="fileEncoding"/>
@@ -1814,31 +1810,7 @@
         </Option>
       </Option>
     </Option>
-    <Option type="QgsProcessingOutputLayerDefinition" name="qgis:deletecolumn_1:aantal keer oppompen per bem">
-      <Option type="Map">
-        <Option type="Map" name="create_options">
-          <Option value="System" type="QString" name="fileEncoding"/>
-        </Option>
-        <Option type="Map" name="sink">
-          <Option value="true" type="bool" name="active"/>
-          <Option value="1" type="int" name="type"/>
-          <Option value="TEMPORARY_OUTPUT" type="QString" name="val"/>
-        </Option>
-      </Option>
-    </Option>
-    <Option type="QgsProcessingOutputLayerDefinition" name="qgis:deletecolumn_3:Gebiedsgegevens tbv Geodyn">
-      <Option type="Map">
-        <Option type="Map" name="create_options">
-          <Option value="System" type="QString" name="fileEncoding"/>
-        </Option>
-        <Option type="Map" name="sink">
-          <Option value="true" type="bool" name="active"/>
-          <Option value="1" type="int" name="type"/>
-          <Option value="TEMPORARY_OUTPUT" type="QString" name="val"/>
-        </Option>
-      </Option>
-    </Option>
-    <Option type="QgsProcessingOutputLayerDefinition" name="qgis:deletecolumn_5:Bemalingsgebieden met aantal keer opppomen, aantal onderbemalingen en namen onderbemalingen">
+    <Option type="QgsProcessingOutputLayerDefinition" name="qgis:deletecolumn_1:Bemalingsgebieden_met_afvoerrelaties_tbv_stap3">
       <Option type="Map">
         <Option type="Map" name="create_options">
           <Option value="System" type="QString" name="fileEncoding"/>
