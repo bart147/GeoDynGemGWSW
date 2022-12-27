@@ -173,6 +173,45 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
     """
     CustomToolBasicAlgortim with all custom funtions added
     """
+    def sort_fields(self, fields_to_sort_by, layer, feedback):
+        """sort by multiple fields and add a new field order"""
+
+        feedback.pushInfo("sort fields {}".format(fields_to_sort_by))
+        
+        # field1Id = "VAN_NAAR"
+        # isInv1 = False
+        # field2Id = "BERGING_M3"
+        # isInv2 = True
+        # field3Id = "length"
+        # isInv3 = False
+
+        field1Id, field2Id, field3Id = fields_to_sort_by
+
+        order_field = "order"
+
+        layer = self.vervang_None_door_0_voor_velden_in_lijst([field2Id], layer, feedback)
+
+        featureList = list( layer.getFeatures() )
+        #featureList = sorted(featureList, key=lambda f: f[field1Id], reverse=isInv1)
+        #featureList = sorted(featureList, key=lambda f: f[field2Id], reverse=isInv2)
+        #featureList = sorted(featureList, key=lambda f: f[field3Id], reverse=isInv3)
+        featureList = sorted(featureList, key=lambda f: (f[field1Id],-f[field2Id],f[field3Id]) )
+
+        layer.startEditing()
+
+        # add order field
+        layer.dataProvider().addAttributes( [QgsField(order_field, QVariant.Int)] )
+        attrIdx = layer.dataProvider().fields().indexFromName( order_field )
+        layer.updateFields() # tell the vector layer to fetch changes from the provider
+                    
+        for i, f in enumerate(featureList):
+            layer.changeAttributeValue(f.id(), attrIdx, i+1)
+
+        layer.commitChanges()
+
+
+        return layer, feedback
+
     def retain_fields(self, fields_to_retain, layer, feedback):
         feedback.pushInfo("fields to retain {}".format(fields_to_retain))
         prov = layer.dataProvider()
@@ -801,4 +840,57 @@ class CustomToolsRetainFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
         """
         l = parameters['veldenlijst'].split(";")
         layer, feedback = self.retain_fields(l, layer, feedback)
+        return layer
+
+
+class CustomToolsSortByMultipleFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
+    """
+    Custom SortByMultipleFields Algorithm
+    """
+
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+
+
+    def createInstance(self):
+        return CustomToolsSortByMultipleFieldsAlgorithm()
+
+    def name(self):
+        """
+        Returns the algorithm name, used for identifying the algorithm. This
+        string should be fixed for the algorithm, and must not be localised.
+        The name should be unique within each provider. Names should contain
+        lowercase alphanumeric characters only and no spaces or other
+        formatting characters.
+        """
+        return 'sortfields'
+
+    def displayName(self):
+        """
+        Returns the translated algorithm name, which should be used for any
+        user-visible display of the algorithm name.
+        """
+        return self.tr('sortfields')
+
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))      
+        self.addParameter(QgsProcessingParameterString(
+                'veldenlijst', 
+                '3 velden om op te sorteren, gescheiden met ;', 
+                multiLine=False, 
+                defaultValue="VAN_NAAR;BERGING_M3;length"
+        ))
+        
+    def customAlgorithm(self, layer, parameters, feedback):
+        """
+        Here we define our own custom algorithm.
+        """
+        l = parameters['veldenlijst'].split(";")
+        layer, feedback = self.sort_fields(l, layer, feedback)
         return layer
