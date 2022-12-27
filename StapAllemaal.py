@@ -26,7 +26,6 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3)', "VE's", types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputbemalingsgebieden (2) (2) (3) (2)', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields_csv', behavior=QgsProcessingParameterFile.File, fileFilter='All Files (*.*)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
-        ##self.addParameter(QgsProcessingParameterFeatureSink('Stap1_berging_uit_knopen', 'Stap1_berging_uit_knopen', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stap1_leidingen_niet_meegenomen', 'Stap1_leidingen_niet_meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stap1_rioolstelsel_buffer_10m_buffer', 'Stap1_rioolstelsel_buffer_10m_buffer', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stap2_afvoerrelaties_bemalingsgebieden', 'Stap2_afvoerrelaties_bemalingsgebieden', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
@@ -50,13 +49,15 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
 
         # stap 1.) GWSW to Geodyn
         alg_params = {
+            'Bemalingsgebieden_tbv_stap2': 'TEMPORARY_OUTPUT',
+            'Eindpunten': 'TEMPORARY_OUTPUT',
             'GWSWBemalingsgebieden': parameters['inputbemalingsgebieden'],
             'GWSWnetwerkknooppunt': parameters['inputbemalingsgebieden (2)'],
             'GWSWnetwerkkunstwerk': parameters['inputbemalingsgebieden (2) (2)'],
             'MaxzoekafstandRG': 3,
             'netwerkverbinding': parameters['inputbemalingsgebieden (2) (2) (2)'],
             'Bemalingsgebieden_tbv_stap2': QgsProcessing.TEMPORARY_OUTPUT,
-            'Berging_uit_knopen': QgsProcessing.TEMPORARY_OUTPUT, #parameters['Stap1_berging_uit_knopen'],
+            'Berging_uit_knopen': QgsProcessing.TEMPORARY_OUTPUT,
             'Eindpunten': QgsProcessing.TEMPORARY_OUTPUT,
             'GebiedsgegevensStap1AllAtt': QgsProcessing.TEMPORARY_OUTPUT,
             'Gebiedsgegevens_lijn_tbv_stap2': QgsProcessing.TEMPORARY_OUTPUT,
@@ -64,11 +65,11 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'GemengdeEnVuilwaterstelsels': QgsProcessing.TEMPORARY_OUTPUT,
             'LeidingenNietMeegenomen': parameters['Stap1_leidingen_niet_meegenomen'],
             'Rioolstelsel_buffer': QgsProcessing.TEMPORARY_OUTPUT,
-            'Rioolstelsel_buffer_10m': parameters['Stap1_rioolstelsel_buffer_10m_buffer']
+            'Rioolstelsel_buffer_10m': parameters['Stap1_rioolstelsel_buffer_10m_buffer'],
+            'Stelselkenmerken': QgsProcessing.TEMPORARY_OUTPUT
         }
         alg_params['keepName'] = True
         outputs['Stap1GwswToGeodyn'] = processing.run('GeoDynTools:stap 1.) GWSW to Geodyn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        #results['Stap1_berging_uit_knopen'] = outputs['Stap1GwswToGeodyn']['Berging_uit_knopen']
         results['Stap1_leidingen_niet_meegenomen'] = outputs['Stap1GwswToGeodyn']['LeidingenNietMeegenomen']
         results['Stap1_rioolstelsel_buffer_10m_buffer'] = outputs['Stap1GwswToGeodyn']['Rioolstelsel_buffer_10m']
 

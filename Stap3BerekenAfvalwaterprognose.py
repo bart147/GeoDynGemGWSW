@@ -64,9 +64,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         results['Exafw_per_bem_id'] = outputs['KoppelOverigeBronnen']['Exafw_per_bem_id']
         results['Plancap_pc_id'] = outputs['KoppelOverigeBronnen']['Plancap_pc_id']
         results['Stats_drinkwater'] = outputs['KoppelOverigeBronnen']['Stats_drinkwater']
-        # only add result if input ve's exists
-        if parameters['inputves']:
-            results['Stats_ve'] = outputs['KoppelOverigeBronnen']['Stats_ve']
+        results['Stats_ve'] = outputs['KoppelOverigeBronnen']['Stats_ve']
         results['Meerdere_plancaps_in_bemalingsgebied'] = outputs['KoppelOverigeBronnen']['Meerdere_plancaps_in_bemalingsgebied']
         results['Plancap_in_meerdere_bemalingsgebieden'] = outputs['KoppelOverigeBronnen']['Plancap_in_meerdere_bemalingsgebieden']
 
@@ -165,68 +163,62 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        if parameters['bgtinlooptabel']:
-            # koppel bgtInlooptabel
-            alg_params = {
-                'input': outputs['CalcFields05_ber']['Output_layer'],
-                'inputves (2)': parameters['bgtinlooptabel'],
-                'Bgt_intersect': parameters['Bgt_intersect'],
-                'Bgt_intersect_stats': QgsProcessing.TEMPORARY_OUTPUT
-            }
-            outputs['KoppelBgtinlooptabel'] = processing.run('GeoDynTools:koppel bgtInlooptabel', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            results['Bgt_intersect'] = outputs['KoppelBgtinlooptabel']['Bgt_intersect']
+        # koppel bgtInlooptabel
+        alg_params = {
+            'input': outputs['CalcFields05_ber']['Output_layer'],
+            'inputves (2)': parameters['bgtinlooptabel'],
+            'Bgt_intersect': parameters['Bgt_intersect'],
+            'Bgt_intersect_stats': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['KoppelBgtinlooptabel'] = processing.run('GeoDynTools:koppel bgtInlooptabel', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bgt_intersect'] = outputs['KoppelBgtinlooptabel']['Bgt_intersect']
 
-            feedback.setCurrentStep(9)
-            if feedback.isCanceled():
-                return {}
+        feedback.setCurrentStep(9)
+        if feedback.isCanceled():
+            return {}
 
-            # calc fields '06_bgt'
-            alg_params = {
-                'inputfields': parameters['inputfieldscsv'],
-                'inputlayer': outputs['KoppelBgtinlooptabel']['Bgt_intersect_stats'],
-                'uittevoerenstapininputfields': '06_bgt',
-                'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
-            }
-            outputs['CalcFields06_bgt'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        # calc fields '06_bgt'
+        alg_params = {
+            'inputfields': parameters['inputfieldscsv'],
+            'inputlayer': outputs['KoppelBgtinlooptabel']['Bgt_intersect_stats'],
+            'uittevoerenstapininputfields': '06_bgt',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['CalcFields06_bgt'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-            feedback.setCurrentStep(10)
-            if feedback.isCanceled():
-                return {}
+        feedback.setCurrentStep(10)
+        if feedback.isCanceled():
+            return {}
 
-            # vervang alle None-waarden met 0 voor bgt velden
-            alg_params = {
-                'inputlayer': outputs['CalcFields06_bgt']['Output_layer'],
-                'veldenlijst': 'HA_GEM_G;HA_HWA_G;HA_VGS_G;HA_VWR_G;HA_INF_G;HA_OPW_G;HA_MVD_G;HA_OBK_G;HA_BEM_G;HA_VER_G',
-                'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
-            }
-            outputs['VervangAlleNonewaardenMet0VoorBgtVelden'] = processing.run('GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        # vervang alle None-waarden met 0 voor bgt velden
+        alg_params = {
+            'inputlayer': outputs['CalcFields06_bgt']['Output_layer'],
+            'veldenlijst': 'HA_GEM_G;HA_HWA_G;HA_VGS_G;HA_VWR_G;HA_INF_G;HA_OPW_G;HA_MVD_G;HA_OBK_G;HA_BEM_G;HA_VER_G',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['VervangAlleNonewaardenMet0VoorBgtVelden'] = processing.run('GeoDynTools:VervangNoneValuesMet0VoorVeldenlijst', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-            feedback.setCurrentStep(11)
-            if feedback.isCanceled():
-                return {}
+        feedback.setCurrentStep(11)
+        if feedback.isCanceled():
+            return {}
 
-            # calc fields '07_ber'
-            alg_params = {
-                'inputfields': parameters['inputfieldscsv'],
-                'inputlayer': outputs['VervangAlleNonewaardenMet0VoorBgtVelden']['Output_layer'],
-                'uittevoerenstapininputfields': '07_ber',
-                'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
-            }
-            outputs['CalcFields07_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        # calc fields '07_ber'
+        alg_params = {
+            'inputfields': parameters['inputfieldscsv'],
+            'inputlayer': outputs['VervangAlleNonewaardenMet0VoorBgtVelden']['Output_layer'],
+            'uittevoerenstapininputfields': '07_ber',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['CalcFields07_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-            feedback.setCurrentStep(12)
-            if feedback.isCanceled():
-                return {}
-
-            inputlayer = outputs['CalcFields07_ber']['Output_layer']
-        else:
-            inputlayer = outputs['CalcFields05_ber']['Output_layer']
-
+        feedback.setCurrentStep(12)
+        if feedback.isCanceled():
+            return {}
 
         # calc fields '08_ber'
         alg_params = {
             'inputfields': parameters['inputfieldscsv'],
-            'inputlayer': inputlayer,
+            'inputlayer': outputs['CalcFields07_ber']['Output_layer'],
             'uittevoerenstapininputfields': '08_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -298,6 +290,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
         }
         outputs['CalcFields11_ber'] = processing.run('GeoDynTools:calc fields from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Result'] = outputs['CalcFields11_ber']['Output_layer']
+        
         # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
