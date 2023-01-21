@@ -12,11 +12,12 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterFile,
                        QgsProcessingParameterVectorLayer,
+                       QgsProcessingUtils,
                        QgsProject)
-from .custom_tools import rename_layers, default_inp_fields, default_layer
+from .custom_tools import rename_layers, default_inp_fields, default_layer, QgsProcessingAlgorithmPost
 
 
-class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
+class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3')))
@@ -296,6 +297,8 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithm):
             feedback.pushInfo("keepName = True")
         else:
             results, context, feedback = rename_layers(results, context, feedback)
+            for key in results:
+                self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)        
  
         return results
 

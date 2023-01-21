@@ -11,12 +11,12 @@ from qgis.core import QgsProcessingMultiStepFeedback
 from qgis.core import QgsProcessingParameterMapLayer
 from qgis.core import QgsProcessingParameterNumber
 from qgis.core import QgsProcessingParameterFeatureSink
-from qgis.core import QgsProject
+from qgis.core import QgsProject, QgsProcessingUtils
 import processing
-from .custom_tools import rename_layers, default_layer
+from .custom_tools import rename_layers, default_layer, QgsProcessingAlgorithmPost
 
         
-class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
+class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterMapLayer('GWSWBemalingsgebieden', 'Input bemalingsgebieden', defaultValue=default_layer('Input bemalingsgebieden',geometryType=2), types=[QgsProcessing.TypeVectorPolygon]))
         self.addParameter(QgsProcessingParameterMapLayer('GWSWnetwerkknooppunt', 'GWSW_netwerk_knooppunt', defaultValue=default_layer('netwerk_knooppunt',geometryType=0), types=[QgsProcessing.TypeVectorPoint]))
@@ -34,7 +34,6 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_tbv_stap2', 'Gebiedsgegevens_lijn_tbv_stap2', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('GemengdeEnVuilwaterstelsels', 'Gemengde en vuilwaterstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Berging_uit_knopen', 'Stap1_berging_uit_knopen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -1435,6 +1434,8 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
             feedback.pushInfo("keepName = True")
         else:
             results, context, feedback = rename_layers(results, context, feedback)
+            for key in results:
+                self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)        
  
         return results
 

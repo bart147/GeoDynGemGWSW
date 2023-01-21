@@ -12,11 +12,13 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterFile,
                        QgsProcessingParameterVectorLayer,
+                       QgsProcessingUtils,
                        QgsProject)
-from .custom_tools import rename_layers, default_inp_fields, default_layer
-
+from .custom_tools import rename_layers, default_inp_fields, default_layer, return_result_group, QgsProcessingAlgorithmPost
+from qgis.utils import iface
+from PyQt5 import Qt
        
-class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
+class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden_tbv_stap2', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('bemalingsgebieden_tbv_stap2')))
@@ -454,8 +456,12 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
             feedback.pushInfo("keepName = True")
         else:
             results, context, feedback = rename_layers(results, context, feedback)
+            for key in results:
+                self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)        
  
         return results
+
+    
 
     def name(self):
         return 'stap 2.) genereer_afvoerrelaties'

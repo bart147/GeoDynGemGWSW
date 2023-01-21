@@ -24,11 +24,13 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterBoolean,
                        QgsProject,
-                       QgsMapLayerType)
+                       QgsMapLayerType,
+                       QgsLayerTreeGroup)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
 from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
 from qgis import processing
+from qgis.utils import iface
 from .Dijkstra import Graph, dijkstra
 
 cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
@@ -42,7 +44,18 @@ class Renamer (QgsProcessingLayerPostProcessorInterface):
     def postProcessLayer(self, layer, context, feedback):
         layer.setName(self.name)
 
+def return_result_group():
+    selNodes = iface.layerTreeView().selectedNodes()
+    selNode = selNodes[0] if selNodes else None
+    if isinstance(selNode, QgsLayerTreeGroup):
+        group = selNode
+    else:
+        root = QgsProject.instance().layerTreeRoot()
+        group = root.addGroup('Results')
+    return group
+
 def rename_layers(results, context, feedback):
+    
     for key in results:
         if context.willLoadLayerOnCompletion(results[key]):
             random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
@@ -55,7 +68,17 @@ def rename_layers(results, context, feedback):
             if os.path.exists(style):
                 layer = context.getMapLayer(results[key])
                 layer.loadNamedStyle(style)
-                #layer.triggerRepaint()??
+
+            # add to subgroup or group
+            continue
+            if not 'tbv' in key:
+                subgroup = group.addGroup("tussenresultaten")
+                subgroup.addLayer(layer)
+            else:
+                group.addLayer(layer)
+
+
+
 
     return results, context, feedback
 
@@ -76,6 +99,34 @@ def default_layer(wildcard, geometryType=None):
         if wildcard.lower() in layername.lower():
             return layername
     return None
+
+class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
+
+    final_layers = { }
+
+    def postProcessAlgorithm(self, context, feedback):
+        project = context.project()
+        root = project.instance().layerTreeRoot()
+        #group = root.addGroup('Results')
+        #root = return_result_group()
+        group = root.addGroup("Result " + self.displayName())
+        hoofdgroup = group.addGroup("hoofdresultaten")
+        subgroup = group.addGroup("tussenresultaten")
+        
+        for index, item in enumerate(self.final_layers.items()):
+            layer = item[1]
+            layername = item[0]
+            layer.setName(item[0])
+            if 'tbv' in layername or layername == 'Result':
+                group_to_add = hoofdgroup
+            else:
+                group_to_add = subgroup
+
+            project.addMapLayers([layer], False)
+            group_to_add.insertLayer(int(index), layer)
+
+        self.final_layers.clear()
+        return {}
 
 class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     """

@@ -10,12 +10,13 @@ from qgis.core import QgsProcessingAlgorithm
 from qgis.core import QgsProcessingMultiStepFeedback
 from qgis.core import QgsProcessingParameterVectorLayer
 from qgis.core import QgsProcessingParameterFeatureSink
-from qgis.core import QgsProject
+from qgis.core import QgsProject,QgsProcessingUtils
+
 import processing
-from .custom_tools import rename_layers, default_layer
+from .custom_tools import rename_layers, default_layer, QgsProcessingAlgorithmPost
 
         
-class Stap1KikkerToGeodyn(QgsProcessingAlgorithm):
+class Stap1KikkerToGeodyn(QgsProcessingAlgorithmPost):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('input bemalingsgebieden',geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('kikkerlijnen', 'Kikker_lijnen', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('kikker', geometryType=1)))
@@ -138,9 +139,11 @@ class Stap1KikkerToGeodyn(QgsProcessingAlgorithm):
             feedback.pushInfo("keepName = True")
         else:
             results, context, feedback = rename_layers(results, context, feedback)
+            for key in results:
+                self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)     
  
         return results
-
+    
     def name(self):
         return 'stap 1.) Kikker to Geodyn'
 
