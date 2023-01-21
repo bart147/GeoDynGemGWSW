@@ -13,16 +13,16 @@ from qgis.core import QgsProcessingParameterNumber
 from qgis.core import QgsProcessingParameterFeatureSink
 from qgis.core import QgsProject
 import processing
-from .custom_tools import rename_layers
+from .custom_tools import rename_layers, default_layer
 
         
 class Stap1GwswToGeodyn(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterMapLayer('GWSWBemalingsgebieden', 'Input bemalingsgebieden', defaultValue=None, types=[QgsProcessing.TypeVectorPolygon]))
-        self.addParameter(QgsProcessingParameterMapLayer('GWSWnetwerkknooppunt', 'GWSW_netwerk_knooppunt', defaultValue=None, types=[QgsProcessing.TypeVectorPoint]))
-        self.addParameter(QgsProcessingParameterMapLayer('GWSWnetwerkkunstwerk', 'GWSW_netwerk_kunstwerk', defaultValue=None, types=[QgsProcessing.TypeVectorPoint]))
+        self.addParameter(QgsProcessingParameterMapLayer('GWSWBemalingsgebieden', 'Input bemalingsgebieden', defaultValue=default_layer('Input bemalingsgebieden',geometryType=2), types=[QgsProcessing.TypeVectorPolygon]))
+        self.addParameter(QgsProcessingParameterMapLayer('GWSWnetwerkknooppunt', 'GWSW_netwerk_knooppunt', defaultValue=default_layer('netwerk_knooppunt',geometryType=0), types=[QgsProcessing.TypeVectorPoint]))
+        self.addParameter(QgsProcessingParameterMapLayer('GWSWnetwerkkunstwerk', 'GWSW_netwerk_kunstwerk', defaultValue=default_layer('netwerk_kunstwerk',geometryType=0), types=[QgsProcessing.TypeVectorPoint]))
         self.addParameter(QgsProcessingParameterNumber('MaxzoekafstandRG', 'Max_zoek_afstand_RG', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=100, defaultValue=3))
-        self.addParameter(QgsProcessingParameterMapLayer('netwerkverbinding', 'GWSW_netwerk_verbinding', defaultValue=None, types=[QgsProcessing.TypeVectorLine]))
+        self.addParameter(QgsProcessingParameterMapLayer('netwerkverbinding', 'GWSW_netwerk_verbinding', defaultValue=default_layer('netwerk_verbinding',geometryType=1), types=[QgsProcessing.TypeVectorLine]))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_punt_tbv_stap2', 'Gebiedsgegevens_punt_tbv_stap2', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer_10m', 'Rioolstelsel_buffer_10m', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('LeidingenNietMeegenomen', 'leidingen niet meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))

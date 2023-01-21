@@ -13,15 +13,15 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterFile,
                        QgsProcessingParameterVectorLayer,
                        QgsProject)
-from .custom_tools import rename_layers, default_inp_fields
+from .custom_tools import rename_layers, default_inp_fields, default_layer
 
        
 class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden_tbv_stap2', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
-        self.addParameter(QgsProcessingParameterVectorLayer('gebiedsgegevenspunttbvstap2', 'Gebiedsgegevens_punt_tbv_stap2', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'gebiedsgegevens_lijn_tbv_stap2', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden_tbv_stap2', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('bemalingsgebieden_tbv_stap2')))
+        self.addParameter(QgsProcessingParameterVectorLayer('gebiedsgegevenspunttbvstap2', 'Gebiedsgegevens_punt_tbv_stap2', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('Gebiedsgegevens_punt_tbv_stap2')))
+        self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'gebiedsgegevens_lijn_tbv_stap2', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('gebiedsgegevens_lijn_tbv_stap2')))
         ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar', 'VAN_NAAR', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))

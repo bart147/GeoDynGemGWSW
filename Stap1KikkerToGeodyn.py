@@ -12,14 +12,14 @@ from qgis.core import QgsProcessingParameterVectorLayer
 from qgis.core import QgsProcessingParameterFeatureSink
 from qgis.core import QgsProject
 import processing
-from .custom_tools import rename_layers
+from .custom_tools import rename_layers, default_layer
 
         
 class Stap1KikkerToGeodyn(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
-        self.addParameter(QgsProcessingParameterVectorLayer('kikkerlijnen', 'Kikker_lijnen', types=[QgsProcessing.TypeVectorLine], defaultValue=None))
-        self.addParameter(QgsProcessingParameterVectorLayer('kikkerpunten', 'Kikker_punten', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebieden', 'bemalingsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('input bemalingsgebieden',geometryType=2)))
+        self.addParameter(QgsProcessingParameterVectorLayer('kikkerlijnen', 'Kikker_lijnen', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('kikker', geometryType=1)))
+        self.addParameter(QgsProcessingParameterVectorLayer('kikkerpunten', 'Kikker_punten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('kikker', geometryType=0)))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_tbv_stap2_kikker', 'Gebiedsgegevens_lijn_tbv_stap2_kikker', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_tbv_stap2_kikker', 'Bemalingsgebieden_tbv_stap2_kikker', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_punt_tbv_stap2_kikker', 'Gebiedsgegevens_punt_tbv_stap2_kikker', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))

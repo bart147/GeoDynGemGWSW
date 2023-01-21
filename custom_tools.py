@@ -23,7 +23,8 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterFeatureSource,
                        QgsProcessingParameterFeatureSink,
                        QgsProcessingParameterBoolean,
-                       QgsProject)
+                       QgsProject,
+                       QgsMapLayerType)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
 from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
@@ -58,6 +59,23 @@ def rename_layers(results, context, feedback):
 
     return results, context, feedback
 
+def default_layer(wildcard, geometryType=None):
+    """
+    Return layername or None based on wildcard
+    Also filters for geometryType if specified where 0=point, 1=line, 2=poly
+    """
+    layers = QgsProject.instance().mapLayers()
+    for layerid in layers:
+        layer = layers[layerid]
+        if geometryType != None: # only filter if geometryType is specified
+            if layer.type() != QgsMapLayerType.VectorLayer:
+                continue # skip layer if not Vector
+            elif layer.geometryType() != geometryType:
+                continue # skip if geometryType is different
+        layername = layer.name()
+        if wildcard.lower() in layername.lower():
+            return layername
+    return None
 
 class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     """
