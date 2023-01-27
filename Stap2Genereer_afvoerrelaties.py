@@ -14,7 +14,7 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterVectorLayer,
                        QgsProcessingUtils,
                        QgsProject)
-from .custom_tools import rename_layers, default_inp_fields, default_layer, return_result_group, QgsProcessingAlgorithmPost
+from .custom_tools import rename_layers, default_inp_fields, default_layer, QgsProcessingAlgorithmPost
 from qgis.utils import iface
 from PyQt5 import Qt
        

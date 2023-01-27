@@ -45,6 +45,7 @@ class Renamer (QgsProcessingLayerPostProcessorInterface):
         layer.setName(self.name)
 
 def return_result_group():
+    '''depricated...'''
     selNodes = iface.layerTreeView().selectedNodes()
     selNode = selNodes[0] if selNodes else None
     if isinstance(selNode, QgsLayerTreeGroup):
@@ -109,7 +110,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         root = project.instance().layerTreeRoot()
         #group = root.addGroup('Results')
         #root = return_result_group()
-        group = root.addGroup("Result " + self.displayName())
+        group = root.insertGroup(0, "Result " + self.displayName())
         hoofdgroup = group.addGroup("hoofdresultaten")
         subgroup = group.addGroup("tussenresultaten")
         
@@ -127,6 +128,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
         self.final_layers.clear()
         return {}
+
 
 class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     """
@@ -506,10 +508,15 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         feedback.pushInfo ("netwerk opslaan als graph...")
         VAN_FLD = "BEM_ID"
         NAAR_FLD = "NAAR_BEM_ID"
-
+        LABEL = "VAN_KNOOPN"
+        BM_NM = "BM_NM"
+        d_LABEL = { }
+        d_BM_NM = { }
         for feature in layer.getFeatures():  # .getFeatures()
             VAN_KNOOPN = feature[VAN_FLD]
             LOOST_OP = feature[NAAR_FLD]
+            d_LABEL[VAN_KNOOPN] = feature[LABEL]
+            d_BM_NM[VAN_KNOOPN] = feature[BM_NM] if layer.fields().indexFromName(BM_NM) != -1 else None
             graph.add_node(VAN_KNOOPN)
             graph_rev.add_node(VAN_KNOOPN)
             if LOOST_OP != None:
@@ -541,6 +548,13 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND"), K_KNP_EIND)              # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
             d_K_ONTV_VAN[VAN_KNOOPN] = l_onderliggende_gemalen
             d_K_ONTV_VAN_n1[VAN_KNOOPN] =  l_onderliggende_gemalen_n1
+            # convert bemid's to description field
+            l_onderliggende_desc = str([d_LABEL[key] for key in list(d_edges)]) # [u'ZRE-123',u'ZRE-234']
+            l_onderliggende_desc = l_onderliggende_desc.replace("u'", "'").replace("[", "").replace("]", "")
+            l_onderliggende_desc_n1 = str([d_LABEL[key] for key in l_onderliggende_gemalen_n1]).replace("u'", "'").replace("[", "").replace("]", "")
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_ONTV_VAN_NAME"), l_onderliggende_desc) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_ONTV_1N_NAME"), l_onderliggende_desc_n1) # K_ONTV_1N = 'ZRE-1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND_NAME"), d_BM_NM[K_KNP_EIND])              # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
 
         layer.commitChanges()
         return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]
