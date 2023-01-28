@@ -118,7 +118,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             layer = item[1]
             layername = item[0]
             layer.setName(item[0])
-            if 'tbv' in layername or layername == 'Result':
+            if 'tbv' in layername or layername == 'Eindresultaat':
                 group_to_add = hoofdgroup
             else:
                 group_to_add = subgroup
@@ -295,6 +295,30 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
 
         return layer, feedback
 
+    def drop_empty_fields(self, layer, feedback):
+        feedback.pushInfo("drop empty fields...")
+        prov = layer.dataProvider()
+        field_names = [field.name() for field in prov.fields()]
+        
+
+        field_names_to_delete = []
+        for field_name in field_names:
+            empty = True
+            for feature in layer.getFeatures():
+                if feature[field_name]:
+                    empty = False
+            if empty:
+                field_names_to_delete.append(field_name)
+
+        field_indexes_to_delete = [layer.fields().indexFromName(fld) for fld in field_names_to_delete]
+        feedback.pushWarning("empty fields to delete:")
+        for fld in field_names_to_delete:
+            feedback.pushInfo(str("-" + fld))
+        layer.dataProvider().deleteAttributes(field_indexes_to_delete)
+        layer.updateFields()
+
+        return layer, feedback
+
     def get_d_velden_csv(self, INP_FIELDS_CSV):
         """dictionary field-info ophalen uit excel zonder pandas met xlrd"""
     
@@ -330,6 +354,17 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         
         return d_velden
 
+    def add_fieldAlias_from_dict(self, layer, d_fld, feedback):
+
+        for field in layer.fields():
+            fieldname = field.name()
+            if fieldname in d_fld.keys():
+                fld = d_fld[fieldname] # dict with field parameters
+                feedback.pushInfo("veld alias '{}' toevoegen aan {}".format(fld["field_alias"], fieldname))
+                fieldindex = layer.fields().indexFromName(fieldname)
+                layer.setFieldAlias(fieldindex, fld["field_alias"])
+        return layer
+
     def add_field_from_dict(self, fc, fld_name, d_fld, feedback):
         """add field. dict must be like
             d_fld[fld_name] = {
@@ -341,6 +376,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         
         feedback.pushInfo("veld {} toevoegen".format(fld_name))
         fld = d_fld[fld_name] # dict with field parameters
+        feedback.pushInfo("veld alias {}".format(fld["field_alias"]))
         if fld in [field.name() for field in fc.fields()]:
             return
         if "field_length" in list(fld.keys()):
@@ -359,10 +395,20 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             "FLOAT": QVariant.Double,
             "DATE" : QVariant.DateTime,
         }
-
-        if fc.fields().indexFromName(fld_name) == -1:
-            fc.dataProvider().addAttributes([QgsField(prec=2, name=fld_name, type=fldtype_mapper.get(fld["field_type"],QVariant.String), len=field_length)])
+        new_fld = QgsField(prec=2, name=fld_name, type=fldtype_mapper.get(fld["field_type"],QVariant.String), len=field_length)
+        #new_fld.setAlias(fld["field_alias"])
+        #new_fld.alias = fld["field_alias"]
+        fieldindex = fc.fields().indexFromName(fld_name)
+        if fieldindex == -1:
+            fc.dataProvider().addAttributes([new_fld])
+            #fc.updateFields()
+            #fc.fields()[fieldindex].alias = fld["field_alias"]
+            #fc.fields()[fieldindex].setAlias(fld["field_alias"])
             fc.updateFields()
+            feedback.pushInfo("setveld alias {}".format(fld["field_alias"]))
+            fc.setFieldAlias(fieldindex, fld["field_alias"])
+            ##fc.updateFields()
+        ##return fc
 
     def add_field_from_dict_label(self, fc, add_fld_value, d_fld, feedback):
         """velden toevoegen op basis van dict.keys 'add_fld', 'order' en 'fc' in d_fld
@@ -701,7 +747,7 @@ class CustomToolsAddFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
         """
 
         self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=r"G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\inp_fields.csv"))
+        self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
         self.addParameter(QgsProcessingParameterString('uittevoerenstapininputfields', 'uit te voeren stap in input_fields', multiLine=False, defaultValue='st2a'))
         self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
 
@@ -977,3 +1023,128 @@ class CustomToolsSortByMultipleFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
         l = parameters['veldenlijst'].split(";")
         layer, feedback = self.sort_fields(l, layer, feedback)
         return layer
+
+
+class CustomToolsDropEmptyFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
+    """
+    Custom Algorithm to drop empty fields
+    """
+
+    def createInstance(self):
+        return CustomToolsDropEmptyFieldsAlgorithm()
+
+    def name(self):
+        """
+        Returns the algorithm name, used for identifying the algorithm. This
+        string should be fixed for the algorithm, and must not be localised.
+        The name should be unique within each provider. Names should contain
+        lowercase alphanumeric characters only and no spaces or other
+        formatting characters.
+        """
+        return 'drop_empty_fields'
+
+    def displayName(self):
+        """
+        Returns the translated algorithm name, which should be used for any
+        user-visible display of the algorithm name.
+        """
+        return self.tr('drop empty fields')
+
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))     
+        
+    def customAlgorithm(self, layer, parameters, feedback):
+        """
+        Here we define our own custom algorithm.
+        """
+        layer, feedback = self.drop_empty_fields(layer, feedback)
+        return layer
+    
+
+class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
+    """
+    This is an example algorithm that takes a vector layer and
+    creates a new identical one.
+
+    It is meant to be used as an example of how to create your own
+    algorithms and explain methods and variables used to do it. An
+    algorithm like this will be available in all elements, and there
+    is not need for additional work.
+
+    All Processing algorithms should extend the QgsProcessingAlgorithm
+    class.
+    """
+
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+
+    def tr(self, string):
+        """
+        Returns a translatable string with the self.tr() function.
+        """
+        return QCoreApplication.translate('Processing', string)
+
+    def createInstance(self):
+        return CustomToolsAddFieldAliasFromCsvAlgorithm()
+
+    def name(self):
+        """
+        Returns the algorithm name, used for identifying the algorithm. This
+        string should be fixed for the algorithm, and must not be localised.
+        The name should be unique within each provider. Names should contain
+        lowercase alphanumeric characters only and no spaces or other
+        formatting characters.
+        """
+        return 'add fieldAlias from csv input fields'
+
+    def displayName(self):
+        """
+        Returns the translated algorithm name, which should be used for any
+        user-visible display of the algorithm name.
+        """
+        return self.tr('add fieldAlias from csv input fields')
+
+    def shortHelpString(self):
+        """
+        Returns a localised short helper string for the algorithm. This string
+        should provide a basic description about what the algorithm does and the
+        parameters and outputs associated with it..
+        """
+        return self.tr("Example algorithm short description")
+
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.addParameter(
+            QgsProcessingParameterFeatureSource(
+                self.INPUT,
+                self.tr('Input layer'),
+                [QgsProcessing.TypeVectorAnyGeometry]
+            )
+        )
+        #self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        #self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+
+    def processAlgorithm(self, parameters, context, model_feedback):
+        # effects input directly so no new output is created
+        feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
+        results = {}
+        
+        layer = self.parameterAsVectorLayer(
+            parameters, 
+            self.INPUT, 
+            context
+        )
+        d_fld = self.get_d_velden_csv(parameters['inputfields'])
+        layer = self.add_fieldAlias_from_dict(layer, d_fld, feedback)
+        
+        return results

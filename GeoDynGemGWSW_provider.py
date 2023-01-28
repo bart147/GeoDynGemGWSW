@@ -45,7 +45,9 @@ from .custom_tools import (CustomToolsAddFieldsFromDictAlgorithm,
                            CustomToolsBerekenOnderbemalingAlgorithm,
                            CustomToolsVervangNoneDoor0Algorithm,
                            CustomToolsRetainFieldsAlgorithm,
-                           CustomToolsSortByMultipleFieldsAlgorithm)
+                           CustomToolsSortByMultipleFieldsAlgorithm,
+                           CustomToolsDropEmptyFieldsAlgorithm,
+                           CustomToolsAddFieldAliasFromCsvAlgorithm)
 from .Stap1GwswToGeodyn import Stap1GwswToGeodyn
 from .Stap1KikkerToGeodyn import Stap1KikkerToGeodyn
 from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
@@ -84,10 +86,12 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         # add customTools
         self.addAlgorithm(CustomToolsLis2GraphAlgorithm())
         self.addAlgorithm(CustomToolsAddFieldsFromDictAlgorithm())
+        self.addAlgorithm(CustomToolsAddFieldAliasFromCsvAlgorithm())
         self.addAlgorithm(CustomToolsCalcFieldsFromDictAlgorithm())
         self.addAlgorithm(CustomToolsBerekenOnderbemalingAlgorithm())
         self.addAlgorithm(CustomToolsVervangNoneDoor0Algorithm())
         self.addAlgorithm(CustomToolsRetainFieldsAlgorithm())
+        self.addAlgorithm(CustomToolsDropEmptyFieldsAlgorithm())
         self.addAlgorithm(CustomToolsSortByMultipleFieldsAlgorithm())
         self.addAlgorithm(KoppelBgtinlooptabel())
         self.addAlgorithm(KoppelOverigeBronnen())
