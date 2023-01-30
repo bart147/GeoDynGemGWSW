@@ -115,7 +115,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
 
         This string should be short (e.g. "Lastools") and localised.
         """
-        return self.tr('GeoDynGemeente')
+        return self.tr('GeoDyn voor gemeenten')
 
     # def icon(self):
         # """

@@ -26,7 +26,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
         ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
-        self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
+        self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
         self.addParameter(QgsProcessingParameterFeatureSink('Result_all_fields', 'result_all_fields', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat', 'Eindresultaat', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
@@ -43,12 +43,13 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         parameters['inputfieldscsv'] = default_inp_fields
+        dummy_folder = "dummy_gpkg"
         if not parameters['inputves']:
-            parameters['inputves'] = QgsVectorLayer(os.path.join(cmd_folder, "dummy_gpkg", "ve_empty.gpkg"), "ve_empty", "ogr")
+            parameters['inputves'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "ve_empty.gpkg"), "ve_empty", "ogr")
         if not parameters['bgtinlooptabel']:
-            parameters['bgtinlooptabel'] = QgsVectorLayer(os.path.join(cmd_folder, "dummy_gpkg", "bgt_inlooptabel_empty.gpkg"), "bgt_inlooptabel_empty", "ogr")
-        if not parameters['Plancap_pc_id']:
-            parameters['Plancap_pc_id'] = QgsVectorLayer(os.path.join(cmd_folder, "dummy_gpkg", "plancap_empty.gpkg"), "plancap_empty", "ogr")
+            parameters['bgtinlooptabel'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgt_inlooptabel_empty.gpkg"), "bgt_inlooptabel_empty", "ogr")
+        if not parameters['inputplancap']:
+            parameters['inputplancap'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "plancap_empty.gpkg"), "plancap_empty", "ogr")
         QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
         feedback = QgsProcessingMultiStepFeedback(18, model_feedback)
@@ -305,15 +306,27 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
+        # Veld(en) verwijderen
+        alg_params = {
+            'COLUMN': ['BERGING_M3','CAP_INST_M','LAAGSTE_OS','POMPEN_ST','OVERSTORT_','DOORLAAT_S','STRENGEN_S','KNOPEN_ST','K_ONTV_VAN','K_ONTV_1N','K_KNP_EIND','par_result_sum','zak_result_sum','par_result_count','zak_result_count','ExAFW_2124_sum','ExAFW_2529_sum','ExAFW_3039_sum','ExAFW_4050_sum','PC_IDs','GEM_HA_count','GEM_HA_sum','HWA_HA_count','HWA_HA_sum','INF_HA_count','INF_HA_sum','OPW_HA_count','OPW_HA_sum','MVD_HA_count','MVD_HA_sum','BGT_HA_TOT'],
+            'INPUT': outputs['CalcFields11_ber']['Output_layer'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['VeldenVerwijderen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(19)
+        if feedback.isCanceled():
+            return {}
+
         # drop empty fields
         alg_params = {
-            'inputlayer': outputs['CalcFields11_ber']['Output_layer'],
+            'inputlayer': outputs['VeldenVerwijderen']['OUTPUT'],
             'Output_layer': parameters['Eindresultaat']
         }
         outputs['DropEmptyFields'] = processing.run('GeoDynTools:drop_empty_fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Eindresultaat'] = outputs['DropEmptyFields']['Output_layer']
 
-        feedback.setCurrentStep(19)
+        feedback.setCurrentStep(20)
         if feedback.isCanceled():
             return {}
 
@@ -324,7 +337,6 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         }
         outputs['AddFieldaliasFromCsvInputFields'] = processing.run('GeoDynTools:add fieldAlias from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        
         # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
@@ -339,7 +351,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         return 'stap 3.) bereken afvalwaterprognose'
 
     def displayName(self):
-        return 'stap 3.) bereken afvalwaterprognose'
+        return 'stap 3.) Bereken afvalwaterprognose'
 
     def group(self):
         return ''

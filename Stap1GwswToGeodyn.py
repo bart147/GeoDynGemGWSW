@@ -1443,7 +1443,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         return 'stap 1.) GWSW to Geodyn'
 
     def displayName(self):
-        return 'stap 1.) GWSW to Geodyn'
+        return 'stap 1.) GWSW to GeoDyn'
 
     def group(self):
         return ''

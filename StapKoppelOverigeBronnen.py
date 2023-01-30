@@ -321,10 +321,10 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
             results['Bemalingsgebieden_joined_stats'] = outputs['AddFieldGrondslag_sum']['OUTPUT']           
         
         # --- this is needed to rename layers. looks funky, but works!
-        if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
-            feedback.pushInfo("keepName = True")
-        else:
-            results, context, feedback = rename_layers(results, context, feedback)
+        # if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
+        #     feedback.pushInfo("keepName = True")
+        # else:
+        #     results, context, feedback = rename_layers(results, context, feedback)
  
         return results
 

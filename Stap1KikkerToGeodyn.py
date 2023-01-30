@@ -148,7 +148,7 @@ class Stap1KikkerToGeodyn(QgsProcessingAlgorithmPost):
         return 'stap 1.) Kikker to Geodyn'
 
     def displayName(self):
-        return 'stap 1.) Kikker to Geodyn'
+        return 'stap 1.) Kikker to GeoDyn'
 
     def group(self):
         return ''

@@ -467,7 +467,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
         return 'stap 2.) genereer_afvoerrelaties'
 
     def displayName(self):
-        return 'stap 2.) genereer_afvoerrelaties'
+        return 'stap 2.) Genereer afvoerrelaties'
 
     def group(self):
         return ''

@@ -141,8 +141,8 @@
       </Option>
       <Option type="QString" name="component_description" value="add fieldAlias from csv input fields"/>
       <Option type="double" name="component_height" value="30"/>
-      <Option type="double" name="component_pos_x" value="1764.8"/>
-      <Option type="double" name="component_pos_y" value="2229.6"/>
+      <Option type="double" name="component_pos_x" value="1760"/>
+      <Option type="double" name="component_pos_y" value="2386.4"/>
       <Option type="double" name="component_width" value="200"/>
       <Option name="dependencies"/>
       <Option type="QString" name="id" value="GeoDynTools:add fieldAlias from csv input fields_1"/>
@@ -627,7 +627,7 @@
           <Option type="QString" name="component_description" value="result_all_fields"/>
           <Option type="double" name="component_height" value="30"/>
           <Option type="double" name="component_pos_x" value="1688.0000000000002"/>
-          <Option type="double" name="component_pos_y" value="2149.6"/>
+          <Option type="double" name="component_pos_y" value="2159.2"/>
           <Option type="double" name="component_width" value="200"/>
           <Option type="invalid" name="default_value"/>
           <Option type="bool" name="mandatory" value="false"/>
@@ -837,8 +837,8 @@
       </Option>
       <Option type="QString" name="component_description" value="drop empty fields"/>
       <Option type="double" name="component_height" value="30"/>
-      <Option type="double" name="component_pos_x" value="1531.2"/>
-      <Option type="double" name="component_pos_y" value="2200.4"/>
+      <Option type="double" name="component_pos_x" value="1576.7999999999997"/>
+      <Option type="double" name="component_pos_y" value="2310.8"/>
       <Option type="double" name="component_width" value="200"/>
       <Option name="dependencies"/>
       <Option type="QString" name="id" value="GeoDynTools:drop_empty_fields_1"/>
@@ -858,8 +858,8 @@
           </Option>
           <Option type="QString" name="component_description" value="Eindresultaat"/>
           <Option type="double" name="component_height" value="30"/>
-          <Option type="double" name="component_pos_x" value="1690.8000000000004"/>
-          <Option type="double" name="component_pos_y" value="2287.7999999999997"/>
+          <Option type="double" name="component_pos_x" value="1714.3999999999999"/>
+          <Option type="double" name="component_pos_y" value="2460.6000000000004"/>
           <Option type="double" name="component_width" value="200"/>
           <Option type="invalid" name="default_value"/>
           <Option type="bool" name="mandatory" value="false"/>
@@ -874,8 +874,8 @@
       <Option type="Map" name="params">
         <Option type="List" name="inputlayer">
           <Option type="Map">
-            <Option type="QString" name="child_id" value="GeoDynTools:calc fields from csv input fields_9"/>
-            <Option type="QString" name="output_name" value="Output_layer"/>
+            <Option type="QString" name="child_id" value="qgis:deletecolumn_1"/>
+            <Option type="QString" name="output_name" value="OUTPUT"/>
             <Option type="int" name="source" value="1"/>
           </Option>
         </Option>
@@ -1172,6 +1172,79 @@
           <Option type="Map">
             <Option type="QString" name="parameter_name" value="inputdrinkwater"/>
             <Option type="int" name="source" value="0"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option type="Map" name="qgis:deletecolumn_1">
+      <Option type="bool" name="active" value="true"/>
+      <Option name="alg_config"/>
+      <Option type="QString" name="alg_id" value="qgis:deletecolumn"/>
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="1784"/>
+        <Option type="double" name="component_pos_y" value="2300.6"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="Veld(en) verwijderen"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="1551.2000000000003"/>
+      <Option type="double" name="component_pos_y" value="2217.6"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option name="dependencies"/>
+      <Option type="QString" name="id" value="qgis:deletecolumn_1"/>
+      <Option name="outputs"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+      <Option type="Map" name="params">
+        <Option type="List" name="COLUMN">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="StringList" name="static_value">
+              <Option type="QString" value="BERGING_M3"/>
+              <Option type="QString" value="CAP_INST_M"/>
+              <Option type="QString" value="LAAGSTE_OS"/>
+              <Option type="QString" value="POMPEN_ST"/>
+              <Option type="QString" value="OVERSTORT_"/>
+              <Option type="QString" value="DOORLAAT_S"/>
+              <Option type="QString" value="STRENGEN_S"/>
+              <Option type="QString" value="KNOPEN_ST"/>
+              <Option type="QString" value="K_ONTV_VAN"/>
+              <Option type="QString" value="K_ONTV_1N"/>
+              <Option type="QString" value="K_KNP_EIND"/>
+              <Option type="QString" value="par_result_sum"/>
+              <Option type="QString" value="zak_result_sum"/>
+              <Option type="QString" value="par_result_count"/>
+              <Option type="QString" value="zak_result_count"/>
+              <Option type="QString" value="ExAFW_2124_sum"/>
+              <Option type="QString" value="ExAFW_2529_sum"/>
+              <Option type="QString" value="ExAFW_3039_sum"/>
+              <Option type="QString" value="ExAFW_4050_sum"/>
+              <Option type="QString" value="PC_IDs"/>
+              <Option type="QString" value="GEM_HA_count"/>
+              <Option type="QString" value="GEM_HA_sum"/>
+              <Option type="QString" value="HWA_HA_count"/>
+              <Option type="QString" value="HWA_HA_sum"/>
+              <Option type="QString" value="INF_HA_count"/>
+              <Option type="QString" value="INF_HA_sum"/>
+              <Option type="QString" value="OPW_HA_count"/>
+              <Option type="QString" value="OPW_HA_sum"/>
+              <Option type="QString" value="MVD_HA_count"/>
+              <Option type="QString" value="MVD_HA_sum"/>
+              <Option type="QString" value="BGT_HA_TOT"/>
+            </Option>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT">
+          <Option type="Map">
+            <Option type="QString" name="child_id" value="GeoDynTools:calc fields from csv input fields_9"/>
+            <Option type="QString" name="output_name" value="Output_layer"/>
+            <Option type="int" name="source" value="1"/>
           </Option>
         </Option>
       </Option>
