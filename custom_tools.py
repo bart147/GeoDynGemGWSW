@@ -69,7 +69,7 @@ def rename_layers(results, context, feedback):
             if os.path.exists(style):
                 layer = context.getMapLayer(results[key])
                 layer.loadNamedStyle(style)
-    #QgsProject.instance().reloadAllLayers() 
+    QgsProject.instance().reloadAllLayers() 
     return results, context, feedback
 
 def default_layer(wildcard, geometryType=None):
@@ -113,7 +113,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             # feedback.pushInfo("layer.name = {}".format(layer.name()))
             # feedback.pushInfo("layername = {}".format(layername))
             rename[layer.id()] = layername
-            #layer.setName(item[0])
+            layer.setName(item[0])
             if 'tbv' in layername or layername == 'Eindresultaat':
                 group_to_add = hoofdgroup
             else:
@@ -121,16 +121,15 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
             project.addMapLayers([layer], False)
             group_to_add.insertLayer(int(index), layer)
-            
+
         layers = QgsProject.instance().mapLayers()
         for layerid in layers:
-            feedback.pushInfo("layerid = {}".format(layerid))
-            
             if layerid in rename:
+                feedback.pushInfo("layerid = {}".format(layerid))
                 feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
                 feedback.pushInfo("rename to = {}".format(rename[layerid]))
                 layers[layerid].setName(rename[layerid])
-        #QgsProject.instance().reloadAllLayers() 
+        QgsProject.instance().reloadAllLayers() 
         self.final_layers.clear()
         return {}
 

@@ -85,9 +85,9 @@ class GeodynAlleStappenKikker(QgsProcessingAlgorithm):
         }
         #alg_params['keepName'] = True
         outputs['Stap2Genereer_afvoerrelaties'] = processing.run('GeoDynTools:stap 2.) genereer_afvoerrelaties', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Stap2_afvoerrelaties_bemalingsgebieden'] = outputs['Stap2Genereer_afvoerrelaties']['Afvoerboom']
-        results['Stap2_afvoerrelaties_rioolgemalen'] = outputs['Stap2Genereer_afvoerrelaties']['Gebiedsgegevens_lijn_selectie']
-        results['Stap2_rioolgemalen_gekoppeld'] = outputs['Stap2Genereer_afvoerrelaties']['Van_naar_sel']
+        # results['Stap2_afvoerrelaties_bemalingsgebieden'] = outputs['Stap2Genereer_afvoerrelaties']['Afvoerboom']
+        # results['Stap2_afvoerrelaties_rioolgemalen'] = outputs['Stap2Genereer_afvoerrelaties']['Gebiedsgegevens_lijn_selectie']
+        # results['Stap2_rioolgemalen_gekoppeld'] = outputs['Stap2Genereer_afvoerrelaties']['Van_naar_sel']
 
         feedback.setCurrentStep(2)
         if feedback.isCanceled():
@@ -113,23 +113,16 @@ class GeodynAlleStappenKikker(QgsProcessingAlgorithm):
         }
         #alg_params['keepName'] = True
         outputs['Stap3BerekenAfvalwaterprognose'] = processing.run('GeoDynTools:stap 3.) bereken afvalwaterprognose', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Eindresultaat'] = outputs['Stap3BerekenAfvalwaterprognose']['Eindresultaat']
-        results['Result_all_fields'] = outputs['Stap3BerekenAfvalwaterprognose']['Result_all_fields']
-        results['Stap3_exafw_per_bem_id'] = outputs['Stap3BerekenAfvalwaterprognose']['Exafw_per_bem_id']
-        results['Stap3_plancap_pc_id'] = outputs['Stap3BerekenAfvalwaterprognose']['Plancap_pc_id']
-        results['Stap3_bgt_intersect'] = outputs['Stap3BerekenAfvalwaterprognose']['Bgt_intersect']
-        results['Stap3_meerdere_plancaps_in_bemalingsgebied'] = outputs['Stap3BerekenAfvalwaterprognose']['Meerdere_plancaps_in_bemalingsgebied']
-        results['Stap3_plancap_in_meerdere_bemalingsgebieden'] = outputs['Stap3BerekenAfvalwaterprognose']['Plancap_in_meerdere_bemalingsgebieden']
+        # results['Eindresultaat'] = outputs['Stap3BerekenAfvalwaterprognose']['Eindresultaat']
+        # results['Result_all_fields'] = outputs['Stap3BerekenAfvalwaterprognose']['Result_all_fields']
+        # results['Stap3_exafw_per_bem_id'] = outputs['Stap3BerekenAfvalwaterprognose']['Exafw_per_bem_id']
+        # results['Stap3_plancap_pc_id'] = outputs['Stap3BerekenAfvalwaterprognose']['Plancap_pc_id']
+        # results['Stap3_bgt_intersect'] = outputs['Stap3BerekenAfvalwaterprognose']['Bgt_intersect']
+        # results['Stap3_meerdere_plancaps_in_bemalingsgebied'] = outputs['Stap3BerekenAfvalwaterprognose']['Meerdere_plancaps_in_bemalingsgebied']
+        # results['Stap3_plancap_in_meerdere_bemalingsgebieden'] = outputs['Stap3BerekenAfvalwaterprognose']['Plancap_in_meerdere_bemalingsgebieden']
 
         # --- add below each alg_params {} 
         # alg_params['keepName'] = True
-
-        # --- this is needed to rename layers. looks funky, but works!
-        if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
-            feedback.pushInfo("keepName = True")
-        else:
-            results, context, feedback = rename_layers(results, context, feedback)
- 
 
         return results
 
