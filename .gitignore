@@ -1,2 +1,4 @@
 
 *.pyc
+*.gpkg-shm
+*.gpkg-wal
