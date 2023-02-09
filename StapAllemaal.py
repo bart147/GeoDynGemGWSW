@@ -78,12 +78,13 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'Rioolstelsel_buffer_10m': QgsProcessing.TEMPORARY_OUTPUT,
             'Stelselkenmerken': QgsProcessing.TEMPORARY_OUTPUT
         }
+        #alg_params['keepName'] = True
         outputs['Stap1GwswToGeodyn'] = processing.run('GeoDynTools:stap 1.) GWSW to Geodyn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(1)
         if feedback.isCanceled():
             return {}
-
+        
         # stap 2.) genereer_afvoerrelaties
         alg_params = {
             'bemalingsgebieden': outputs['Stap1GwswToGeodyn']['Bemalingsgebieden_tbv_stap2'],
@@ -96,6 +97,7 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'Van_naar': QgsProcessing.TEMPORARY_OUTPUT,
             'Van_naar_sel': QgsProcessing.TEMPORARY_OUTPUT
         }
+        alg_params['keepName'] = True
         outputs['Stap2Genereer_afvoerrelaties'] = processing.run('GeoDynTools:stap 2.) genereer_afvoerrelaties', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(2)
@@ -120,16 +122,13 @@ class GeodynAlleStappen(QgsProcessingAlgorithm):
             'Stats_drinkwater': QgsProcessing.TEMPORARY_OUTPUT,
             'Stats_ve': QgsProcessing.TEMPORARY_OUTPUT
         }
+        alg_params['keepName'] = True
         outputs['Stap3BerekenAfvalwaterprognose'] = processing.run('GeoDynTools:stap 3.) bereken afvalwaterprognose', alg_params, context=context, feedback=feedback, is_child_algorithm=True)  
         
         # --- add below each alg_params {} 
         # alg_params['keepName'] = True
 
-        # --- this is needed to rename layers. looks funky, but works!
-        if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
-            feedback.pushInfo("keepName = True")
-        else:
-            pass #results, context, feedback = rename_layers(results, context, feedback)
+        #results, context, feedback = rename_layers(results, context, feedback)
 
         return results
 

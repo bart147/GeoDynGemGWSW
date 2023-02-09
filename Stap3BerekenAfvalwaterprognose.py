@@ -333,7 +333,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         # add fieldAlias from csv input fields
         alg_params = {
             'INPUT': outputs['DropEmptyFields']['Output_layer'],
-            'inputfields': 'C:/Users/b_kro/AppData/Roaming/QGIS/QGIS3\\profiles\\default/python/plugins\\GeoDynGemGWSW\\inp_fields.csv'
+            'inputfields': parameters['inputfieldscsv']
         }
         outputs['AddFieldaliasFromCsvInputFields'] = processing.run('GeoDynTools:add fieldAlias from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 

@@ -56,7 +56,7 @@ def return_result_group():
     return group
 
 def rename_layers(results, context, feedback):
-    QgsProject.instance().reloadAllLayers() 
+    #QgsProject.instance().reloadAllLayers() 
     for key in results:
         if context.willLoadLayerOnCompletion(results[key]):
             random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
@@ -69,7 +69,7 @@ def rename_layers(results, context, feedback):
             if os.path.exists(style):
                 layer = context.getMapLayer(results[key])
                 layer.loadNamedStyle(style)
-    QgsProject.instance().reloadAllLayers() 
+    #QgsProject.instance().reloadAllLayers() 
     return results, context, feedback
 
 def default_layer(wildcard, geometryType=None):
@@ -95,7 +95,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
     final_layers = { }
 
     def postProcessAlgorithm(self, context, feedback):
-        QgsProject.instance().reloadAllLayers() 
+        #QgsProject.instance().reloadAllLayers() 
         project = context.project()
         root = project.instance().layerTreeRoot()
         #group = root.addGroup('Results')
@@ -129,7 +129,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
                 feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
                 feedback.pushInfo("rename to = {}".format(rename[layerid]))
                 layers[layerid].setName(rename[layerid])
-        QgsProject.instance().reloadAllLayers() 
+        #QgsProject.instance().reloadAllLayers() 
         self.final_layers.clear()
         return {}
 
