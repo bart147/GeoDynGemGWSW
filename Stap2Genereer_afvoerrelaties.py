@@ -36,7 +36,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         parameters['inputfieldscsv'] = default_inp_fields
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(28, model_feedback)
         results = {}
         outputs = {}

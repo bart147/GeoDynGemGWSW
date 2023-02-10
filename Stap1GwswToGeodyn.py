@@ -38,7 +38,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
-        QgsProject.instance().reloadAllLayers() 
+        #QgsProject.instance().reloadAllLayers() 
         feedback = QgsProcessingMultiStepFeedback(92, model_feedback)
         results = {}
         outputs = {}

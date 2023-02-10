@@ -56,6 +56,7 @@ def return_result_group():
     return group
 
 def rename_layers(results, context, feedback):
+    return results, context, feedback
     #QgsProject.instance().reloadAllLayers() 
     for key in results:
         if context.willLoadLayerOnCompletion(results[key]):
@@ -94,8 +95,14 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
     final_layers = { }
 
+    # def postProcessAlgorithm(self, context, feedback):
+    #     return {}
     def postProcessAlgorithm(self, context, feedback):
         #QgsProject.instance().reloadAllLayers() 
+        if not self.final_layers:
+            feedback.pushWarning("final_layers empty. postProcessing skipped")
+            return {}
+       
         project = context.project()
         root = project.instance().layerTreeRoot()
         #group = root.addGroup('Results')
@@ -113,7 +120,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             # feedback.pushInfo("layer.name = {}".format(layer.name()))
             # feedback.pushInfo("layername = {}".format(layername))
             rename[layer.id()] = layername
-            layer.setName(item[0])
+            #layer.setName(item[0])
             if 'tbv' in layername or layername == 'Eindresultaat':
                 group_to_add = hoofdgroup
             else:
@@ -121,14 +128,14 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
             project.addMapLayers([layer], False)
             group_to_add.insertLayer(int(index), layer)
-
-        layers = QgsProject.instance().mapLayers()
-        for layerid in layers:
-            if layerid in rename:
-                feedback.pushInfo("layerid = {}".format(layerid))
-                feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
-                feedback.pushInfo("rename to = {}".format(rename[layerid]))
-                layers[layerid].setName(rename[layerid])
+        # QgsProject.instance().reloadAllLayers() 
+        # layers = QgsProject.instance().mapLayers()
+        # for layerid in layers:
+        #     if layerid in rename:
+        #         feedback.pushInfo("layerid = {}".format(layerid))
+        #         feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
+        #         feedback.pushInfo("rename to = {}".format(rename[layerid]))
+        #         layers[layerid].setName(rename[layerid])
         #QgsProject.instance().reloadAllLayers() 
         self.final_layers.clear()
         return {}
@@ -215,7 +222,7 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
         results = {}
         outputs = {}

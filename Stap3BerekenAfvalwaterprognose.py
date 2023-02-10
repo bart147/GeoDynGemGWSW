@@ -50,7 +50,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
             parameters['bgtinlooptabel'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgt_inlooptabel_empty.gpkg"), "bgt_inlooptabel_empty", "ogr")
         if not parameters['inputplancap']:
             parameters['inputplancap'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "plancap_empty.gpkg"), "plancap_empty", "ogr")
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
         feedback = QgsProcessingMultiStepFeedback(18, model_feedback)
         results = {}
