@@ -25,26 +25,27 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSource('inputplancap', 'Input Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves (2)', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Exafw_per_bem_id', 'ExAFW_per_bem_id', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Meerdere_plancaps_in_bemalingsgebied', 'meerdere_plancaps_in_bemalingsgebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_in_meerdere_bemalingsgebieden', 'plancap_in_meerdere_bemalingsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_pc_id', 'PLANCAP_PC_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        ##self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_drinkwater', 'STATS_DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_ve', 'STATS_VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
-        feedback = QgsProcessingMultiStepFeedback(19, model_feedback)
+        feedback = QgsProcessingMultiStepFeedback(16, model_feedback)
         results = {}
         outputs = {}
 
-        # Conditional has ve
+        # Fix geometries
         alg_params = {
+            'INPUT': parameters['inputplancap'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['ConditionalHasVe'] = processing.run('native:condition', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(1)
         if feedback.isCanceled():
@@ -67,17 +68,6 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Fix geometries
-        alg_params = {
-            'INPUT': parameters['inputplancap'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(4)
-        if feedback.isCanceled():
-            return {}
-
         # Join attributes SUM Drinkwater
         alg_params = {
             'DISCARD_NONMATCHING': False,
@@ -92,7 +82,24 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         }
         outputs['JoinAttributesSumDrinkwater'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(6)
+        feedback.setCurrentStep(3)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by location (summary) VE's
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': parameters['input'],
+            'JOIN': parameters['inputves'],
+            'JOIN_FIELDS': ['GRONDSLAG'],
+            'PREDICATE': [0],  # intersects
+            'SUMMARIES': [0,5],  # count,sum
+            'OUTPUT': parameters['Stats_ve']
+        }
+        outputs['JoinAttributesByLocationSummaryVes'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Stats_ve'] = outputs['JoinAttributesByLocationSummaryVes']['OUTPUT']
+
+        feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
@@ -109,38 +116,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         outputs['FieldCalcPc_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Plancap_pc_id'] = outputs['FieldCalcPc_id']['OUTPUT']
 
-        feedback.setCurrentStep(7)
-        if feedback.isCanceled():
-            return {}
-
-        # Intersect bem en plancap
-        alg_params = {
-            'INPUT': parameters['input'],
-            'INPUT_FIELDS': ['BEM_ID'],
-            'OVERLAY': outputs['FieldCalcPc_id']['OUTPUT'],
-            'OVERLAY_FIELDS': ['ExAFW_2124','ExAFW_2529','ExAFW_3039','ExAFW_4050','PC_ID'],
-            'OVERLAY_FIELDS_PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['IntersectBemEnPlancap'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(8)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by location (summary) meerdere plancaps per bemalingsgebied
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'INPUT': parameters['input'],
-            'JOIN': outputs['FieldCalcPc_id']['OUTPUT'],
-            'JOIN_FIELDS': ['PC_ID'],
-            'PREDICATE': [0],  # intersects
-            'SUMMARIES': [0],  # count
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByLocationSummaryMeerderePlancapsPerBemalingsgebied'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(9)
+        feedback.setCurrentStep(5)
         if feedback.isCanceled():
             return {}
 
@@ -156,7 +132,23 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         }
         outputs['JoinAttributesByLocationSummaryPlancapInMeerdereBemalingsgebieden'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(10)
+        feedback.setCurrentStep(6)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by location (summary) meerdere plancaps per bemalingsgebied
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': parameters['input'],
+            'JOIN': outputs['FieldCalcPc_id']['OUTPUT'],
+            'JOIN_FIELDS': ['PC_ID'],
+            'PREDICATE': [0],  # intersects
+            'SUMMARIES': [0],  # count
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByLocationSummaryMeerderePlancapsPerBemalingsgebied'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(7)
         if feedback.isCanceled():
             return {}
 
@@ -170,6 +162,47 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         }
         outputs['ExtractByCount2'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Plancap_in_meerdere_bemalingsgebieden'] = outputs['ExtractByCount2']['OUTPUT']
+
+        feedback.setCurrentStep(8)
+        if feedback.isCanceled():
+            return {}
+
+        # Intersect bem en plancap
+        alg_params = {
+            'INPUT': parameters['input'],
+            'INPUT_FIELDS': ['BEM_ID'],
+            'OVERLAY': outputs['FieldCalcPc_id']['OUTPUT'],
+            'OVERLAY_FIELDS': ['ExAFW_2124','ExAFW_2529','ExAFW_3039','ExAFW_4050','PC_ID'],
+            'OVERLAY_FIELDS_PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['IntersectBemEnPlancap'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(9)
+        if feedback.isCanceled():
+            return {}
+
+        # Add geometry attributes
+        alg_params = {
+            'CALC_METHOD': 0,  # Layer CRS
+            'INPUT': outputs['IntersectBemEnPlancap']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['AddGeometryAttributes'] = processing.run('qgis:exportaddgeometrycolumns', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(10)
+        if feedback.isCanceled():
+            return {}
+
+        # Order by Plancap Area descending
+        alg_params = {
+            'ASCENDING': False,
+            'EXPRESSION': 'area',
+            'INPUT': outputs['AddGeometryAttributes']['OUTPUT'],
+            'NULLS_FIRST': False,
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['OrderByPlancapAreaDescending'] = processing.run('native:orderbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(11)
         if feedback.isCanceled():
@@ -190,32 +223,6 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Add geometry attributes
-        alg_params = {
-            'CALC_METHOD': 0,  # Layer CRS
-            'INPUT': outputs['IntersectBemEnPlancap']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['AddGeometryAttributes'] = processing.run('qgis:exportaddgeometrycolumns', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(13)
-        if feedback.isCanceled():
-            return {}
-
-        # Order by Plancap Area descending
-        alg_params = {
-            'ASCENDING': False,
-            'EXPRESSION': 'area',
-            'INPUT': outputs['AddGeometryAttributes']['OUTPUT'],
-            'NULLS_FIRST': False,
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['OrderByPlancapAreaDescending'] = processing.run('native:orderbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(14)
-        if feedback.isCanceled():
-            return {}
-
         # Delete duplicates PC_ID
         alg_params = {
             'FIELDS': ['PC_ID'],
@@ -224,7 +231,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         }
         outputs['DeleteDuplicatesPc_id'] = processing.run('native:removeduplicatesbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(15)
+        feedback.setCurrentStep(13)
         if feedback.isCanceled():
             return {}
 
@@ -238,7 +245,7 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         outputs['AggregateByBem_id'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Exafw_per_bem_id'] = outputs['AggregateByBem_id']['OUTPUT']
 
-        feedback.setCurrentStep(16)
+        feedback.setCurrentStep(14)
         if feedback.isCanceled():
             return {}
 
@@ -256,69 +263,24 @@ class KoppelOverigeBronnen(QgsProcessingAlgorithm):
         }
         outputs['JoinAttributesPlancap'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(17)
+        feedback.setCurrentStep(15)
         if feedback.isCanceled():
             return {}
-                
-        if parameters['inputves']:
-            # Join attributes by location (summary) VE's
-            alg_params = {
-                'DISCARD_NONMATCHING': False,
-                'INPUT': parameters['input'],
-                'JOIN': parameters['inputves'],
-                'JOIN_FIELDS': ['GRONDSLAG'],
-                'PREDICATE': [0],  # intersects
-                'SUMMARIES': [0,5],  # count,sum
-                'OUTPUT': parameters['Stats_ve']
-            }
-            outputs['JoinAttributesByLocationSummaryVes'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            results['Stats_ve'] = outputs['JoinAttributesByLocationSummaryVes']['OUTPUT']
 
-            feedback.setCurrentStep(3)
-            if feedback.isCanceled():
-                return {}
-
-            # Join attributes VE
-            alg_params = {
-                'DISCARD_NONMATCHING': False,
-                'FIELD': 'BEM_ID',
-                'FIELDS_TO_COPY': ['GRONDSLAG_count','GRONDSLAG_sum'],
-                'FIELD_2': 'BEM_ID',
-                'INPUT': outputs['JoinAttributesPlancap']['OUTPUT'],
-                'INPUT_2': outputs['JoinAttributesByLocationSummaryVes']['OUTPUT'],
-                'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
-                'PREFIX': '',
-                'OUTPUT': parameters['Bemalingsgebieden_joined_stats']
-            }
-            outputs['JoinAttributesVe'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            results['Bemalingsgebieden_joined_stats'] = outputs['JoinAttributesVe']['OUTPUT']
-
-            feedback.setCurrentStep(18)
-            if feedback.isCanceled():
-                return {}       
-        else:
-            # Raise warning
-            alg_params = {
-                'CONDITION': '',
-                'MESSAGE': '"No source for VE\'s selected, skip join" '
-            }
-            outputs['RaiseWarning'] = processing.run('native:raisewarning', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-            feedback.setCurrentStep(5)
-            if feedback.isCanceled():
-                return {}
-
-            # Add field GRONDSLAG_sum
-            alg_params = {
-                'FIELD_LENGTH': 10,
-                'FIELD_NAME': 'GRONDSLAG_sum',
-                'FIELD_PRECISION': 0,
-                'FIELD_TYPE': 0,  # Integer
-                'INPUT': outputs['JoinAttributesPlancap']['OUTPUT'],
-                'OUTPUT': parameters['Bemalingsgebieden_joined_stats']
-            }
-            outputs['AddFieldGrondslag_sum'] = processing.run('native:addfieldtoattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            results['Bemalingsgebieden_joined_stats'] = outputs['AddFieldGrondslag_sum']['OUTPUT']           
+        # Join attributes VE
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID',
+            'FIELDS_TO_COPY': ['GRONDSLAG_count','GRONDSLAG_sum'],
+            'FIELD_2': 'BEM_ID',
+            'INPUT': outputs['JoinAttributesPlancap']['OUTPUT'],
+            'INPUT_2': outputs['JoinAttributesByLocationSummaryVes']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': parameters['Bemalingsgebieden_joined_stats']
+        }
+        outputs['JoinAttributesVe'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bemalingsgebieden_joined_stats'] = outputs['JoinAttributesVe']['OUTPUT']        
         
         # --- this is needed to rename layers. looks funky, but works!
         # if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
