@@ -39,82 +39,21 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         QgsProject.instance().reloadAllLayers() 
-        feedback = QgsProcessingMultiStepFeedback(92, model_feedback)
+        feedback = QgsProcessingMultiStepFeedback(94, model_feedback)
         results = {}
         outputs = {}
-
-        # Fix geometries BEMALINGSGEBIEDEN
-        alg_params = {
-            'INPUT': parameters['GWSWBemalingsgebieden'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FixGeometriesBemalingsgebieden'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(1)
-        if feedback.isCanceled():
-            return {}
 
         # Extract doorlaat
         alg_params = {
             'FIELD': 'type',
             'INPUT': parameters['GWSWnetwerkkunstwerk'],
-            'OPERATOR': 0,
+            'OPERATOR': 0,  # =
             'VALUE': 'Doorlaatniveau',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['ExtractDoorlaat'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(2)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by expression - pompen die nergens naartoe pompen
-        alg_params = {
-            'EXPRESSION': '\"type\" = \'Pomp\' AND \"eind\" IS NULL',
-            'INPUT': parameters['GWSWnetwerkkunstwerk'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionPompenDieNergensNaartoePompen'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(3)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract pompen
-        alg_params = {
-            'FIELD': 'type',
-            'INPUT': parameters['GWSWnetwerkkunstwerk'],
-            'OPERATOR': 0,
-            'VALUE': 'Pomp',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractPompen'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(4)
-        if feedback.isCanceled():
-            return {}
-
-        # Delete duplicates by attribute - dubbele pompen
-        alg_params = {
-            'FIELDS': ['begin'],
-            'INPUT': outputs['ExtractPompen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DeleteDuplicatesByAttributeDubbelePompen'] = processing.run('native:removeduplicatesbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(5)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) knooppunt
-        alg_params = {
-            'COLUMN': ['wkt_geom','AantalWoningen','Aantal_ieBedrijven','Aantal_ieRecreatie','AfvoerendOppervlak','LateraalDebietDWA','LateraalDebietHWA','LateraalAfvoerendOppervlak'],
-            'INPUT': parameters['GWSWnetwerkknooppunt'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DropFieldsKnooppunt'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(6)
+        feedback.setCurrentStep(1)
         if feedback.isCanceled():
             return {}
 
@@ -126,7 +65,218 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['DropFieldsVerbinding'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(2)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract Overstortdrempel
+        alg_params = {
+            'FIELD': 'type',
+            'INPUT': parameters['GWSWnetwerkkunstwerk'],
+            'OPERATOR': 0,  # =
+            'VALUE': 'Overstortdrempel',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractOverstortdrempel'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(3)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract verbinding DWA/GEM stelselberging
+        alg_params = {
+            'EXPRESSION': '"type" LIKE \'%erg%\' OR\r\n"type" LIKE \'%emengd%\' OR\r\n"type" LIKE \'%uilwate%\' OR \r\n"type" LIKE \'%ransportrioolleidin%\'',
+            'INPUT': outputs['DropFieldsVerbinding']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractVerbindingDwagemStelselberging'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(4)
+        if feedback.isCanceled():
+            return {}
+
+        # Fix geometries verbinding DWA/GEM stelselberging - gemengde en vuilwaterstelsels voor stelselberging
+        alg_params = {
+            'INPUT': outputs['ExtractVerbindingDwagemStelselberging']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FixGeometriesVerbindingDwagemStelselbergingGemengdeEnVuilwaterstelselsVoorStelselberging'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(5)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression - pompen die nergens naartoe pompen
+        alg_params = {
+            'EXPRESSION': '"type" = \'Pomp\' AND "eind" IS NULL',
+            'INPUT': parameters['GWSWnetwerkkunstwerk'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByExpressionPompenDieNergensNaartoePompen'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(6)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract overstorten
+        alg_params = {
+            'EXPRESSION': '"Drempelniveau" IS NOT NULL',
+            'INPUT': parameters['GWSWnetwerkkunstwerk'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractOverstorten'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(7)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract pompen
+        alg_params = {
+            'FIELD': 'type',
+            'INPUT': parameters['GWSWnetwerkkunstwerk'],
+            'OPERATOR': 0,  # =
+            'VALUE': 'Pomp',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractPompen'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(8)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract specific vertices - beginknoop
+        alg_params = {
+            'INPUT': outputs['ExtractVerbindingDwagemStelselberging']['OUTPUT'],
+            'VERTICES': '0',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractSpecificVerticesBeginknoop'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(9)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) beginknopen
+        alg_params = {
+            'COLUMN': ['wkt_geom','eindpunt','LengteLeiding','BobEindpuntLeiding','vertex_pos','vertex_index','vertex_part','vertex_part_index','distance','angle',''],
+            'INPUT': outputs['ExtractSpecificVerticesBeginknoop']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsBeginknopen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(10)
+        if feedback.isCanceled():
+            return {}
+
+        # Fix geometries BEMALINGSGEBIEDEN
+        alg_params = {
+            'INPUT': parameters['GWSWBemalingsgebieden'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FixGeometriesBemalingsgebieden'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(11)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) knooppunt
+        alg_params = {
+            'COLUMN': ['wkt_geom','AantalWoningen','Aantal_ieBedrijven','Aantal_ieRecreatie','AfvoerendOppervlak','LateraalDebietDWA','LateraalDebietHWA','LateraalAfvoerendOppervlak'],
+            'INPUT': parameters['GWSWnetwerkknooppunt'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsKnooppunt'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(12)
+        if feedback.isCanceled():
+            return {}
+
+        # Delete duplicates by attribute - dubbele pompen
+        alg_params = {
+            'FIELDS': ['begin'],
+            'INPUT': outputs['ExtractPompen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DeleteDuplicatesByAttributeDubbelePompen'] = processing.run('native:removeduplicatesbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(13)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract specific vertices - eindknoop
+        alg_params = {
+            'INPUT': outputs['ExtractVerbindingDwagemStelselberging']['OUTPUT'],
+            'VERTICES': '-1',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractSpecificVerticesEindknoop'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(14)
+        if feedback.isCanceled():
+            return {}
+
+        # Join - begin aan knooppunt
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'naam',
+            'FIELDS_TO_COPY': [''],
+            'FIELD_2': 'beginpunt',
+            'INPUT': outputs['DropFieldsKnooppunt']['OUTPUT'],
+            'INPUT_2': outputs['ExtractSpecificVerticesBeginknoop']['OUTPUT'],
+            'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
+            'PREFIX': 'US_',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinBeginAanKnooppunt'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(15)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) eindknopen
+        alg_params = {
+            'COLUMN': ['wkt_geom','beginpunt','LengteLeiding','BobBeginpuntLeiding','vertex_pos','vertex_index','vertex_part','vertex_part_index','distance','angle',''],
+            'INPUT': outputs['ExtractSpecificVerticesEindknoop']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsEindknopen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(16)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator BEM_ID
+        alg_params = {
+            'FIELD_LENGTH': 20,
+            'FIELD_NAME': 'BEM_ID',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': "'BEM' || lpad( $id ,3,0)",
+            'INPUT': outputs['FixGeometriesBemalingsgebieden']['OUTPUT'],
+            'OUTPUT': parameters['Bemalingsgebieden_tbv_stap2']
+        }
+        outputs['FieldCalculatorBem_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bemalingsgebieden_tbv_stap2'] = outputs['FieldCalculatorBem_id']['OUTPUT']
+
+        feedback.setCurrentStep(17)
+        if feedback.isCanceled():
+            return {}
+
+        # Join - eind aan knooppunt
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'naam',
+            'FIELDS_TO_COPY': [''],
+            'FIELD_2': 'eindpunt',
+            'INPUT': outputs['JoinBeginAanKnooppunt']['OUTPUT'],
+            'INPUT_2': outputs['DropFieldsEindknopen']['OUTPUT'],
+            'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
+            'PREFIX': 'DS_',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinEindAanKnooppunt'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(18)
         if feedback.isCanceled():
             return {}
 
@@ -145,74 +295,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['AfvoerrelatiesHubLinesOrigineleAfvoerrelaties'] = processing.run('native:hublines', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(8)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract Overstortdrempel
-        alg_params = {
-            'FIELD': 'type',
-            'INPUT': parameters['GWSWnetwerkkunstwerk'],
-            'OPERATOR': 0,
-            'VALUE': 'Overstortdrempel',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractOverstortdrempel'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(9)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract verbinding DWA/GEM stelselberging
-        alg_params = {
-            'EXPRESSION': '\"type\" LIKE \'%erg%\' OR\r\n\"type\" LIKE \'%emengd%\' OR\r\n\"type\" LIKE \'%uilwate%\' OR \r\n\"type\" LIKE \'%ransportrioolleidin%\'',
-            'INPUT': outputs['DropFieldsVerbinding']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractVerbindingDwagemStelselberging'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(10)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator BEM_ID
-        alg_params = {
-            'FIELD_LENGTH': 20,
-            'FIELD_NAME': 'BEM_ID',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\'BEM\' || lpad( $id ,3,0)',
-            'INPUT': outputs['FixGeometriesBemalingsgebieden']['OUTPUT'],
-            'OUTPUT': parameters['Bemalingsgebieden_tbv_stap2']
-        }
-        outputs['FieldCalculatorBem_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Bemalingsgebieden_tbv_stap2'] = outputs['FieldCalculatorBem_id']['OUTPUT']
-
-        feedback.setCurrentStep(11)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract overstorten
-        alg_params = {
-            'EXPRESSION': '\"Drempelniveau\" IS NOT NULL',
-            'INPUT': parameters['GWSWnetwerkkunstwerk'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractOverstorten'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(12)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract specific vertices - eindknoop
-        alg_params = {
-            'INPUT': outputs['ExtractVerbindingDwagemStelselberging']['OUTPUT'],
-            'VERTICES': '-1',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractSpecificVerticesEindknoop'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(13)
+        feedback.setCurrentStep(19)
         if feedback.isCanceled():
             return {}
 
@@ -221,50 +304,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 8,
             'FIELD_NAME': 'NUMMER',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,
+            'FIELD_TYPE': 1,  # Integer
             'FORMULA': ' $id',
             'INPUT': outputs['AfvoerrelatiesHubLinesOrigineleAfvoerrelaties']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorNummer'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(14)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract specific vertices - beginknoop
-        alg_params = {
-            'INPUT': outputs['ExtractVerbindingDwagemStelselberging']['OUTPUT'],
-            'VERTICES': '0',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractSpecificVerticesBeginknoop'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(15)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract beginknopen afvoerrelaties
-        alg_params = {
-            'INPUT': outputs['AfvoerrelatiesHubLinesOrigineleAfvoerrelaties']['OUTPUT'],
-            'VERTICES': '0',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractBeginknopenAfvoerrelaties'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(16)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) eindknopen
-        alg_params = {
-            'COLUMN': ['wkt_geom','beginpunt','LengteLeiding','BobBeginpuntLeiding','vertex_pos','vertex_index','vertex_part','vertex_part_index','distance','angle',''],
-            'INPUT': outputs['ExtractSpecificVerticesEindknoop']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DropFieldsEindknopen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(17)
+        feedback.setCurrentStep(20)
         if feedback.isCanceled():
             return {}
 
@@ -277,138 +324,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         outputs['ExtractSpecificVerticesEindpuntAfvoerrelaties'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Eindpunten'] = outputs['ExtractSpecificVerticesEindpuntAfvoerrelaties']['OUTPUT']
 
-        feedback.setCurrentStep(18)
-        if feedback.isCanceled():
-            return {}
-
-        # Merge vector layers
-        alg_params = {
-            'CRS': None,
-            'LAYERS': [outputs['ExtractByExpressionPompenDieNergensNaartoePompen']['OUTPUT'],outputs['ExtractBeginknopenAfvoerrelaties']['OUTPUT']],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['MergeVectorLayers'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(19)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator VAN_KNOOPN
-        alg_params = {
-            'FIELD_LENGTH': 16,
-            'FIELD_NAME': 'VAN_KNOOPN',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\"begin\"',
-            'INPUT': outputs['FieldCalculatorNummer']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorVan_knoopn'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(20)
-        if feedback.isCanceled():
-            return {}
-
-        # Fix geometries verbinding DWA/GEM stelselberging - gemengde en vuilwaterstelsels voor stelselberging
-        alg_params = {
-            'INPUT': outputs['ExtractVerbindingDwagemStelselberging']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FixGeometriesVerbindingDwagemStelselbergingGemengdeEnVuilwaterstelselsVoorStelselberging'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(21)
-        if feedback.isCanceled():
-            return {}
-
-        # Join - begin aan knooppunt
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'naam',
-            'FIELDS_TO_COPY': [''],
-            'FIELD_2': 'beginpunt',
-            'INPUT': outputs['DropFieldsKnooppunt']['OUTPUT'],
-            'INPUT_2': outputs['ExtractSpecificVerticesBeginknoop']['OUTPUT'],
-            'METHOD': 0,
-            'PREFIX': 'US_',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinBeginAanKnooppunt'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(22)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator NAAR_KNOOP
-        alg_params = {
-            'FIELD_LENGTH': 16,
-            'FIELD_NAME': 'NAAR_KNOOP',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\"eind\"',
-            'INPUT': outputs['FieldCalculatorVan_knoopn']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorNaar_knoop'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(23)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) beginknopen
-        alg_params = {
-            'COLUMN': ['wkt_geom','eindpunt','LengteLeiding','BobEindpuntLeiding','vertex_pos','vertex_index','vertex_part','vertex_part_index','distance','angle',''],
-            'INPUT': outputs['ExtractSpecificVerticesBeginknoop']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DropFieldsBeginknopen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(24)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) layer en path
-        alg_params = {
-            'COLUMN': ['layer','path'],
-            'INPUT': outputs['MergeVectorLayers']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DropFieldsLayerEnPath'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(25)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator TTOTAAL_M3
-        alg_params = {
-            'FIELD_LENGTH': 11,
-            'FIELD_NAME': 'TTOTAAL_M3',
-            'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"Pompcapaciteit\"',
-            'INPUT': outputs['FieldCalculatorNaar_knoop']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorTtotaal_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(26)
-        if feedback.isCanceled():
-            return {}
-
-        # Join - eind aan knooppunt
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'naam',
-            'FIELDS_TO_COPY': [''],
-            'FIELD_2': 'eindpunt',
-            'INPUT': outputs['JoinBeginAanKnooppunt']['OUTPUT'],
-            'INPUT_2': outputs['DropFieldsEindknopen']['OUTPUT'],
-            'METHOD': 0,
-            'PREFIX': 'DS_',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinEindAanKnooppunt'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(27)
         if feedback.isCanceled():
             return {}
 
@@ -418,14 +334,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'INPUT': outputs['FixGeometriesVerbindingDwagemStelselbergingGemengdeEnVuilwaterstelselsVoorStelselberging']['OUTPUT'],
             'JOIN': outputs['FieldCalculatorBem_id']['OUTPUT'],
             'JOIN_FIELDS': ['BEM_ID'],
-            'METHOD': 0,
-            'PREDICATE': [5],
+            'METHOD': 0,  # Create separate feature for each matching feature (one-to-many)
+            'PREDICATE': [5],  # within
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinBem_idAanLeidingen'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(28)
+        feedback.setCurrentStep(22)
         if feedback.isCanceled():
             return {}
 
@@ -436,7 +352,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['RaiseWarningLeidingenBuitenOfOpGrensVanBemalingsgebied'] = processing.run('native:raisewarning', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(29)
+        feedback.setCurrentStep(23)
         if feedback.isCanceled():
             return {}
 
@@ -444,26 +360,30 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         alg_params = {
             'FIELD': 'BEM_ID',
             'INPUT': outputs['JoinBem_idAanLeidingen']['OUTPUT'],
-            'OPERATOR': 9,
+            'OPERATOR': 9,  # is not null
             'VALUE': '',
             'FAIL_OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['ExtractJoinedLeidingen'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(30)
+        feedback.setCurrentStep(24)
         if feedback.isCanceled():
             return {}
 
-        # retainfields lijnen
+        # Field calculator VAN_KNOOPN
         alg_params = {
-            'inputlayer': outputs['FieldCalculatorTtotaal_m3']['OUTPUT'],
-            'veldenlijst': 'NUMMER;VAN_KNOOPN;NAAR_KNOOP;TTOTAAL_M3',
-            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+            'FIELD_LENGTH': 16,
+            'FIELD_NAME': 'VAN_KNOOPN',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': '"begin"',
+            'INPUT': outputs['FieldCalculatorNummer']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['RetainfieldsLijnen'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorVan_knoopn'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(31)
+        feedback.setCurrentStep(25)
         if feedback.isCanceled():
             return {}
 
@@ -475,24 +395,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['DropFieldsNietRelevant'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(32)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by location - BEM aan BEGINKNOPEN AFVOERRELATIES
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'INPUT': outputs['DropFieldsLayerEnPath']['OUTPUT'],
-            'JOIN': outputs['FieldCalculatorBem_id']['OUTPUT'],
-            'JOIN_FIELDS': ['BEM_ID'],
-            'METHOD': 1,
-            'PREDICATE': [0],
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByLocationBemAanBeginknopenAfvoerrelaties'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(33)
+        feedback.setCurrentStep(26)
         if feedback.isCanceled():
             return {}
 
@@ -500,51 +403,40 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         alg_params = {
             'DISSOLVE': True,
             'DISTANCE': 0.2,
-            'END_CAP_STYLE': 0,
+            'END_CAP_STYLE': 0,  # Round
             'INPUT': outputs['ExtractJoinedLeidingen']['OUTPUT'],
-            'JOIN_STYLE': 0,
+            'JOIN_STYLE': 0,  # Round
             'MITER_LIMIT': 2,
             'SEGMENTS': 5,
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['Buffer'] = processing.run('native:buffer', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(34)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) overbodige info
-        alg_params = {
-            'COLUMN': ['geo_id','Stelsel','naam','type','beginpunt','eindpunt','MateriaalLeiding','VormLeiding','BreedteLeiding','HoogteLeiding','LengteLeiding','BobBeginpuntLeiding','BobEindpuntLeiding','BEM_ID',''],
-            'INPUT': outputs['Buffer']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DropFieldsOverbodigeInfo'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(35)
+        feedback.setCurrentStep(27)
         if feedback.isCanceled():
             return {}
 
         # Extract knopen aan DWA of GEM - BOB maten aan knopen plakken
         alg_params = {
-            'EXPRESSION': '\"US_naam\" IS NOT NULL OR \"DS_naam\" IS NOT NULL',
+            'EXPRESSION': '"US_naam" IS NOT NULL OR "DS_naam" IS NOT NULL',
             'INPUT': outputs['DropFieldsNietRelevant']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['ExtractKnopenAanDwaOfGemBobMatenAanKnopenPlakken'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(36)
+        feedback.setCurrentStep(28)
         if feedback.isCanceled():
             return {}
 
-        # Multipart to singleparts rioolstelsels
+        # Extract beginknopen afvoerrelaties
         alg_params = {
-            'INPUT': outputs['DropFieldsOverbodigeInfo']['OUTPUT'],
+            'INPUT': outputs['AfvoerrelatiesHubLinesOrigineleAfvoerrelaties']['OUTPUT'],
+            'VERTICES': '0',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['MultipartToSinglepartsRioolstelsels'] = processing.run('native:multiparttosingleparts', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['ExtractBeginknopenAfvoerrelaties'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(37)
+        feedback.setCurrentStep(29)
         if feedback.isCanceled():
             return {}
 
@@ -557,7 +449,86 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         outputs['ExtractByExpression'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['LeidingenNietMeegenomen'] = outputs['ExtractByExpression']['OUTPUT']
 
-        feedback.setCurrentStep(38)
+        feedback.setCurrentStep(30)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) overbodige info
+        alg_params = {
+            'COLUMN': ['geo_id','Stelsel','naam','type','beginpunt','eindpunt','MateriaalLeiding','VormLeiding','BreedteLeiding','HoogteLeiding','LengteLeiding','BobBeginpuntLeiding','BobEindpuntLeiding','BEM_ID',''],
+            'INPUT': outputs['Buffer']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsOverbodigeInfo'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(31)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator NAAR_KNOOP
+        alg_params = {
+            'FIELD_LENGTH': 16,
+            'FIELD_NAME': 'NAAR_KNOOP',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': '"eind"',
+            'INPUT': outputs['FieldCalculatorVan_knoopn']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorNaar_knoop'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(32)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator TTOTAAL_M3
+        alg_params = {
+            'FIELD_LENGTH': 11,
+            'FIELD_NAME': 'TTOTAAL_M3',
+            'FIELD_PRECISION': 3,
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"Pompcapaciteit"',
+            'INPUT': outputs['FieldCalculatorNaar_knoop']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorTtotaal_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(33)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields lijnen
+        alg_params = {
+            'inputlayer': outputs['FieldCalculatorTtotaal_m3']['OUTPUT'],
+            'veldenlijst': 'NUMMER;VAN_KNOOPN;NAAR_KNOOP;TTOTAAL_M3',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['RetainfieldsLijnen'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(34)
+        if feedback.isCanceled():
+            return {}
+
+        # Multipart to singleparts rioolstelsels
+        alg_params = {
+            'INPUT': outputs['DropFieldsOverbodigeInfo']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['MultipartToSinglepartsRioolstelsels'] = processing.run('native:multiparttosingleparts', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(35)
+        if feedback.isCanceled():
+            return {}
+
+        # Merge vector layers
+        alg_params = {
+            'CRS': None,
+            'LAYERS': [outputs['ExtractByExpressionPompenDieNergensNaartoePompen']['OUTPUT'],outputs['ExtractBeginknopenAfvoerrelaties']['OUTPUT']],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['MergeVectorLayers'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(36)
         if feedback.isCanceled():
             return {}
 
@@ -566,14 +537,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 50,
             'FIELD_NAME': 'STELSEL_ID',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
+            'FIELD_TYPE': 2,  # String
             'FORMULA': 'lpad( $id+1 ,3,0)',
             'INPUT': outputs['MultipartToSinglepartsRioolstelsels']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorStelsel_id'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(39)
+        feedback.setCurrentStep(37)
         if feedback.isCanceled():
             return {}
 
@@ -588,7 +559,19 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['IntersectStelselMetBemalingsgebieden'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(40)
+        feedback.setCurrentStep(38)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) layer en path
+        alg_params = {
+            'COLUMN': ['layer','path'],
+            'INPUT': outputs['MergeVectorLayers']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsLayerEnPath'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(39)
         if feedback.isCanceled():
             return {}
 
@@ -601,7 +584,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['CountStelsel_id'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(41)
+        feedback.setCurrentStep(40)
         if feedback.isCanceled():
             return {}
 
@@ -613,11 +596,28 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'STELSEL_ID',
             'INPUT': outputs['IntersectStelselMetBemalingsgebieden']['OUTPUT'],
             'INPUT_2': outputs['CountStelsel_id']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': 'STELSEL_',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinStelsel_idCount'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(41)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by location - BEM aan BEGINKNOPEN AFVOERRELATIES
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': outputs['DropFieldsLayerEnPath']['OUTPUT'],
+            'JOIN': outputs['FieldCalculatorBem_id']['OUTPUT'],
+            'JOIN_FIELDS': ['BEM_ID'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREDICATE': [0],  # intersects
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByLocationBemAanBeginknopenAfvoerrelaties'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(42)
         if feedback.isCanceled():
@@ -628,8 +628,8 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 50,
             'FIELD_NAME': 'BEM_ID_SP',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\"BEM_ID\" || \'-\' || \"STELSEL_ID\"',
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': '"BEM_ID" || \'-\' || "STELSEL_ID"',
             'INPUT': outputs['JoinStelsel_idCount']['OUTPUT'],
             'OUTPUT': parameters['Rioolstelsel_buffer']
         }
@@ -640,20 +640,160 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
+        # Join stats knopen maaiveld (summary)
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
+            'JOIN': parameters['GWSWnetwerkknooppunt'],
+            'JOIN_FIELDS': ['Maaiveldhoogte'],
+            'PREDICATE': [0],  # intersects
+            'SUMMARIES': [0,2,3,6,7,11,12,4],  # count,min,max,mean,median,q1,q3,range
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinStatsKnopenMaaiveldSummary'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(44)
+        if feedback.isCanceled():
+            return {}
+
+        # Create spatial index BEM_ID_SP
+        alg_params = {
+            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT']
+        }
+        outputs['CreateSpatialIndexBem_id_sp'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(45)
+        if feedback.isCanceled():
+            return {}
+
         # Join attributes by location - within - BEM aan knopen
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'INPUT': outputs['ExtractKnopenAanDwaOfGemBobMatenAanKnopenPlakken']['OUTPUT'],
             'JOIN': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
             'JOIN_FIELDS': ['BEM_ID','BEM_ID_SP'],
-            'METHOD': 1,
-            'PREDICATE': [5],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREDICATE': [5],  # within
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinAttributesByLocationWithinBemAanKnopen'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(44)
+        feedback.setCurrentStep(46)
+        if feedback.isCanceled():
+            return {}
+
+        # Join Overstort dichtsbijzijnde rioolstelsel
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELDS_TO_COPY': ['BEM_ID_SP'],
+            'INPUT': outputs['ExtractOverstortdrempel']['OUTPUT'],
+            'INPUT_2': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
+            'MAX_DISTANCE': 2,
+            'NEIGHBORS': 1,
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinOverstortDichtsbijzijndeRioolstelsel'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(47)
+        if feedback.isCanceled():
+            return {}
+
+        # Join stats leidingen diameters (summary)
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
+            'JOIN': outputs['FixGeometriesVerbindingDwagemStelselbergingGemengdeEnVuilwaterstelselsVoorStelselberging']['OUTPUT'],
+            'JOIN_FIELDS': ['HoogteLeiding'],
+            'PREDICATE': [0],  # intersects
+            'SUMMARIES': [0,1,2,3,4,6,7],  # count,unique,min,max,range,mean,median
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinStatsLeidingenDiametersSummary'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(48)
+        if feedback.isCanceled():
+            return {}
+
+        # Join overstorten (summary) - overstortdata plakken
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
+            'JOIN': outputs['ExtractOverstorten']['OUTPUT'],
+            'JOIN_FIELDS': ['Drempelniveau'],
+            'PREDICATE': [0],  # intersects
+            'SUMMARIES': [2,3,4,6,7],  # min,max,range,mean,median
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinOverstortenSummaryOverstortdataPlakken'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(49)
+        if feedback.isCanceled():
+            return {}
+
+        # Buffer
+        alg_params = {
+            'DISSOLVE': False,
+            'DISTANCE': 10,
+            'END_CAP_STYLE': 0,  # Round
+            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
+            'JOIN_STYLE': 0,  # Round
+            'MITER_LIMIT': 2,
+            'SEGMENTS': 5,
+            'OUTPUT': parameters['Rioolstelsel_buffer_10m']
+        }
+        outputs['Buffer'] = processing.run('native:buffer', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Rioolstelsel_buffer_10m'] = outputs['Buffer']['OUTPUT']
+
+        feedback.setCurrentStep(50)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by nearest BEGINKNOOP met BEM_ID_SP
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELDS_TO_COPY': ['BEM_ID_SP'],
+            'INPUT': outputs['JoinAttributesByLocationBemAanBeginknopenAfvoerrelaties']['OUTPUT'],
+            'INPUT_2': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
+            'MAX_DISTANCE': parameters['MaxzoekafstandRG'],
+            'NEIGHBORS': 1,
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByNearestBeginknoopMetBem_id_sp'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(51)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) gebeidskenmerken - GEBIEDSKENMERKEN KNOPEN
+        alg_params = {
+            'COLUMN': ['BreedteOpening','HoogteOpening','VormOpening','Contractiecoef','MaxCapDoorlaat','Buitenwaterstand','Stromingsrichting','geo_id_2','Stelsel_2','naam_2','type_2','Maaiveldhoogte','Maaiveldschematisering','MateriaalPut','VormPut','BreedtePut','LengtePut','HoogtePut','vertex_pos','vertex_index','vertex_part','vertex_part_index','distance','angle','AanslagniveauBeneden','AfslagniveauBeneden','Doorlaatniveau','Drempelbreedte','Drempelniveau','n','feature_x','feature_y','nearest_x','nearest_y',''],
+            'INPUT': outputs['JoinAttributesByNearestBeginknoopMetBem_id_sp']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsGebeidskenmerkenGebiedskenmerkenKnopen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(52)
+        if feedback.isCanceled():
+            return {}
+
+        # Join mv_q1 aan knopen
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['Maaiveldhoogte_q1'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['JoinAttributesByLocationWithinBemAanKnopen']['OUTPUT'],
+            'INPUT_2': outputs['JoinStatsKnopenMaaiveldSummary']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinMv_q1AanKnopen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(53)
         if feedback.isCanceled():
             return {}
 
@@ -670,35 +810,36 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['JoinPompDichtsbijzijndeRioolstelsel'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(45)
+        feedback.setCurrentStep(54)
         if feedback.isCanceled():
             return {}
 
-        # Buffer
+        # aantal overstorten per gebied
         alg_params = {
-            'DISSOLVE': False,
-            'DISTANCE': 10,
-            'END_CAP_STYLE': 0,
-            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
-            'JOIN_STYLE': 0,
-            'MITER_LIMIT': 2,
-            'SEGMENTS': 5,
-            'OUTPUT': parameters['Rioolstelsel_buffer_10m']
+            'CATEGORIES_FIELD_NAME': ['BEM_ID_SP'],
+            'INPUT': outputs['JoinOverstortDichtsbijzijndeRioolstelsel']['OUTPUT'],
+            'VALUES_FIELD_NAME': 'naam',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['Buffer'] = processing.run('native:buffer', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Rioolstelsel_buffer_10m'] = outputs['Buffer']['OUTPUT']
+        outputs['AantalOverstortenPerGebied'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(46)
+        feedback.setCurrentStep(55)
         if feedback.isCanceled():
             return {}
 
-        # Create spatial index BEM_ID_SP
+        # Count overstortdrempel bij NULL op 0 zetten
         alg_params = {
-            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT']
+            'FIELD_LENGTH': 8,
+            'FIELD_NAME': 'OVERSTORT_',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer
+            'FORMULA': 'if("BEM_ID_SP" IS NULL, 0, "count")',
+            'INPUT': outputs['AantalOverstortenPerGebied']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['CreateSpatialIndexBem_id_sp'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['CountOverstortdrempelBijNullOp0Zetten'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(47)
+        feedback.setCurrentStep(56)
         if feedback.isCanceled():
             return {}
 
@@ -715,7 +856,25 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['JoinDoorlaatDichtsbijzijndeRioolstelsel'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(48)
+        feedback.setCurrentStep(57)
+        if feedback.isCanceled():
+            return {}
+
+        # Join overstorthoogte aan gebiedskenmerken
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['Drempelniveau_min'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['DropFieldsGebeidskenmerkenGebiedskenmerkenKnopen']['OUTPUT'],
+            'INPUT_2': outputs['JoinOverstortenSummaryOverstortdataPlakken']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinOverstorthoogteAanGebiedskenmerken'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(58)
         if feedback.isCanceled():
             return {}
 
@@ -733,7 +892,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         outputs['JoinAttributesByNearestBem_id_spAanLeidingen'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['GemengdeEnVuilwaterstelsels'] = outputs['JoinAttributesByNearestBem_id_spAanLeidingen']['OUTPUT']
 
-        feedback.setCurrentStep(49)
+        feedback.setCurrentStep(59)
         if feedback.isCanceled():
             return {}
 
@@ -746,73 +905,43 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['AantalDoorlatenPerGebied'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(50)
+        feedback.setCurrentStep(60)
         if feedback.isCanceled():
             return {}
 
-        # Join Overstort dichtsbijzijnde rioolstelsel
+        # Join mv_q1 aan leidingen
         alg_params = {
             'DISCARD_NONMATCHING': False,
-            'FIELDS_TO_COPY': ['BEM_ID_SP'],
-            'INPUT': outputs['ExtractOverstortdrempel']['OUTPUT'],
-            'INPUT_2': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
-            'MAX_DISTANCE': 2,
-            'NEIGHBORS': 1,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['Maaiveldhoogte_q1'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['JoinAttributesByNearestBem_id_spAanLeidingen']['OUTPUT'],
+            'INPUT_2': outputs['JoinStatsKnopenMaaiveldSummary']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['JoinOverstortDichtsbijzijndeRioolstelsel'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['JoinMv_q1AanLeidingen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(51)
+        feedback.setCurrentStep(61)
         if feedback.isCanceled():
             return {}
 
-        # Join overstorten (summary) - overstortdata plakken
+        # Join overstorthoogte kunstwerken aan knopen
         alg_params = {
             'DISCARD_NONMATCHING': False,
-            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
-            'JOIN': outputs['ExtractOverstorten']['OUTPUT'],
-            'JOIN_FIELDS': ['Drempelniveau'],
-            'PREDICATE': [0],
-            'SUMMARIES': [2,3,4,6,7],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinOverstortenSummaryOverstortdataPlakken'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(52)
-        if feedback.isCanceled():
-            return {}
-
-        # Join stats leidingen diameters (summary)
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
-            'JOIN': outputs['FixGeometriesVerbindingDwagemStelselbergingGemengdeEnVuilwaterstelselsVoorStelselberging']['OUTPUT'],
-            'JOIN_FIELDS': ['HoogteLeiding'],
-            'PREDICATE': [0],
-            'SUMMARIES': [0,1,2,3,4,6,7],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinStatsLeidingenDiametersSummary'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(53)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by nearest BEGINKNOOP met BEM_ID_SP
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELDS_TO_COPY': ['BEM_ID_SP'],
-            'INPUT': outputs['JoinAttributesByLocationBemAanBeginknopenAfvoerrelaties']['OUTPUT'],
-            'INPUT_2': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
-            'MAX_DISTANCE': parameters['MaxzoekafstandRG'],
-            'NEIGHBORS': 1,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['Drempelniveau_min'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['JoinMv_q1AanKnopen']['OUTPUT'],
+            'INPUT_2': outputs['JoinOverstortenSummaryOverstortdataPlakken']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['JoinAttributesByNearestBeginknoopMetBem_id_sp'] = processing.run('native:joinbynearest', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['JoinOverstorthoogteKunstwerkenAanKnopen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(54)
+        feedback.setCurrentStep(62)
         if feedback.isCanceled():
             return {}
 
@@ -825,73 +954,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['AantalPompenPerGebied'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(55)
-        if feedback.isCanceled():
-            return {}
-
-        # Join stats knopen maaiveld (summary)
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'INPUT': outputs['FieldCalculatorBem_idsinglepart']['OUTPUT'],
-            'JOIN': parameters['GWSWnetwerkknooppunt'],
-            'JOIN_FIELDS': ['Maaiveldhoogte'],
-            'PREDICATE': [0],
-            'SUMMARIES': [0,2,3,6,7,11,12,4],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinStatsKnopenMaaiveldSummary'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(56)
-        if feedback.isCanceled():
-            return {}
-
-        # Count bij NULL op 1 zetten
-        alg_params = {
-            'FIELD_LENGTH': 8,
-            'FIELD_NAME': 'POMPEN_ST',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,
-            'FORMULA': 'if(\"BEM_ID_SP\" IS NULL, 1, \"count\")',
-            'INPUT': outputs['AantalPompenPerGebied']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['CountBijNullOp1Zetten'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(57)
-        if feedback.isCanceled():
-            return {}
-
-        # Join mv_q1 aan leidingen
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'BEM_ID_SP',
-            'FIELDS_TO_COPY': ['Maaiveldhoogte_q1'],
-            'FIELD_2': 'BEM_ID_SP',
-            'INPUT': outputs['JoinAttributesByNearestBem_id_spAanLeidingen']['OUTPUT'],
-            'INPUT_2': outputs['JoinStatsKnopenMaaiveldSummary']['OUTPUT'],
-            'METHOD': 1,
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinMv_q1AanLeidingen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(58)
-        if feedback.isCanceled():
-            return {}
-
-        # Doorlaten - count bij NULL op 0 zetten
-        alg_params = {
-            'FIELD_LENGTH': 8,
-            'FIELD_NAME': 'DOORLAAT_S',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,
-            'FORMULA': 'if(\"BEM_ID_SP\" IS NULL, 0, \"count\")',
-            'INPUT': outputs['AantalDoorlatenPerGebied']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DoorlatenCountBijNullOp0Zetten'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(59)
+        feedback.setCurrentStep(63)
         if feedback.isCanceled():
             return {}
 
@@ -903,13 +966,61 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'BEM_ID_SP',
             'INPUT': outputs['JoinMv_q1AanLeidingen']['OUTPUT'],
             'INPUT_2': outputs['JoinOverstortenSummaryOverstortdataPlakken']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinOverstorthoogteKunstwerkenAanLeidingen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(60)
+        feedback.setCurrentStep(64)
+        if feedback.isCanceled():
+            return {}
+
+        # Doorlaten - count bij NULL op 0 zetten
+        alg_params = {
+            'FIELD_LENGTH': 8,
+            'FIELD_NAME': 'DOORLAAT_S',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer
+            'FORMULA': 'if("BEM_ID_SP" IS NULL, 0, "count")',
+            'INPUT': outputs['AantalDoorlatenPerGebied']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DoorlatenCountBijNullOp0Zetten'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(65)
+        if feedback.isCanceled():
+            return {}
+
+        # Count bij NULL op 1 zetten
+        alg_params = {
+            'FIELD_LENGTH': 8,
+            'FIELD_NAME': 'POMPEN_ST',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer
+            'FORMULA': 'if("BEM_ID_SP" IS NULL, 1, "count")',
+            'INPUT': outputs['AantalPompenPerGebied']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['CountBijNullOp1Zetten'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(66)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator default max niveau berging
+        alg_params = {
+            'FIELD_LENGTH': 10,
+            'FIELD_NAME': 'OVH_D',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': 'round("Maaiveldhoogte_q1" - @nooduitlaat ,2)',
+            'INPUT': outputs['JoinOverstorthoogteKunstwerkenAanKnopen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorDefaultMaxNiveauBerging'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(67)
         if feedback.isCanceled():
             return {}
 
@@ -918,93 +1029,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 10,
             'FIELD_NAME': 'OVH_D',
             'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,
-            'FORMULA': 'round(\"Maaiveldhoogte_q1\" - @nooduitlaat ,2)',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': 'round("Maaiveldhoogte_q1" - @nooduitlaat ,2)',
             'INPUT': outputs['JoinOverstorthoogteKunstwerkenAanLeidingen']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorLeidingenMaxNiveauBerging'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(61)
-        if feedback.isCanceled():
-            return {}
-
-        # aantal overstorten per gebied
-        alg_params = {
-            'CATEGORIES_FIELD_NAME': ['BEM_ID_SP'],
-            'INPUT': outputs['JoinOverstortDichtsbijzijndeRioolstelsel']['OUTPUT'],
-            'VALUES_FIELD_NAME': 'naam',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['AantalOverstortenPerGebied'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(62)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) gebeidskenmerken - GEBIEDSKENMERKEN KNOPEN
-        alg_params = {
-            'COLUMN': ['BreedteOpening','HoogteOpening','VormOpening','Contractiecoef','MaxCapDoorlaat','Buitenwaterstand','Stromingsrichting','geo_id_2','Stelsel_2','naam_2','type_2','Maaiveldhoogte','Maaiveldschematisering','MateriaalPut','VormPut','BreedtePut','LengtePut','HoogtePut','vertex_pos','vertex_index','vertex_part','vertex_part_index','distance','angle','AanslagniveauBeneden','AfslagniveauBeneden','Doorlaatniveau','Drempelbreedte','Drempelniveau','n','feature_x','feature_y','nearest_x','nearest_y',''],
-            'INPUT': outputs['JoinAttributesByNearestBeginknoopMetBem_id_sp']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DropFieldsGebeidskenmerkenGebiedskenmerkenKnopen'] = processing.run('qgis:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(63)
-        if feedback.isCanceled():
-            return {}
-
-        # Join overstorthoogte aan gebiedskenmerken
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'BEM_ID_SP',
-            'FIELDS_TO_COPY': ['Drempelniveau_min'],
-            'FIELD_2': 'BEM_ID_SP',
-            'INPUT': outputs['DropFieldsGebeidskenmerkenGebiedskenmerkenKnopen']['OUTPUT'],
-            'INPUT_2': outputs['JoinOverstortenSummaryOverstortdataPlakken']['OUTPUT'],
-            'METHOD': 1,
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinOverstorthoogteAanGebiedskenmerken'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(64)
-        if feedback.isCanceled():
-            return {}
-
-        # Join mv_q1 aan knopen
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'BEM_ID_SP',
-            'FIELDS_TO_COPY': ['Maaiveldhoogte_q1'],
-            'FIELD_2': 'BEM_ID_SP',
-            'INPUT': outputs['JoinAttributesByLocationWithinBemAanKnopen']['OUTPUT'],
-            'INPUT_2': outputs['JoinStatsKnopenMaaiveldSummary']['OUTPUT'],
-            'METHOD': 1,
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinMv_q1AanKnopen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(65)
-        if feedback.isCanceled():
-            return {}
-
-        # Join overstorthoogte kunstwerken aan knopen
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'BEM_ID_SP',
-            'FIELDS_TO_COPY': ['Drempelniveau_min'],
-            'FIELD_2': 'BEM_ID_SP',
-            'INPUT': outputs['JoinMv_q1AanKnopen']['OUTPUT'],
-            'INPUT_2': outputs['JoinOverstortenSummaryOverstortdataPlakken']['OUTPUT'],
-            'METHOD': 1,
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinOverstorthoogteKunstwerkenAanKnopen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(66)
+        feedback.setCurrentStep(68)
         if feedback.isCanceled():
             return {}
 
@@ -1013,30 +1045,30 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 10,
             'FIELD_NAME': 'B_M3_LEI',
             'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,
-            'FORMULA': 'if(mean( \"BobBeginpuntLeiding\" , \"BobEindpuntLeiding\" ) +  (\"HoogteLeiding\"/1000) > if( \"Drempelniveau_min\" IS NOT NULL,  \"Drempelniveau_min\" , \"OVH_D\" ), 0,\r\nif(\"VormLeiding\" LIKE \'%Ei%\' , round((((0.25 * pi()*(((\"BreedteLeiding\"/1000)^2))/2))+((((\"BreedteLeiding\"/1000)+((\"HoogteLeiding\"-\"BreedteLeiding\")/1000))/2)*((\"BreedteLeiding\"/1000/2)+((\"HoogteLeiding\"-\"BreedteLeiding\")/1000/2)))+((0.25*pi()*((\"HoogteLeiding\"-\"BreedteLeiding\")/1000)^2/2))) *  \"LengteLeiding\" ,2),\r\nif(\"VormLeiding\" = \'Rechthoekig\' , round( (\"BreedteLeiding\" /1000) * (\"HoogteLeiding\" /1000) *  \"LengteLeiding\" ,2),\r\nround( (\"BreedteLeiding\" /1000 /2) * (\"BreedteLeiding\" /1000 /2) * pi() *  \"LengteLeiding\" ,2 ))))',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': 'if(mean( "BobBeginpuntLeiding" , "BobEindpuntLeiding" ) +  ("HoogteLeiding"/1000) > if( "Drempelniveau_min" IS NOT NULL,  "Drempelniveau_min" , "OVH_D" ), 0,\r\nif("VormLeiding" LIKE \'%Ei%\' , round((((0.25 * pi()*((("BreedteLeiding"/1000)^2))/2))+(((("BreedteLeiding"/1000)+(("HoogteLeiding"-"BreedteLeiding")/1000))/2)*(("BreedteLeiding"/1000/2)+(("HoogteLeiding"-"BreedteLeiding")/1000/2)))+((0.25*pi()*(("HoogteLeiding"-"BreedteLeiding")/1000)^2/2))) *  "LengteLeiding" ,2),\r\nif("VormLeiding" = \'Rechthoekig\' , round( ("BreedteLeiding" /1000) * ("HoogteLeiding" /1000) *  "LengteLeiding" ,2),\r\nround( ("BreedteLeiding" /1000 /2) * ("BreedteLeiding" /1000 /2) * pi() *  "LengteLeiding" ,2 ))))',
             'INPUT': outputs['FieldCalculatorLeidingenMaxNiveauBerging']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['BergingInLeidingenFieldCalculator'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(67)
+        feedback.setCurrentStep(69)
         if feedback.isCanceled():
             return {}
 
-        # Count overstortdrempel bij NULL op 0 zetten
+        # Berging knopen - Field calculator
         alg_params = {
-            'FIELD_LENGTH': 8,
-            'FIELD_NAME': 'OVERSTORT_',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,
-            'FORMULA': 'if(\"BEM_ID_SP\" IS NULL, 0, \"count\")',
-            'INPUT': outputs['AantalOverstortenPerGebied']['OUTPUT'],
+            'FIELD_LENGTH': 10,
+            'FIELD_NAME': 'B_M3_KNP',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': 'round(\r\nif( "VormPut" = \'Rond\',  (("BreedtePut" /1000) * ("BreedtePut" /1000) * pi()) * \r\n(if( "Drempelniveau_min" IS NULL,  abs("OVH_D" - min( "US_BobBeginpuntLeiding" , "DS_BobEindpuntLeiding" )),  abs("Drempelniveau_min" - min( "US_BobBeginpuntLeiding" , "DS_BobEindpuntLeiding" )))),\r\n("BreedtePut" /1000) * ("Lengteput" /1000) * if( "Drempelniveau_min" IS NULL,  abs("OVH_D" - min( "US_BobBeginpuntLeiding" , "DS_BobEindpuntLeiding" )),  abs("Drempelniveau_min" - min( "US_BobBeginpuntLeiding" , "DS_BobEindpuntLeiding" ))))\r\n, 2)',
+            'INPUT': outputs['FieldCalculatorDefaultMaxNiveauBerging']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['CountOverstortdrempelBijNullOp0Zetten'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['BergingKnopenFieldCalculator'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(68)
+        feedback.setCurrentStep(70)
         if feedback.isCanceled():
             return {}
 
@@ -1049,58 +1081,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['StatisticsByCategoriesBergingLeidingenStatBem_id_sp'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(69)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator default max niveau berging
-        alg_params = {
-            'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'OVH_D',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,
-            'FORMULA': 'round(\"Maaiveldhoogte_q1\" - @nooduitlaat ,2)',
-            'INPUT': outputs['JoinOverstorthoogteKunstwerkenAanKnopen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorDefaultMaxNiveauBerging'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(70)
-        if feedback.isCanceled():
-            return {}
-
-        # Join berging leidingen
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'BEM_ID_SP',
-            'FIELDS_TO_COPY': ['sum','count'],
-            'FIELD_2': 'BEM_ID_SP',
-            'INPUT': outputs['JoinOverstorthoogteAanGebiedskenmerken']['OUTPUT'],
-            'INPUT_2': outputs['StatisticsByCategoriesBergingLeidingenStatBem_id_sp']['OUTPUT'],
-            'METHOD': 1,
-            'PREFIX': 'LEI_',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinBergingLeidingen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(71)
-        if feedback.isCanceled():
-            return {}
-
-        # Berging knopen - Field calculator
-        alg_params = {
-            'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'B_M3_KNP',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,
-            'FORMULA': 'round(\r\nif( \"VormPut\" = \'Rond\',  ((\"BreedtePut\" /1000) * (\"BreedtePut\" /1000) * pi()) * \r\n(if( \"Drempelniveau_min\" IS NULL,  abs(\"OVH_D\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" )),  abs(\"Drempelniveau_min\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" )))),\r\n(\"BreedtePut\" /1000) * (\"Lengteput\" /1000) * if( \"Drempelniveau_min\" IS NULL,  abs(\"OVH_D\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" )),  abs(\"Drempelniveau_min\" - min( \"US_BobBeginpuntLeiding\" , \"DS_BobEindpuntLeiding\" ))))\r\n, 2)',
-            'INPUT': outputs['FieldCalculatorDefaultMaxNiveauBerging']['OUTPUT'],
-            'OUTPUT': parameters['Berging_uit_knopen']
-        }
-        outputs['BergingKnopenFieldCalculator'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Stap1_berging_uit_knopen'] = outputs['BergingKnopenFieldCalculator']['OUTPUT']
-
-        feedback.setCurrentStep(72)
         if feedback.isCanceled():
             return {}
 
@@ -1113,25 +1094,79 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         }
         outputs['StatisticsByCategoriesBergingKnopenStatBem_id_sp'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(72)
+        if feedback.isCanceled():
+            return {}
+
+        # Join berging leidingen sum
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['sum'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['JoinOverstorthoogteAanGebiedskenmerken']['OUTPUT'],
+            'INPUT_2': outputs['StatisticsByCategoriesBergingLeidingenStatBem_id_sp']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': 'LEI_',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinBergingLeidingenSum'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(73)
         if feedback.isCanceled():
             return {}
 
-        # Join berging knopen
+        # Join berging leidingen count
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID_SP',
-            'FIELDS_TO_COPY': ['sum','count'],
+            'FIELDS_TO_COPY': ['count'],
             'FIELD_2': 'BEM_ID_SP',
-            'INPUT': outputs['JoinBergingLeidingen']['OUTPUT'],
+            'INPUT': outputs['JoinBergingLeidingenSum']['OUTPUT'],
+            'INPUT_2': outputs['StatisticsByCategoriesBergingLeidingenStatBem_id_sp']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': 'LEI_',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinBergingLeidingenCount'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(74)
+        if feedback.isCanceled():
+            return {}
+
+        # Join berging knopen sum
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['sum'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['JoinBergingLeidingenCount']['OUTPUT'],
             'INPUT_2': outputs['StatisticsByCategoriesBergingKnopenStatBem_id_sp']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': 'KNP_',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['JoinBergingKnopen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['JoinBergingKnopenSum'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(74)
+        feedback.setCurrentStep(75)
+        if feedback.isCanceled():
+            return {}
+
+        # Join berging knopen count
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'BEM_ID_SP',
+            'FIELDS_TO_COPY': ['count'],
+            'FIELD_2': 'BEM_ID_SP',
+            'INPUT': outputs['JoinBergingKnopenSum']['OUTPUT'],
+            'INPUT_2': outputs['StatisticsByCategoriesBergingKnopenStatBem_id_sp']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': 'KNP_',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinBergingKnopenCount'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(76)
         if feedback.isCanceled():
             return {}
 
@@ -1140,14 +1175,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 10,
             'FIELD_NAME': 'BERGING_M3',
             'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"LEI_sum\" + \"KNP_sum\"',
-            'INPUT': outputs['JoinBergingKnopen']['OUTPUT'],
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"LEI_sum" + \r\nif ("KNP_sum" IS NOT Null, "KNP_sum", 0)',
+            'INPUT': outputs['JoinBergingKnopenCount']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorTotalStorage'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(75)
+        feedback.setCurrentStep(77)
         if feedback.isCanceled():
             return {}
 
@@ -1159,13 +1194,13 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'BEM_ID_SP',
             'INPUT': outputs['FieldCalculatorTotalStorage']['OUTPUT'],
             'INPUT_2': outputs['CountBijNullOp1Zetten']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinPompCountPerBem_id_sp'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(76)
+        feedback.setCurrentStep(78)
         if feedback.isCanceled():
             return {}
 
@@ -1177,13 +1212,13 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'BEM_ID_SP',
             'INPUT': outputs['JoinPompCountPerBem_id_sp']['OUTPUT'],
             'INPUT_2': outputs['CountOverstortdrempelBijNullOp0Zetten']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinOverstortCountPerBem_id_sp'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(77)
+        feedback.setCurrentStep(79)
         if feedback.isCanceled():
             return {}
 
@@ -1195,14 +1230,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'BEM_ID_SP',
             'INPUT': outputs['JoinOverstortCountPerBem_id_sp']['OUTPUT'],
             'INPUT_2': outputs['DoorlatenCountBijNullOp0Zetten']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': parameters['Stelselkenmerken']
         }
         outputs['JoinDoorlaatCountPerBem_id_sp'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Stelselkenmerken'] = outputs['JoinDoorlaatCountPerBem_id_sp']['OUTPUT']
 
-        feedback.setCurrentStep(78)
+        feedback.setCurrentStep(80)
         if feedback.isCanceled():
             return {}
 
@@ -1214,13 +1249,13 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'begin',
             'INPUT': outputs['JoinDoorlaatCountPerBem_id_sp']['OUTPUT'],
             'INPUT_2': outputs['FieldCalculatorNummer']['OUTPUT'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinNummerAfvoerrelatie'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(79)
+        feedback.setCurrentStep(81)
         if feedback.isCanceled():
             return {}
 
@@ -1229,14 +1264,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 32,
             'FIELD_NAME': 'NAAM',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\"naam\"',
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': '"naam"',
             'INPUT': outputs['JoinNummerAfvoerrelatie']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorNaam'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(80)
+        feedback.setCurrentStep(82)
         if feedback.isCanceled():
             return {}
 
@@ -1245,14 +1280,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 16,
             'FIELD_NAME': 'VAN_KNOOPN',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\"begin\"',
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': '"begin"',
             'INPUT': outputs['FieldCalculatorNaam']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorVan_knoopn'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(81)
+        feedback.setCurrentStep(83)
         if feedback.isCanceled():
             return {}
 
@@ -1261,14 +1296,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 16,
             'FIELD_NAME': 'NAAR_KNOOP',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,
-            'FORMULA': '\"eind\"',
+            'FIELD_TYPE': 2,  # String
+            'FORMULA': '"eind"',
             'INPUT': outputs['FieldCalculatorVan_knoopn']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorNaar_knoop'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(82)
+        feedback.setCurrentStep(84)
         if feedback.isCanceled():
             return {}
 
@@ -1277,14 +1312,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 11,
             'FIELD_NAME': 'CAP_INST_M',
             'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"Pompcapaciteit\"*3.6',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"Pompcapaciteit"*3.6',
             'INPUT': outputs['FieldCalculatorNaar_knoop']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorCap_inst_m'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(83)
+        feedback.setCurrentStep(85)
         if feedback.isCanceled():
             return {}
 
@@ -1293,14 +1328,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 11,
             'FIELD_NAME': 'LAAGSTE_OS',
             'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"Drempelniveau_min\"',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"Drempelniveau_min"',
             'INPUT': outputs['FieldCalculatorCap_inst_m']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorLaagste_os'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(84)
+        feedback.setCurrentStep(86)
         if feedback.isCanceled():
             return {}
 
@@ -1309,14 +1344,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 8,
             'FIELD_NAME': 'STRENGEN_S',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,
-            'FORMULA': '\"LEI_COUNT\"',
+            'FIELD_TYPE': 1,  # Integer
+            'FORMULA': '"LEI_COUNT"',
             'INPUT': outputs['FieldCalculatorLaagste_os']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorStrengen_s'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(85)
+        feedback.setCurrentStep(87)
         if feedback.isCanceled():
             return {}
 
@@ -1325,14 +1360,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 8,
             'FIELD_NAME': 'KNOPEN_ST',
             'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,
-            'FORMULA': '\"KNP_count\"',
+            'FIELD_TYPE': 1,  # Integer
+            'FORMULA': '"KNP_count"',
             'INPUT': outputs['FieldCalculatorStrengen_s']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorKnopen_st'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(86)
+        feedback.setCurrentStep(88)
         if feedback.isCanceled():
             return {}
 
@@ -1341,14 +1376,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 11,
             'FIELD_NAME': 'BERG_KNP_M',
             'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"KNP_sum\" - (\"KNP_sum\" * ( @knoopverlorenberging / 100))',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"KNP_sum" - ("KNP_sum" * ( @knoopverlorenberging / 100))',
             'INPUT': outputs['FieldCalculatorKnopen_st']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorBerg_knp_m'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(87)
+        feedback.setCurrentStep(89)
         if feedback.isCanceled():
             return {}
 
@@ -1357,14 +1392,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 11,
             'FIELD_NAME': 'BERGV_KNP_',
             'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"BERG_KNP_M\" * ( @knoopverlorenberging / 100)',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"BERG_KNP_M" * ( @knoopverlorenberging / 100)',
             'INPUT': outputs['FieldCalculatorBerg_knp_m']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorBergv_knp_'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(88)
+        feedback.setCurrentStep(90)
         if feedback.isCanceled():
             return {}
 
@@ -1373,14 +1408,14 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 11,
             'FIELD_NAME': 'BERG_STR_M',
             'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': 'if(\"LEI_count\" > 0, \"LEI_sum\" - (\"LEI_sum\" * ( @leidingverlorenberging / 100)), NULL)',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': 'if("LEI_count" > 0, "LEI_sum" - ("LEI_sum" * ( @leidingverlorenberging / 100)), NULL)',
             'INPUT': outputs['FieldCalculatorBergv_knp_']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorBerg_str_m'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(89)
+        feedback.setCurrentStep(91)
         if feedback.isCanceled():
             return {}
 
@@ -1389,15 +1424,15 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_LENGTH': 11,
             'FIELD_NAME': 'BERGV_STR_',
             'FIELD_PRECISION': 3,
-            'FIELD_TYPE': 0,
-            'FORMULA': '\"BERG_STR_M\" * ( @leidingverlorenberging / 100)',
+            'FIELD_TYPE': 0,  # Float
+            'FORMULA': '"BERG_STR_M" * ( @leidingverlorenberging / 100)',
             'INPUT': outputs['FieldCalculatorBerg_str_m']['OUTPUT'],
             'OUTPUT': parameters['GebiedsgegevensStap1AllAtt']
         }
         outputs['FieldCalculatorBergv_str_'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['GebiedsgegevensStap1AllAtt'] = outputs['FieldCalculatorBergv_str_']['OUTPUT']
 
-        feedback.setCurrentStep(90)
+        feedback.setCurrentStep(92)
         if feedback.isCanceled():
             return {}
 
@@ -1410,7 +1445,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         outputs['RetainfieldsPunten'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Gebiedsgegevens_punt_tbv_stap2'] = outputs['RetainfieldsPunten']['Output_layer']
 
-        feedback.setCurrentStep(91)
+        feedback.setCurrentStep(93)
         if feedback.isCanceled():
             return {}
 
@@ -1422,7 +1457,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
             'FIELD_2': 'NUMMER',
             'INPUT': outputs['RetainfieldsLijnen']['Output_layer'],
             'INPUT_2': outputs['RetainfieldsPunten']['Output_layer'],
-            'METHOD': 1,
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': parameters['Gebiedsgegevens_lijn_tbv_stap2']
         }
