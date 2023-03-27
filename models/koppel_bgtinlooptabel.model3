@@ -1,6 +1,40 @@
 <!DOCTYPE model>
 <Option type="Map">
   <Option name="children" type="Map">
+    <Option name="native:createspatialindex_1" type="Map">
+      <Option name="active" type="bool" value="true"/>
+      <Option name="alg_config"/>
+      <Option name="alg_id" type="QString" value="native:createspatialindex"/>
+      <Option name="color" type="QString" value=""/>
+      <Option name="comment" type="Map">
+        <Option name="color" type="QString" value=""/>
+        <Option name="component_description" type="QString" value=""/>
+        <Option name="component_height" type="double" value="60"/>
+        <Option name="component_pos_x" type="double" value="2276"/>
+        <Option name="component_pos_y" type="double" value="1427"/>
+        <Option name="component_width" type="double" value="100"/>
+        <Option name="outputs_collapsed" type="bool" value="true"/>
+        <Option name="parameters_collapsed" type="bool" value="true"/>
+      </Option>
+      <Option name="component_description" type="QString" value="Create spatial index"/>
+      <Option name="component_height" type="double" value="30"/>
+      <Option name="component_pos_x" type="double" value="389"/>
+      <Option name="component_pos_y" type="double" value="197"/>
+      <Option name="component_width" type="double" value="200"/>
+      <Option name="dependencies"/>
+      <Option name="id" type="QString" value="native:createspatialindex_1"/>
+      <Option name="outputs"/>
+      <Option name="outputs_collapsed" type="bool" value="true"/>
+      <Option name="parameters_collapsed" type="bool" value="true"/>
+      <Option name="params" type="Map">
+        <Option name="INPUT" type="List">
+          <Option type="Map">
+            <Option name="parameter_name" type="QString" value="inputves (2)"/>
+            <Option name="source" type="int" value="0"/>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
     <Option name="native:extractbyattribute_1" type="Map">
       <Option name="active" type="bool" value="true"/>
       <Option name="alg_config"/>
@@ -18,8 +52,8 @@
       </Option>
       <Option name="component_description" type="QString" value="Extract by attribute GEM_HA > 0"/>
       <Option name="component_height" type="double" value="30"/>
-      <Option name="component_pos_x" type="double" value="1210"/>
-      <Option name="component_pos_y" type="double" value="750"/>
+      <Option name="component_pos_x" type="double" value="1219"/>
+      <Option name="component_pos_y" type="double" value="749"/>
       <Option name="component_width" type="double" value="200"/>
       <Option name="dependencies"/>
       <Option name="id" type="QString" value="native:extractbyattribute_1"/>
@@ -800,8 +834,8 @@
           </Option>
           <Option name="component_description" type="QString" value="bgt_intersect"/>
           <Option name="component_height" type="double" value="30"/>
-          <Option name="component_pos_x" type="double" value="976.6666666666667"/>
-          <Option name="component_pos_y" type="double" value="986.3333333333334"/>
+          <Option name="component_pos_x" type="double" value="960.6666666666667"/>
+          <Option name="component_pos_y" type="double" value="1004.3333333333334"/>
           <Option name="component_width" type="double" value="200"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" type="bool" value="false"/>
@@ -935,8 +969,8 @@
       </Option>
       <Option name="component_description" type="QString" value="Intersection"/>
       <Option name="component_height" type="double" value="30"/>
-      <Option name="component_pos_x" type="double" value="503"/>
-      <Option name="component_pos_y" type="double" value="306"/>
+      <Option name="component_pos_x" type="double" value="506"/>
+      <Option name="component_pos_y" type="double" value="302"/>
       <Option name="component_width" type="double" value="200"/>
       <Option name="dependencies"/>
       <Option name="id" type="QString" value="native:intersection_1"/>
@@ -946,8 +980,9 @@
       <Option name="params" type="Map">
         <Option name="INPUT" type="List">
           <Option type="Map">
-            <Option name="parameter_name" type="QString" value="inputves (2)"/>
-            <Option name="source" type="int" value="0"/>
+            <Option name="child_id" type="QString" value="native:createspatialindex_1"/>
+            <Option name="output_name" type="QString" value="OUTPUT"/>
+            <Option name="source" type="int" value="1"/>
           </Option>
         </Option>
         <Option name="INPUT_FIELDS" type="List">
@@ -2109,8 +2144,8 @@
       </Option>
       <Option name="component_description" type="QString" value="inputves (2)"/>
       <Option name="component_height" type="double" value="30"/>
-      <Option name="component_pos_x" type="double" value="223.45000000000002"/>
-      <Option name="component_pos_y" type="double" value="239.5"/>
+      <Option name="component_pos_x" type="double" value="221.45000000000002"/>
+      <Option name="component_pos_y" type="double" value="103.5"/>
       <Option name="component_width" type="double" value="200"/>
       <Option name="name" type="QString" value="inputves (2)"/>
       <Option name="outputs_collapsed" type="bool" value="true"/>

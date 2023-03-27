@@ -28,9 +28,19 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         results = {}
         outputs = {}
 
+        # Create spatial index
+        alg_params = {
+            'INPUT': parameters['inputves (2)']
+        }
+        outputs['CreateSpatialIndex'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(1)
+        if feedback.isCanceled():
+            return {}
+
         # Intersection
         alg_params = {
-            'INPUT': parameters['inputves (2)'],
+            'INPUT': outputs['CreateSpatialIndex']['OUTPUT'],
             'INPUT_FIELDS': [''],
             'OVERLAY': parameters['input'],
             'OVERLAY_FIELDS': [''],
@@ -39,7 +49,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['Intersection'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(1)
+        feedback.setCurrentStep(2)
         if feedback.isCanceled():
             return {}
 
@@ -51,7 +61,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['AddGeometryAttributes'] = processing.run('qgis:exportaddgeometrycolumns', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(2)
+        feedback.setCurrentStep(3)
         if feedback.isCanceled():
             return {}
 
@@ -67,7 +77,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['FieldCalculatorGem_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(3)
+        feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
@@ -83,7 +93,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['FieldCalculatorHwa_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(4)
+        feedback.setCurrentStep(5)
         if feedback.isCanceled():
             return {}
 
@@ -99,7 +109,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['FieldCalculatorVgs_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(5)
+        feedback.setCurrentStep(6)
         if feedback.isCanceled():
             return {}
 
@@ -115,7 +125,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['FieldCalculatorVwr_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(6)
+        feedback.setCurrentStep(7)
         if feedback.isCanceled():
             return {}
 
@@ -131,7 +141,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['FieldCalculatorInf_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(7)
+        feedback.setCurrentStep(8)
         if feedback.isCanceled():
             return {}
 
@@ -147,7 +157,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['FieldCalculatorOpw_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(8)
+        feedback.setCurrentStep(9)
         if feedback.isCanceled():
             return {}
 
@@ -164,66 +174,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         outputs['FieldCalculatorMvd_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Bgt_intersect'] = outputs['FieldCalculatorMvd_ha']['OUTPUT']
 
-        feedback.setCurrentStep(9)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by attribute MVD_HA > 0
-        alg_params = {
-            'FIELD': 'MVD_HA',
-            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
-            'OPERATOR': 2,  # >
-            'VALUE': '0',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByAttributeMvd_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(10)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by attribute INF_HA > 0
-        alg_params = {
-            'FIELD': 'INF_HA',
-            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
-            'OPERATOR': 2,  # >
-            'VALUE': '0',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByAttributeInf_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(11)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by attribute VWR_HA > 0
-        alg_params = {
-            'FIELD': 'VWR_HA',
-            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
-            'OPERATOR': 2,  # >
-            'VALUE': '0',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByAttributeVwr_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(12)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by location (summary)
-        # Helaas, resultaat van deze join by location is onbetrouwbaar. :-( Dan maar Statistics by category met veel meer stappen...
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'INPUT': parameters['input'],
-            'JOIN': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
-            'JOIN_FIELDS': ['GEM_HA','HWA_HA','VGS_HA','VWR_HA','INF_HA','OPW_HA','MVD_HA'],
-            'PREDICATE': [0],  # intersects
-            'SUMMARIES': [0,5],  # count,sum
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByLocationSummary'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(13)
         if feedback.isCanceled():
             return {}
 
@@ -237,7 +188,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['ExtractByAttributeVgs_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(14)
+        feedback.setCurrentStep(11)
         if feedback.isCanceled():
             return {}
 
@@ -251,21 +202,20 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['ExtractByAttributeHwa_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(15)
+        feedback.setCurrentStep(12)
         if feedback.isCanceled():
             return {}
 
-        # Extract by attribute GEM_HA > 0
+        # Statistics by categories HWA_HA
         alg_params = {
-            'FIELD': 'GEM_HA',
-            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
-            'OPERATOR': 2,  # >
-            'VALUE': '0',
+            'CATEGORIES_FIELD_NAME': ['BEM_ID'],
+            'INPUT': outputs['ExtractByAttributeHwa_ha0']['OUTPUT'],
+            'VALUES_FIELD_NAME': 'HWA_HA',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['ExtractByAttributeGem_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['StatisticsByCategoriesHwa_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(16)
+        feedback.setCurrentStep(13)
         if feedback.isCanceled():
             return {}
 
@@ -279,20 +229,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['ExtractByAttributeOpw_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(17)
-        if feedback.isCanceled():
-            return {}
-
-        # Statistics by categories INF_HA
-        alg_params = {
-            'CATEGORIES_FIELD_NAME': ['BEM_ID'],
-            'INPUT': outputs['ExtractByAttributeInf_ha0']['OUTPUT'],
-            'VALUES_FIELD_NAME': 'INF_HA',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['StatisticsByCategoriesInf_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(18)
+        feedback.setCurrentStep(14)
         if feedback.isCanceled():
             return {}
 
@@ -305,31 +242,87 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['StatisticsByCategoriesVgs_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(15)
+        if feedback.isCanceled():
+            return {}
+
+        # Statistics by categories OPW_HA
+        alg_params = {
+            'CATEGORIES_FIELD_NAME': ['BEM_ID'],
+            'INPUT': outputs['ExtractByAttributeOpw_ha0']['OUTPUT'],
+            'VALUES_FIELD_NAME': 'OPW_HA',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['StatisticsByCategoriesOpw_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(16)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by attribute GEM_HA > 0
+        alg_params = {
+            'FIELD': 'GEM_HA',
+            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
+            'OPERATOR': 2,  # >
+            'VALUE': '0',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByAttributeGem_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(17)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by attribute INF_HA > 0
+        alg_params = {
+            'FIELD': 'INF_HA',
+            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
+            'OPERATOR': 2,  # >
+            'VALUE': '0',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByAttributeInf_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(18)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by attribute VWR_HA > 0
+        alg_params = {
+            'FIELD': 'VWR_HA',
+            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
+            'OPERATOR': 2,  # >
+            'VALUE': '0',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByAttributeVwr_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(19)
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories HWA_HA
+        # Extract by attribute MVD_HA > 0
         alg_params = {
-            'CATEGORIES_FIELD_NAME': ['BEM_ID'],
-            'INPUT': outputs['ExtractByAttributeHwa_ha0']['OUTPUT'],
-            'VALUES_FIELD_NAME': 'HWA_HA',
+            'FIELD': 'MVD_HA',
+            'INPUT': outputs['FieldCalculatorMvd_ha']['OUTPUT'],
+            'OPERATOR': 2,  # >
+            'VALUE': '0',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['StatisticsByCategoriesHwa_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['ExtractByAttributeMvd_ha0'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(20)
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories MVD_HA
+        # Statistics by categories INF_HA
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['BEM_ID'],
-            'INPUT': outputs['ExtractByAttributeMvd_ha0']['OUTPUT'],
-            'VALUES_FIELD_NAME': 'MVD_HA',
+            'INPUT': outputs['ExtractByAttributeInf_ha0']['OUTPUT'],
+            'VALUES_FIELD_NAME': 'INF_HA',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['StatisticsByCategoriesMvd_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['StatisticsByCategoriesInf_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(21)
         if feedback.isCanceled():
@@ -348,19 +341,6 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories OPW_HA
-        alg_params = {
-            'CATEGORIES_FIELD_NAME': ['BEM_ID'],
-            'INPUT': outputs['ExtractByAttributeOpw_ha0']['OUTPUT'],
-            'VALUES_FIELD_NAME': 'OPW_HA',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['StatisticsByCategoriesOpw_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(23)
-        if feedback.isCanceled():
-            return {}
-
         # Statistics by categories GEM_HA
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['BEM_ID'],
@@ -369,6 +349,19 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['StatisticsByCategoriesGem_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(23)
+        if feedback.isCanceled():
+            return {}
+
+        # Statistics by categories MVD_HA
+        alg_params = {
+            'CATEGORIES_FIELD_NAME': ['BEM_ID'],
+            'INPUT': outputs['ExtractByAttributeMvd_ha0']['OUTPUT'],
+            'VALUES_FIELD_NAME': 'MVD_HA',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['StatisticsByCategoriesMvd_ha'] = processing.run('qgis:statisticsbycategories', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(24)
         if feedback.isCanceled():
@@ -524,6 +517,7 @@ class KoppelBgtinlooptabel(QgsProcessingAlgorithm):
         }
         outputs['AddGeometryAttributes'] = processing.run('qgis:exportaddgeometrycolumns', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Bgt_intersect_stats'] = outputs['AddGeometryAttributes']['OUTPUT']
+        
         return results
 
     def name(self):

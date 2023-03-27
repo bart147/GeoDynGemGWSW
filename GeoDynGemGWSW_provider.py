@@ -81,8 +81,8 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         self.addAlgorithm(Stap1KikkerToGeodyn())
         self.addAlgorithm(Stap2Genereer_afvoerrelaties())
         self.addAlgorithm(Stap3BerekenAfvalwaterprognose())
-        self.addAlgorithm(GeodynAlleStappen())
-        self.addAlgorithm(GeodynAlleStappenKikker())
+        #self.addAlgorithm(GeodynAlleStappen())
+        #self.addAlgorithm(GeodynAlleStappenKikker())
         # add customTools
         self.addAlgorithm(CustomToolsLis2GraphAlgorithm())
         self.addAlgorithm(CustomToolsAddFieldsFromDictAlgorithm())
