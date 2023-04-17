@@ -24,7 +24,8 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3')))
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
-        self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
+        self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
+        self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater (2)', 'Input BAG Verblijfsobjecten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('verblijfsobjecten', geometryType=0)))
         ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
         self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
@@ -35,6 +36,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterFeatureSink('Exafw_per_bem_id', 'ExAFW_per_bem_id', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_pc_id', 'PLANCAP_PC_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_drinkwater', 'STATS_DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Stats_vbo', 'STATS_VBO', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Stats_ve', 'STATS_VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Meerdere_plancaps_in_bemalingsgebied', 'meerdere_plancaps_in_bemalingsgebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Plancap_in_meerdere_bemalingsgebieden', 'plancap_in_meerdere_bemalingsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
@@ -50,9 +52,11 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
             parameters['bgtinlooptabel'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgt_inlooptabel_empty.gpkg"), "bgt_inlooptabel_empty", "ogr")
         if not parameters['inputplancap']:
             parameters['inputplancap'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "plancap_empty.gpkg"), "plancap_empty", "ogr")
+        if not parameters['inputdrinkwater']:
+            parameters['inputdrinkwater'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "drinkwater_empty.gpkg"), "drinkwater_empty", "ogr")
         QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
-        feedback = QgsProcessingMultiStepFeedback(18, model_feedback)
+        feedback = QgsProcessingMultiStepFeedback(21, model_feedback)
         results = {}
         outputs = {}
 
@@ -62,19 +66,21 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
             'inputplancap': parameters['inputplancap'],
             'inputves': parameters['inputves'],
             'inputves (2)': parameters['inputdrinkwater'],
+            'inputves (2) (2)': parameters['inputdrinkwater (2)'],
             'Bemalingsgebieden_joined_stats': parameters['Bemalingsgebieden_joined_stats'],
-            'Exafw_per_bem_id': parameters['Exafw_per_bem_id'],
+            'Exafw_per_bem_id': QgsProcessing.TEMPORARY_OUTPUT,
             'Meerdere_plancaps_in_bemalingsgebied': parameters['Meerdere_plancaps_in_bemalingsgebied'],
             'Plancap_in_meerdere_bemalingsgebieden': parameters['Plancap_in_meerdere_bemalingsgebieden'],
             'Plancap_pc_id': parameters['Plancap_pc_id'],
             'Stats_drinkwater': parameters['Stats_drinkwater'],
+            'Stats_vbo': parameters['Stats_vbo'],
             'Stats_ve': parameters['Stats_ve']
         }
         outputs['KoppelOverigeBronnen'] = processing.run('GeoDynTools:koppel overige bronnen', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Bemalingsgebieden_joined_stats'] = outputs['KoppelOverigeBronnen']['Bemalingsgebieden_joined_stats']
-        results['Exafw_per_bem_id'] = outputs['KoppelOverigeBronnen']['Exafw_per_bem_id']
         results['Plancap_pc_id'] = outputs['KoppelOverigeBronnen']['Plancap_pc_id']
         results['Stats_drinkwater'] = outputs['KoppelOverigeBronnen']['Stats_drinkwater']
+        results['Stats_vbo'] = outputs['KoppelOverigeBronnen']['Stats_vbo']
         results['Stats_ve'] = outputs['KoppelOverigeBronnen']['Stats_ve']
         results['Meerdere_plancaps_in_bemalingsgebied'] = outputs['KoppelOverigeBronnen']['Meerdere_plancaps_in_bemalingsgebied']
         results['Plancap_in_meerdere_bemalingsgebieden'] = outputs['KoppelOverigeBronnen']['Plancap_in_meerdere_bemalingsgebieden']

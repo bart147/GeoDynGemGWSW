@@ -965,8 +965,8 @@
       </Option>
       <Option name="component_description" value="koppel overige bronnen" type="QString"/>
       <Option name="component_height" value="30" type="double"/>
-      <Option name="component_pos_x" value="880" type="double"/>
-      <Option name="component_pos_y" value="719" type="double"/>
+      <Option name="component_pos_x" value="824" type="double"/>
+      <Option name="component_pos_y" value="703" type="double"/>
       <Option name="component_width" value="200" type="double"/>
       <Option name="dependencies"/>
       <Option name="id" value="GeoDynTools:koppel overige bronnen_1" type="QString"/>
@@ -986,38 +986,13 @@
           </Option>
           <Option name="component_description" value="Bemalingsgebieden_joined_stats" type="QString"/>
           <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="1006" type="double"/>
+          <Option name="component_pos_x" value="1020" type="double"/>
           <Option name="component_pos_y" value="770" type="double"/>
-          <Option name="component_width" value="200" type="double"/>
+          <Option name="component_width" value="227.99999999999997" type="double"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" value="false" type="bool"/>
           <Option name="name" value="Bemalingsgebieden_joined_stats" type="QString"/>
           <Option name="output_name" value="Bemalingsgebieden_joined_stats" type="QString"/>
-          <Option name="outputs_collapsed" value="true" type="bool"/>
-          <Option name="parameters_collapsed" value="true" type="bool"/>
-        </Option>
-        <Option name="ExAFW_per_bem_id" type="Map">
-          <Option name="child_id" value="GeoDynTools:koppel overige bronnen_1" type="QString"/>
-          <Option name="color" value="" type="QString"/>
-          <Option name="comment" type="Map">
-            <Option name="color" value="" type="QString"/>
-            <Option name="component_description" value="" type="QString"/>
-            <Option name="component_height" value="60" type="double"/>
-            <Option name="component_pos_x" value="0" type="double"/>
-            <Option name="component_pos_y" value="0" type="double"/>
-            <Option name="component_width" value="100" type="double"/>
-            <Option name="outputs_collapsed" value="true" type="bool"/>
-            <Option name="parameters_collapsed" value="true" type="bool"/>
-          </Option>
-          <Option name="component_description" value="ExAFW_per_bem_id" type="QString"/>
-          <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="1006" type="double"/>
-          <Option name="component_pos_y" value="881" type="double"/>
-          <Option name="component_width" value="200" type="double"/>
-          <Option name="default_value" type="invalid"/>
-          <Option name="mandatory" value="false" type="bool"/>
-          <Option name="name" value="ExAFW_per_bem_id" type="QString"/>
-          <Option name="output_name" value="Exafw_per_bem_id" type="QString"/>
           <Option name="outputs_collapsed" value="true" type="bool"/>
           <Option name="parameters_collapsed" value="true" type="bool"/>
         </Option>
@@ -1036,8 +1011,8 @@
           </Option>
           <Option name="component_description" value="PLANCAP_PC_ID" type="QString"/>
           <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="1006" type="double"/>
-          <Option name="component_pos_y" value="917" type="double"/>
+          <Option name="component_pos_x" value="1003" type="double"/>
+          <Option name="component_pos_y" value="919" type="double"/>
           <Option name="component_width" value="200" type="double"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" value="false" type="bool"/>
@@ -1068,6 +1043,31 @@
           <Option name="mandatory" value="false" type="bool"/>
           <Option name="name" value="STATS_DRINKWATER" type="QString"/>
           <Option name="output_name" value="Stats_drinkwater" type="QString"/>
+          <Option name="outputs_collapsed" value="true" type="bool"/>
+          <Option name="parameters_collapsed" value="true" type="bool"/>
+        </Option>
+        <Option name="STATS_VBO" type="Map">
+          <Option name="child_id" value="GeoDynTools:koppel overige bronnen_1" type="QString"/>
+          <Option name="color" value="" type="QString"/>
+          <Option name="comment" type="Map">
+            <Option name="color" value="" type="QString"/>
+            <Option name="component_description" value="" type="QString"/>
+            <Option name="component_height" value="60" type="double"/>
+            <Option name="component_pos_x" value="0" type="double"/>
+            <Option name="component_pos_y" value="0" type="double"/>
+            <Option name="component_width" value="100" type="double"/>
+            <Option name="outputs_collapsed" value="true" type="bool"/>
+            <Option name="parameters_collapsed" value="true" type="bool"/>
+          </Option>
+          <Option name="component_description" value="STATS_VBO" type="QString"/>
+          <Option name="component_height" value="30" type="double"/>
+          <Option name="component_pos_x" value="999" type="double"/>
+          <Option name="component_pos_y" value="882" type="double"/>
+          <Option name="component_width" value="200" type="double"/>
+          <Option name="default_value" type="invalid"/>
+          <Option name="mandatory" value="false" type="bool"/>
+          <Option name="name" value="STATS_VBO" type="QString"/>
+          <Option name="output_name" value="Stats_vbo" type="QString"/>
           <Option name="outputs_collapsed" value="true" type="bool"/>
           <Option name="parameters_collapsed" value="true" type="bool"/>
         </Option>
@@ -1111,9 +1111,9 @@
           </Option>
           <Option name="component_description" value="meerdere_plancaps_in_bemalingsgebied" type="QString"/>
           <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="1002" type="double"/>
+          <Option name="component_pos_x" value="1037" type="double"/>
           <Option name="component_pos_y" value="809" type="double"/>
-          <Option name="component_width" value="200" type="double"/>
+          <Option name="component_width" value="270" type="double"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" value="false" type="bool"/>
           <Option name="name" value="meerdere_plancaps_in_bemalingsgebied" type="QString"/>
@@ -1136,9 +1136,9 @@
           </Option>
           <Option name="component_description" value="plancap_in_meerdere_bemalingsgebieden" type="QString"/>
           <Option name="component_height" value="30" type="double"/>
-          <Option name="component_pos_x" value="1004" type="double"/>
-          <Option name="component_pos_y" value="847" type="double"/>
-          <Option name="component_width" value="200" type="double"/>
+          <Option name="component_pos_x" value="1042" type="double"/>
+          <Option name="component_pos_y" value="842" type="double"/>
+          <Option name="component_width" value="280" type="double"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" value="false" type="bool"/>
           <Option name="name" value="plancap_in_meerdere_bemalingsgebieden" type="QString"/>
@@ -1171,6 +1171,12 @@
         <Option name="inputves (2)" type="List">
           <Option type="Map">
             <Option name="parameter_name" value="inputdrinkwater" type="QString"/>
+            <Option name="source" value="0" type="int"/>
+          </Option>
+        </Option>
+        <Option name="inputves (2) (2)" type="List">
+          <Option type="Map">
+            <Option name="parameter_name" value="inputdrinkwater (2)" type="QString"/>
             <Option name="source" value="0" type="int"/>
           </Option>
         </Option>
@@ -1305,24 +1311,10 @@
       <Option name="default" type="invalid"/>
       <Option name="defaultGui" type="invalid"/>
       <Option name="description" value="Bemalingsgebieden_joined_stats" type="QString"/>
-      <Option name="flags" value="0" type="int"/>
+      <Option name="flags" value="8" type="int"/>
       <Option name="help" value="" type="QString"/>
       <Option name="metadata"/>
       <Option name="name" value="GeoDynTools:koppel overige bronnen_1:Bemalingsgebieden_joined_stats" type="QString"/>
-      <Option name="parameter_type" value="sink" type="QString"/>
-      <Option name="supports_append" value="true" type="bool"/>
-      <Option name="supports_non_file_outputs" value="true" type="bool"/>
-    </Option>
-    <Option name="GeoDynTools:koppel overige bronnen_1:ExAFW_per_bem_id" type="Map">
-      <Option name="create_by_default" value="true" type="bool"/>
-      <Option name="data_type" value="-1" type="int"/>
-      <Option name="default" type="invalid"/>
-      <Option name="defaultGui" type="invalid"/>
-      <Option name="description" value="ExAFW_per_bem_id" type="QString"/>
-      <Option name="flags" value="0" type="int"/>
-      <Option name="help" value="" type="QString"/>
-      <Option name="metadata"/>
-      <Option name="name" value="GeoDynTools:koppel overige bronnen_1:ExAFW_per_bem_id" type="QString"/>
       <Option name="parameter_type" value="sink" type="QString"/>
       <Option name="supports_append" value="false" type="bool"/>
       <Option name="supports_non_file_outputs" value="true" type="bool"/>
@@ -1351,6 +1343,20 @@
       <Option name="help" value="" type="QString"/>
       <Option name="metadata"/>
       <Option name="name" value="GeoDynTools:koppel overige bronnen_1:STATS_DRINKWATER" type="QString"/>
+      <Option name="parameter_type" value="sink" type="QString"/>
+      <Option name="supports_append" value="false" type="bool"/>
+      <Option name="supports_non_file_outputs" value="true" type="bool"/>
+    </Option>
+    <Option name="GeoDynTools:koppel overige bronnen_1:STATS_VBO" type="Map">
+      <Option name="create_by_default" value="true" type="bool"/>
+      <Option name="data_type" value="-1" type="int"/>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" value="STATS_VBO" type="QString"/>
+      <Option name="flags" value="0" type="int"/>
+      <Option name="help" value="" type="QString"/>
+      <Option name="metadata"/>
+      <Option name="name" value="GeoDynTools:koppel overige bronnen_1:STATS_VBO" type="QString"/>
       <Option name="parameter_type" value="sink" type="QString"/>
       <Option name="supports_append" value="false" type="bool"/>
       <Option name="supports_non_file_outputs" value="true" type="bool"/>
@@ -1436,6 +1442,19 @@
       <Option name="name" value="inputdrinkwater" type="QString"/>
       <Option name="parameter_type" value="vector" type="QString"/>
     </Option>
+    <Option name="inputdrinkwater (2)" type="Map">
+      <Option name="data_types" type="List">
+        <Option value="0" type="int"/>
+      </Option>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" value="Input BAG Verblijfsobjecten" type="QString"/>
+      <Option name="flags" value="0" type="int"/>
+      <Option name="help" value="" type="QString"/>
+      <Option name="metadata"/>
+      <Option name="name" value="inputdrinkwater (2)" type="QString"/>
+      <Option name="parameter_type" value="vector" type="QString"/>
+    </Option>
     <Option name="inputfieldscsv" type="Map">
       <Option name="behavior" value="0" type="int"/>
       <Option name="default" value="G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\inp_fields.csv" type="QString"/>
@@ -1492,8 +1511,8 @@
       </Option>
       <Option name="component_description" value="bemalingsgebiedenstats" type="QString"/>
       <Option name="component_height" value="30" type="double"/>
-      <Option name="component_pos_x" value="544" type="double"/>
-      <Option name="component_pos_y" value="572" type="double"/>
+      <Option name="component_pos_x" value="537" type="double"/>
+      <Option name="component_pos_y" value="579" type="double"/>
       <Option name="component_width" value="200" type="double"/>
       <Option name="name" value="bemalingsgebiedenstats" type="QString"/>
       <Option name="outputs_collapsed" value="true" type="bool"/>
@@ -1541,6 +1560,27 @@
       <Option name="outputs_collapsed" value="true" type="bool"/>
       <Option name="parameters_collapsed" value="true" type="bool"/>
     </Option>
+    <Option name="inputdrinkwater (2)" type="Map">
+      <Option name="color" value="" type="QString"/>
+      <Option name="comment" type="Map">
+        <Option name="color" value="" type="QString"/>
+        <Option name="component_description" value="" type="QString"/>
+        <Option name="component_height" value="60" type="double"/>
+        <Option name="component_pos_x" value="792" type="double"/>
+        <Option name="component_pos_y" value="724" type="double"/>
+        <Option name="component_width" value="100" type="double"/>
+        <Option name="outputs_collapsed" value="true" type="bool"/>
+        <Option name="parameters_collapsed" value="true" type="bool"/>
+      </Option>
+      <Option name="component_description" value="inputdrinkwater (2)" type="QString"/>
+      <Option name="component_height" value="30" type="double"/>
+      <Option name="component_pos_x" value="541" type="double"/>
+      <Option name="component_pos_y" value="687" type="double"/>
+      <Option name="component_width" value="200" type="double"/>
+      <Option name="name" value="inputdrinkwater (2)" type="QString"/>
+      <Option name="outputs_collapsed" value="true" type="bool"/>
+      <Option name="parameters_collapsed" value="true" type="bool"/>
+    </Option>
     <Option name="inputfieldscsv" type="Map">
       <Option name="color" value="" type="QString"/>
       <Option name="comment" type="Map">
@@ -1576,8 +1616,8 @@
       </Option>
       <Option name="component_description" value="inputplancap" type="QString"/>
       <Option name="component_height" value="30" type="double"/>
-      <Option name="component_pos_x" value="539" type="double"/>
-      <Option name="component_pos_y" value="668" type="double"/>
+      <Option name="component_pos_x" value="544" type="double"/>
+      <Option name="component_pos_y" value="630" type="double"/>
       <Option name="component_width" value="200" type="double"/>
       <Option name="name" value="inputplancap" type="QString"/>
       <Option name="outputs_collapsed" value="true" type="bool"/>

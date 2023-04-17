@@ -8,8 +8,8 @@
 6;7;;K_ONTV_VAN_NAME;st1a;00_graph;TEXT;1000.0;Ontvangt van;;;lijst met knoopnummers;;Berekend
 7;8;;K_ONTV_1N_NAME;st1a;00_graph;TEXT;1000.0;Ontvangt direct van;;;lijst met knoopnummers;;Berekend
 8;9;;K_KNP_EIND_NAME;st1a;00_graph;TEXT;60.0;Eindbemalingsgebied;;;Eindbemalingsgebied / overnamepunt;;Kikker
-9;10;;X_WON_GEB;st2a;01_ber;LONG;;Aantal woningen (G);[par_result_count];;Aantal percelen Gebied;;Berekend
-10;11;;X_VE_GEB;st2a;01_ber;LONG;;Aantal ve's (G);[zak_result_count];;Aantal ve's Gebied;;Berekend
+9;10;;X_WON_GEB;st2a;01_ber;LONG;;Aantal woningen (G);[vbo_fid_count];;Aantal percelen Gebied;;Berekend
+10;11;;X_VE_GEB;st2a;01_ber;LONG;;Aantal ve's (G);[GRONDSLAG_sum];;Aantal ve's Gebied;;Berekend
 11;12;;AW_21_24_G;st2a;01_ber;DOUBLE;;X Afvw. 21 t/m 24 (G) (m3/u);[ExAFW_2124_sum];;Extra afvalwater uitbreidingsgebieden uit Gebied, van 2025 t/m 2050;;Berekend
 12;13;;AW_25_29_G;st2a;01_ber;DOUBLE;;X Afvw. 25 t/m 29 (G) (m3/u);[ExAFW_2529_sum];;Extra afvalwater uitbreidingsgebieden uit Gebied, van 2025 t/m 2050;;Berekend
 13;14;;AW_30_39_G;st2a;01_ber;DOUBLE;;X Afvw. 30 t/m 39 (G) (m3/u);[ExAFW_3039_sum];;Extra afvalwater uitbreidingsgebieden uit Gebied, van 2025 t/m 2050;;Berekend
