@@ -54,7 +54,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
             parameters['inputplancap'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "plancap_empty.gpkg"), "plancap_empty", "ogr")
         if not parameters['inputdrinkwater']:
             parameters['inputdrinkwater'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "drinkwater_empty.gpkg"), "drinkwater_empty", "ogr")
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
         feedback = QgsProcessingMultiStepFeedback(21, model_feedback)
         results = {}
@@ -347,7 +347,8 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
         else:
-            results, context, feedback = rename_layers(results, context, feedback)
+            #results, context, feedback = rename_layers(results, context, feedback)
+            context.setLayersToLoadOnCompletion({})
             for key in results:
                 self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)        
  

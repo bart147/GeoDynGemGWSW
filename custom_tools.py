@@ -25,7 +25,8 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterBoolean,
                        QgsProject,
                        QgsMapLayerType,
-                       QgsLayerTreeGroup)
+                       QgsLayerTreeGroup,
+                       QgsVectorFileWriter)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
 from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
@@ -55,7 +56,7 @@ def return_result_group():
         group = root.addGroup('Results')
     return group
 
-def rename_layers(results, context, feedback):
+def rename_layers_old(results, context, feedback):
     #QgsProject.instance().reloadAllLayers() 
     for key in results:
         if context.willLoadLayerOnCompletion(results[key]):
@@ -65,6 +66,22 @@ def rename_layers(results, context, feedback):
             globals()[global_key] = Renamer(key) #create unique global renamer instances
             context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
             # add style
+            style = os.path.join(cmd_folder, "styles", key + ".qml")
+            if os.path.exists(style):
+                layer = context.getMapLayer(results[key])
+                layer.loadNamedStyle(style)
+    #QgsProject.instance().reloadAllLayers() 
+    return results, context, feedback
+
+def rename_layers(results, context, feedback):
+    #QgsProject.instance().reloadAllLayers() 
+    for key in results:
+        result = results[key]
+        if context.willLoadLayerOnCompletion(result):
+            feedback.pushInfo("rename layer to {}".format(key))
+            if context.willLoadLayerOnCompletion(result):
+                layer_details = context.layerToLoadOnCompletionDetails(result)
+                layer_details.name = "My output"
             style = os.path.join(cmd_folder, "styles", key + ".qml")
             if os.path.exists(style):
                 layer = context.getMapLayer(results[key])
@@ -103,7 +120,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         group = root.insertGroup(0, "Result " + self.displayName())
         hoofdgroup = group.addGroup("hoofdresultaten")
         subgroup = group.addGroup("tussenresultaten")
-        
+        result_folder = r'G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\JHSW\results'
         rename = {}
         for index, item in enumerate(self.final_layers.items()):
             
@@ -112,23 +129,38 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             # feedback.pushInfo("layer.id = {}".format(layer.id()))
             # feedback.pushInfo("layer.name = {}".format(layer.name()))
             # feedback.pushInfo("layername = {}".format(layername))
-            rename[layer.id()] = layername
-            layer.setName(item[0])
+            #rename[layer.id()] = layername
+            #layer.setName(item[0])
             if 'tbv' in layername or layername == 'Eindresultaat':
-                group_to_add = hoofdgroup
+                #group_to_add = hoofdgroup
+                group_to_add = group
             else:
+                continue
                 group_to_add = subgroup
 
+            layer_path = os.path.join (result_folder, layername+".gpkg")
+            QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+            layer = QgsVectorLayer(layer_path, layername, 'ogr')
+
+            # add style
+            style = os.path.join(cmd_folder, "styles", layername + ".qml")
+            if os.path.exists(style):
+                #layer = context.getMapLayer(results[key])
+                layer.loadNamedStyle(style)
+            
             project.addMapLayers([layer], False)
             group_to_add.insertLayer(int(index), layer)
 
-        layers = QgsProject.instance().mapLayers()
-        for layerid in layers:
-            if layerid in rename:
-                feedback.pushInfo("layerid = {}".format(layerid))
-                feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
-                feedback.pushInfo("rename to = {}".format(rename[layerid]))
-                layers[layerid].setName(rename[layerid])
+        
+        # layers = QgsProject.instance().mapLayers()
+        # for layerid in layers:
+        #     if layerid in rename:
+        #         layer = layers[layerid]
+        #         feedback.pushInfo("layerid = {}".format(layerid))
+        #         feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
+        #         feedback.pushInfo("rename to = {}".format(rename[layerid]))
+        #         layer.setName(rename[layerid])
+
         #QgsProject.instance().reloadAllLayers() 
         self.final_layers.clear()
         return {}
@@ -215,7 +247,7 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
         results = {}
         outputs = {}

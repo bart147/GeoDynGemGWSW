@@ -36,7 +36,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         parameters['inputfieldscsv'] = default_inp_fields
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(30, model_feedback)
         results = {}
         outputs = {}
@@ -487,7 +487,8 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
         else:
-            results, context, feedback = rename_layers(results, context, feedback)
+            #results, context, feedback = rename_layers(results, context, feedback)
+            context.setLayersToLoadOnCompletion({})
             for key in results:
                 self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)        
  
