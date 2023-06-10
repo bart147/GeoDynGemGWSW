@@ -307,8 +307,8 @@
           </Option>
           <Option name="component_description" type="QString" value="Eindresultaat"/>
           <Option name="component_height" type="double" value="30"/>
-          <Option name="component_pos_x" type="double" value="941"/>
-          <Option name="component_pos_y" type="double" value="898"/>
+          <Option name="component_pos_x" type="double" value="965"/>
+          <Option name="component_pos_y" type="double" value="943"/>
           <Option name="component_width" type="double" value="200"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" type="bool" value="false"/>
@@ -490,6 +490,12 @@
             <Option name="source" type="int" value="0"/>
           </Option>
         </Option>
+        <Option name="inputdrinkwater (2)" type="List">
+          <Option type="Map">
+            <Option name="parameter_name" type="QString" value="bag_verblijfsobjecten"/>
+            <Option name="source" type="int" value="0"/>
+          </Option>
+        </Option>
         <Option name="inputplancap" type="List">
           <Option type="Map">
             <Option name="parameter_name" type="QString" value="inputbemalingsgebieden (2) (2) (2) (2) (2)"/>
@@ -508,6 +514,7 @@
   <Option name="designerParameterValues"/>
   <Option name="groupBoxes"/>
   <Option name="help"/>
+  <Option name="internal_version" type="QString" value="Version1"/>
   <Option name="modelVariables"/>
   <Option name="model_group" type="QString" value=""/>
   <Option name="model_name" type="QString" value="GeoDyn alle stappen"/>
@@ -520,7 +527,11 @@
       <Option name="description" type="QString" value="Stap1_leidingen_niet_meegenomen"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 1.) GWSW to Geodyn_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap1_leidingen_niet_meegenomen"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 1.) GWSW to Geodyn_1:Stap1_leidingen_niet_meegenomen"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -534,7 +545,11 @@
       <Option name="description" type="QString" value="Stap1_rioolstelsel_buffer_10m_buffer"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 1.) GWSW to Geodyn_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap1_rioolstelsel_buffer_10m_buffer"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 1.) GWSW to Geodyn_1:Stap1_rioolstelsel_buffer_10m_buffer"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="true"/>
@@ -548,7 +563,11 @@
       <Option name="description" type="QString" value="Stap2_afvoerrelaties_bemalingsgebieden"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 2.) genereer_afvoerrelaties_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap2_afvoerrelaties_bemalingsgebieden"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 2.) genereer_afvoerrelaties_1:Stap2_afvoerrelaties_bemalingsgebieden"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -562,7 +581,11 @@
       <Option name="description" type="QString" value="Stap2_afvoerrelaties_rioolgemalen"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 2.) genereer_afvoerrelaties_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap2_afvoerrelaties_rioolgemalen"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 2.) genereer_afvoerrelaties_1:Stap2_afvoerrelaties_rioolgemalen"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -576,7 +599,11 @@
       <Option name="description" type="QString" value="Stap2_rioolgemalen_gekoppeld"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 2.) genereer_afvoerrelaties_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap2_rioolgemalen_gekoppeld"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 2.) genereer_afvoerrelaties_1:Stap2_rioolgemalen_gekoppeld"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -590,7 +617,11 @@
       <Option name="description" type="QString" value="Eindresultaat"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Eindresultaat"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:Eindresultaat"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="true"/>
@@ -604,7 +635,11 @@
       <Option name="description" type="QString" value="Stap3_ExAFW_per_bem_id"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap3_ExAFW_per_bem_id"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:Stap3_ExAFW_per_bem_id"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -616,9 +651,13 @@
       <Option name="default" type="invalid"/>
       <Option name="defaultGui" type="invalid"/>
       <Option name="description" type="QString" value="Stap3_Plancap_pc_id"/>
-      <Option name="flags" type="int" value="8"/>
+      <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap3_Plancap_pc_id"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:Stap3_Plancap_pc_id"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="true"/>
@@ -632,7 +671,11 @@
       <Option name="description" type="QString" value="Stap3_bgt_intersect"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap3_bgt_intersect"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:Stap3_bgt_intersect"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="true"/>
@@ -646,7 +689,11 @@
       <Option name="description" type="QString" value="Stap3_meerdere_plancaps_in_bemalingsgebied"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap3_meerdere_plancaps_in_bemalingsgebied"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:Stap3_meerdere_plancaps_in_bemalingsgebied"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -660,7 +707,11 @@
       <Option name="description" type="QString" value="Stap3_plancap_in_meerdere_bemalingsgebieden"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="Stap3_plancap_in_meerdere_bemalingsgebieden"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:Stap3_plancap_in_meerdere_bemalingsgebieden"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="false"/>
@@ -674,11 +725,28 @@
       <Option name="description" type="QString" value="result_all_fields"/>
       <Option name="flags" type="int" value="0"/>
       <Option name="help" type="QString" value=""/>
-      <Option name="metadata"/>
+      <Option name="metadata" type="Map">
+        <Option name="_modelChildId" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1"/>
+        <Option name="_modelChildOutputName" type="QString" value="result_all_fields"/>
+        <Option name="_modelChildProvider" type="QString" value="GeoDynTools"/>
+      </Option>
       <Option name="name" type="QString" value="GeoDynTools:stap 3.) bereken afvalwaterprognose_1:result_all_fields"/>
       <Option name="parameter_type" type="QString" value="sink"/>
       <Option name="supports_append" type="bool" value="true"/>
       <Option name="supports_non_file_outputs" type="bool" value="true"/>
+    </Option>
+    <Option name="bag_verblijfsobjecten" type="Map">
+      <Option name="data_types" type="List">
+        <Option type="int" value="0"/>
+      </Option>
+      <Option name="default" type="invalid"/>
+      <Option name="defaultGui" type="invalid"/>
+      <Option name="description" type="QString" value="BAG verblijfsobjecten"/>
+      <Option name="flags" type="int" value="0"/>
+      <Option name="help" type="QString" value=""/>
+      <Option name="metadata"/>
+      <Option name="name" type="QString" value="bag_verblijfsobjecten"/>
+      <Option name="parameter_type" type="QString" value="vector"/>
     </Option>
     <Option name="inputbemalingsgebieden" type="Map">
       <Option name="data_types" type="List">
@@ -800,6 +868,27 @@
   </Option>
   <Option name="parameterOrder"/>
   <Option name="parameters" type="Map">
+    <Option name="bag_verblijfsobjecten" type="Map">
+      <Option name="color" type="QString" value=""/>
+      <Option name="comment" type="Map">
+        <Option name="color" type="QString" value=""/>
+        <Option name="component_description" type="QString" value=""/>
+        <Option name="component_height" type="double" value="60"/>
+        <Option name="component_pos_x" type="double" value="447"/>
+        <Option name="component_pos_y" type="double" value="-75"/>
+        <Option name="component_width" type="double" value="100"/>
+        <Option name="outputs_collapsed" type="bool" value="true"/>
+        <Option name="parameters_collapsed" type="bool" value="true"/>
+      </Option>
+      <Option name="component_description" type="QString" value="bag_verblijfsobjecten"/>
+      <Option name="component_height" type="double" value="30"/>
+      <Option name="component_pos_x" type="double" value="415"/>
+      <Option name="component_pos_y" type="double" value="842"/>
+      <Option name="component_width" type="double" value="200"/>
+      <Option name="name" type="QString" value="bag_verblijfsobjecten"/>
+      <Option name="outputs_collapsed" type="bool" value="true"/>
+      <Option name="parameters_collapsed" type="bool" value="true"/>
+    </Option>
     <Option name="inputbemalingsgebieden" type="Map">
       <Option name="color" type="QString" value=""/>
       <Option name="comment" type="Map">

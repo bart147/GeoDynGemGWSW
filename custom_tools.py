@@ -132,10 +132,8 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             #rename[layer.id()] = layername
             #layer.setName(item[0])
             if 'tbv' in layername or layername == 'Eindresultaat':
-                #group_to_add = hoofdgroup
-                group_to_add = group
+                group_to_add = hoofdgroup
             else:
-                continue
                 group_to_add = subgroup
 
             layer_path = os.path.join (result_folder, layername+".gpkg")
