@@ -22,13 +22,14 @@ from .custom_tools import rename_layers, default_inp_fields, default_layer, QgsP
 class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3')))
+        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('tbv_stap3')))
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater (2)', 'Input BAG Verblijfsobjecten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('vbo', geometryType=0)))
         ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
         self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
+        self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
         self.addParameter(QgsProcessingParameterFeatureSink('Result_all_fields', 'result_all_fields', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat', 'Eindresultaat', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bgt_intersect', 'bgt_intersect', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
@@ -56,6 +57,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
             parameters['inputdrinkwater'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "drinkwater_empty.gpkg"), "drinkwater_empty", "ogr")
         #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
+        self.result_folder = parameters['result_folder']
         feedback = QgsProcessingMultiStepFeedback(21, model_feedback)
         results = {}
         outputs = {}

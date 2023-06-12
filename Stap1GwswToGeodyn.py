@@ -11,9 +11,9 @@ from qgis.core import QgsProcessingMultiStepFeedback
 from qgis.core import QgsProcessingParameterMapLayer
 from qgis.core import QgsProcessingParameterNumber
 from qgis.core import QgsProcessingParameterFeatureSink
-from qgis.core import QgsProject, QgsProcessingUtils
-import processing
-from .custom_tools import rename_layers, default_layer, QgsProcessingAlgorithmPost
+from qgis.core import QgsProject, QgsProcessingUtils, QgsProcessingParameterFile
+import processing, os
+from .custom_tools import rename_layers, default_layer, QgsProcessingAlgorithmPost, cmd_folder
 
         
 class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
@@ -23,6 +23,7 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterMapLayer('GWSWnetwerkkunstwerk', 'GWSW_netwerk_kunstwerk', defaultValue=default_layer('netwerk_kunstwerk',geometryType=0), types=[QgsProcessing.TypeVectorPoint]))
         self.addParameter(QgsProcessingParameterNumber('MaxzoekafstandRG', 'Max_zoek_afstand_RG', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=100, defaultValue=3))
         self.addParameter(QgsProcessingParameterMapLayer('netwerkverbinding', 'GWSW_netwerk_verbinding', defaultValue=default_layer('netwerk_verbinding',geometryType=1), types=[QgsProcessing.TypeVectorLine]))
+        self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_punt_tbv_stap2', 'Gebiedsgegevens_punt_tbv_stap2', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Rioolstelsel_buffer_10m', 'Rioolstelsel_buffer_10m', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('LeidingenNietMeegenomen', 'leidingen niet meegenomen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
@@ -43,6 +44,8 @@ class Stap1GwswToGeodyn(QgsProcessingAlgorithmPost):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         #QgsProject.instance().reloadAllLayers() 
+        self.result_folder = parameters['result_folder']
+        
         feedback = QgsProcessingMultiStepFeedback(94, model_feedback)
         results = {}
         outputs = {}

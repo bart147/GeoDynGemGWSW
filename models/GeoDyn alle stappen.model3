@@ -39,8 +39,8 @@
           </Option>
           <Option name="component_description" type="QString" value="Stap1_leidingen_niet_meegenomen"/>
           <Option name="component_height" type="double" value="30"/>
-          <Option name="component_pos_x" type="double" value="686"/>
-          <Option name="component_pos_y" type="double" value="344"/>
+          <Option name="component_pos_x" type="double" value="713"/>
+          <Option name="component_pos_y" type="double" value="330"/>
           <Option name="component_width" type="double" value="200"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" type="bool" value="false"/>
@@ -511,7 +511,41 @@
       </Option>
     </Option>
   </Option>
-  <Option name="designerParameterValues"/>
+  <Option name="designerParameterValues" type="Map">
+    <Option name="GeoDynTools:stap 1.) GWSW to Geodyn_1:Stap1_leidingen_niet_meegenomen" type="QgsProcessingOutputLayerDefinition">
+      <Option type="Map">
+        <Option name="create_options" type="Map">
+          <Option name="fileEncoding" type="QString" value="System"/>
+        </Option>
+        <Option name="sink" type="Map">
+          <Option name="active" type="bool" value="true"/>
+          <Option name="type" type="int" value="1"/>
+          <Option name="val" type="QString" value="TEMPORARY_OUTPUT"/>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="GeoDynTools:stap 1.) GWSW to Geodyn_1:Stap1_rioolstelsel_buffer_10m_buffer" type="QgsProcessingOutputLayerDefinition">
+      <Option type="Map">
+        <Option name="create_options" type="Map">
+          <Option name="fileEncoding" type="QString" value="System"/>
+        </Option>
+        <Option name="sink" type="Map">
+          <Option name="active" type="bool" value="true"/>
+          <Option name="type" type="int" value="1"/>
+          <Option name="val" type="QString" value="TEMPORARY_OUTPUT"/>
+        </Option>
+      </Option>
+    </Option>
+    <Option name="bag_verblijfsobjecten" type="QString" value="VE_s_BAG_Object_2018_Fictief_a477f7d1_17d7_4254_bf5a_23d4da163bff"/>
+    <Option name="inputbemalingsgebieden" type="QString" value="Geodyn_bemalingsgebieden_testgebied_c34a6cc5_8392_486d_9756_81fb5be59d07"/>
+    <Option name="inputbemalingsgebieden (2)" type="QString" value="Geodyn_gwsw_netwerk_testdata_netwerk_knooppunt_70c7efbb_829a_4980_986e_4e3f41c2e23a"/>
+    <Option name="inputbemalingsgebieden (2) (2)" type="QString" value="Geodyn_gwsw_netwerk_testdata_netwerk_kunstwerk_3125a45e_dae6_481f_82c9_57bbbcf56df1"/>
+    <Option name="inputbemalingsgebieden (2) (2) (2)" type="QString" value="Geodyn_gwsw_netwerk_testdata_netwerk_verbinding_7496f881_c5ce_41ec_b34e_9b8127042ab6"/>
+    <Option name="inputbemalingsgebieden (2) (2) (2) (2)" type="QString" value="BGT_inlooptabel_c1b2fe39_f977_4b9a_9123_0060cce7c643"/>
+    <Option name="inputbemalingsgebieden (2) (2) (2) (2) (2)" type="QString" value="Plancap_28_5_2021_openbaar_ce8e4a73_2fb2_4bc1_8785_7cc0a9718596"/>
+    <Option name="inputbemalingsgebieden (2) (2) (3)" type="QString" value="VE_s_BAG_Object_2018_Fictief_a477f7d1_17d7_4254_bf5a_23d4da163bff"/>
+    <Option name="inputbemalingsgebieden (2) (2) (3) (2)" type="QString" value="Drinkwaterverbruik_BAG_Object_2019_499b9dd2_7bdf_4afe_88f5_9d5fab2722ae"/>
+  </Option>
   <Option name="groupBoxes"/>
   <Option name="help"/>
   <Option name="internal_version" type="QString" value="Version1"/>

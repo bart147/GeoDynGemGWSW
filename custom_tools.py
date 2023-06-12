@@ -110,6 +110,7 @@ def default_layer(wildcard, geometryType=None):
 class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
     final_layers = None
+    result_folder = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -124,7 +125,8 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         group = root.insertGroup(0, "Result " + self.displayName())
         hoofdgroup = group.addGroup("hoofdresultaten")
         subgroup = group.addGroup("tussenresultaten")
-        result_folder = r'G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\JHSW\results'
+        result_folder = self.result_folder
+        #result_folder = r'G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\JHSW\results'
         rename = {}
         for index, item in enumerate(self.final_layers.items()):
             
@@ -141,6 +143,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
                 group_to_add = subgroup
 
             layer_path = os.path.join (result_folder, layername+".gpkg")
+            ##layer_path = 'memory'
             QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
             layer = QgsVectorLayer(layer_path, layername, 'ogr')
 
@@ -475,7 +478,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
     def bereken_veld(self, fc, fld_name, d_fld, feedback):
         """bereken veld m.b.v. 'expression' in dict
         als dict de key 'mag_niet_0_zijn' bevat, wordt een selectie gemaakt voor het opgegeven veld"""
-        try:
+        if True:
             expression = d_fld[fld_name]["expression"]
             expression = expression.replace("[", '"').replace("]", '"')
             feedback.pushInfo("calculate {} = {}".format(fld_name, expression))
@@ -486,8 +489,9 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     ['"{}" <> 0'.format(fld) for fld in l_fld])  # [FLD1,FLD2] -> "FLD1 <> 0 and FLD2 <> 0"
                 expr = QgsExpression(where_clause)
                 #print_log(where_clause, "d")
-                it = fc.getFeatures(QgsFeatureRequest(expr))  # iterator object
-                fc.selectByIds([i.id() for i in it])
+                # it = fc.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                # fc.selectByIds([i.id() for i in it])
+                fc.selectByExpression(where_clause)
 
             # calculate field
             context = QgsExpressionContext()
@@ -505,8 +509,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             fc.commitChanges()
             fc.selectByIds([])
 
-        except Exception as e:
-            feedback.pushWarning("probleem bij bereken veld {}! {}".format(fld_name,e))
+        # except Exception as e:
+        #     feedback.pushWarning("probleem bij bereken veld {}! {}".format(fld_name,e))
 
         return fc
 
@@ -522,7 +526,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                 # TODO check if field exists
                 #if not fld.excists:
                 #    add_field_from_dict(self, fc, fld_name, d_fld, feedback)
-                self.bereken_veld(fc, fld, d_fld, feedback)
+                fc = self.bereken_veld(fc, fld, d_fld, feedback)
                 i += 1
         if i == 0:
             feedback.pushWarning("bereken stap '{}' niet gevonden in input_fields. Geen velden toegevoegd".format(bereken))
@@ -565,8 +569,10 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     feedback.pushWarning("expression has parserError!")
                 if expr.hasEvalError():
                     feedback.pushWarning("expression has Evaluation Error!")
-                it = layer.getFeatures(QgsFeatureRequest(expr))  # iterator object
-                layer.selectByIds([i.id() for i in it])
+                # TODO apparently using iterator object this is the old way
+                # it = layer.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                # layer.selectByIds([i.id() for i in it])
+                layer.selectByExpression(where_clause)
                 feedback.pushDebugInfo("{} features selected".format(layer.selectedFeatureCount()))
                 feedback.pushDebugInfo("selected id's: {}".format(layer.selectedFeatureIds()))
                 for d in fields_to_calc:
@@ -865,7 +871,7 @@ class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
             feedback
         )
         return layer
-    
+         
 
 class CustomToolsBerekenOnderbemalingAlgorithm(CustomToolAllFunctionsAlgorithm):
     """
@@ -916,7 +922,7 @@ class CustomToolsBerekenOnderbemalingAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
-        self.bereken_onderbemaling(layer, d_fld, parameters, feedback)
+        layer = self.bereken_onderbemaling(layer, d_fld, parameters, feedback)
         return layer
 
 
@@ -970,7 +976,7 @@ class CustomToolsVervangNoneDoor0Algorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         l = parameters['veldenlijst'].split(";")
-        self.vervang_None_door_0_voor_velden_in_lijst(l, layer, feedback)
+        layer = self.vervang_None_door_0_voor_velden_in_lijst(l, layer, feedback)
         return layer
 
 

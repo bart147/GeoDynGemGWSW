@@ -2,3 +2,4 @@
 *.pyc
 *.gpkg-shm
 *.gpkg-wal
+results/*

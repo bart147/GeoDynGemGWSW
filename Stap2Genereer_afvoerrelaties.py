@@ -6,6 +6,7 @@ With QGIS : 32207
 """
 
 import processing
+import os
 from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingLayerPostProcessorInterface,
                        QgsProcessingMultiStepFeedback,
@@ -25,6 +26,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterVectorLayer('gebiedsgegevenspunttbvstap2', 'Gebiedsgegevens_punt_tbv_stap2', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('Gebiedsgegevens_punt_tbv_stap2')))
         self.addParameter(QgsProcessingParameterVectorLayer('leidingen', 'gebiedsgegevens_lijn_tbv_stap2', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('gebiedsgegevens_lijn_tbv_stap2')))
         ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input_fields.csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
         self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', type=QgsProcessing.TypeVectorPolygon, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Van_naar', 'VAN_NAAR', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebiedsgegevens_lijn_selectie', 'Gebiedsgegevens_lijn_selectie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
@@ -36,6 +38,7 @@ class Stap2Genereer_afvoerrelaties(QgsProcessingAlgorithmPost):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         parameters['inputfieldscsv'] = default_inp_fields
+        self.result_folder = parameters['result_folder']
         #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(30, model_feedback)
         results = {}
