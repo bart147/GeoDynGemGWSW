@@ -178,8 +178,10 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    INPUT = 'INPUT'
-    OUTPUT = 'OUTPUT'
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     INPUT = 'INPUT'
+    #     OUTPUT = 'OUTPUT'
 
     def tr(self, string):
         """
@@ -469,7 +471,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             for fld in d_fld_no_order:
                 self.add_field_from_dict(fc, fld, d_fld, feedback)
         return fc
-
+    
     def bereken_veld(self, fc, fld_name, d_fld, feedback):
         """bereken veld m.b.v. 'expression' in dict
         als dict de key 'mag_niet_0_zijn' bevat, wordt een selectie gemaakt voor het opgegeven veld"""
@@ -506,6 +508,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         except Exception as e:
             feedback.pushWarning("probleem bij bereken veld {}! {}".format(fld_name,e))
 
+        return fc
+
     def bereken_veld_label(self, fc, bereken, d_fld, feedback):
         """bereken velden op basis van label 'bereken' en fc in d_fld"""
         feedback.pushInfo("\nvelden met bereken '{}' uitrekenen:".format(bereken))
@@ -524,6 +528,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             feedback.pushWarning("bereken stap '{}' niet gevonden in input_fields. Geen velden toegevoegd".format(bereken))
         else:
             feedback.pushInfo("{} velden berekend".format(i))
+
+        return fc
 
     def bereken_onderbemaling(self, layer, d_fld, parameters, feedback):
         """bereken onderbemalingen voor SUM_WAARDE, SUM_BLA, etc..
@@ -803,7 +809,7 @@ class CustomToolsAddFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
         return layer
 
 
-class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolsAddFieldsFromDictAlgorithm):
+class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
     """
     This is an example algorithm that takes a vector layer and
     creates a new identical one.
@@ -836,12 +842,23 @@ class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolsAddFieldsFromDictAlgorit
         """
         return self.tr('calc fields from csv input fields')
 
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        self.addParameter(QgsProcessingParameterString('uittevoerenstapininputfields', 'uit te voeren stap in input_fields', multiLine=False, defaultValue='st2a'))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+
     def customAlgorithm(self, layer, parameters, feedback):
         """
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
-        self.bereken_veld_label(
+        layer = self.bereken_veld_label(
             layer, 
             parameters['uittevoerenstapininputfields'],
             d_fld, 
@@ -1117,7 +1134,7 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
     All Processing algorithms should extend the QgsProcessingAlgorithm
     class.
     """
-
+    INPUT = 'INPUT'
     # Constants used to refer to parameters and outputs. They will be
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
@@ -1161,6 +1178,7 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define the inputs and output of the algorithm, along
         with some other properties.
         """
+        
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
@@ -1168,10 +1186,8 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
                 [QgsProcessing.TypeVectorAnyGeometry]
             )
         )
-        #self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
-        #self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-
+        
     def processAlgorithm(self, parameters, context, model_feedback):
         # effects input directly so no new output is created
         feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
@@ -1186,3 +1202,5 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
         layer = self.add_fieldAlias_from_dict(layer, d_fld, feedback)
         
         return results
+
+    
