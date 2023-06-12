@@ -92,7 +92,11 @@ def default_layer(wildcard, geometryType=None):
 
 class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
-    final_layers = { }
+    final_layers = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.final_layers = { }
 
     def postProcessAlgorithm(self, context, feedback):
         #QgsProject.instance().reloadAllLayers() 
