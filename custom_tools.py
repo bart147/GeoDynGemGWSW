@@ -806,7 +806,7 @@ class CustomToolsAddFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
-        self.add_field_from_dict_label(
+        layer = self.add_field_from_dict_label(
             layer, 
             parameters['uittevoerenstapininputfields'],
             d_fld, 
