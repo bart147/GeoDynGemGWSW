@@ -132,16 +132,15 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             
             layer = item[1]
             layername = item[0]
-            # feedback.pushInfo("layer.id = {}".format(layer.id()))
-            # feedback.pushInfo("layer.name = {}".format(layer.name()))
-            # feedback.pushInfo("layername = {}".format(layername))
+            feedback.pushInfo("layer.id = {}".format(layer.id()))
+            feedback.pushInfo("layer.name = {}".format(layer.name()))
+            feedback.pushInfo("layername = {}".format(layername))
             #rename[layer.id()] = layername
             #layer.setName(item[0])
-            if 'tbv' in layername or layername == 'Eindresultaat':
+            if 'tbv' in layername or 'Eindresultaat' in layername:
                 group_to_add = hoofdgroup
             else:
                 group_to_add = subgroup
-
             layer_path = os.path.join (result_folder, layername+".gpkg")
             ##layer_path = 'memory'
             QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
@@ -154,6 +153,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
                 layer.loadNamedStyle(style)
             
             project.addMapLayers([layer], False)
+            feedback.pushInfo("group_to_add = {}".format(group_to_add.name()))
             group_to_add.insertLayer(int(index), layer)
 
         
@@ -266,7 +266,11 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
             'OUTPUT': 'memory:'
         }
         layer = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback)['OUTPUT']
-
+        result_folder = r'C:\Users\bkropf\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\GeoDynGemGWSW\results'
+        layer_path = os.path.join (result_folder, layer.name()+".gpkg")
+        QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+        layer = QgsVectorLayer(layer_path, layer.name(), 'ogr')
+        
         layer = self.customAlgorithm(layer, parameters, feedback)
         
         # Extract by expression for copy
@@ -478,7 +482,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
     def bereken_veld(self, fc, fld_name, d_fld, feedback):
         """bereken veld m.b.v. 'expression' in dict
         als dict de key 'mag_niet_0_zijn' bevat, wordt een selectie gemaakt voor het opgegeven veld"""
-        if True:
+        try:
             expression = d_fld[fld_name]["expression"]
             expression = expression.replace("[", '"').replace("]", '"')
             feedback.pushInfo("calculate {} = {}".format(fld_name, expression))
@@ -489,8 +493,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     ['"{}" <> 0'.format(fld) for fld in l_fld])  # [FLD1,FLD2] -> "FLD1 <> 0 and FLD2 <> 0"
                 expr = QgsExpression(where_clause)
                 #print_log(where_clause, "d")
-                # it = fc.getFeatures(QgsFeatureRequest(expr))  # iterator object
-                # fc.selectByIds([i.id() for i in it])
+                #it = fc.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                #fc.selectByIds([i.id() for i in it])
                 fc.selectByExpression(where_clause)
 
             # calculate field
@@ -509,8 +513,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             fc.commitChanges()
             fc.selectByIds([])
 
-        # except Exception as e:
-        #     feedback.pushWarning("probleem bij bereken veld {}! {}".format(fld_name,e))
+        except Exception as e:
+            feedback.pushWarning("probleem bij bereken veld {}! {}".format(fld_name,e))
 
         return fc
 
@@ -526,7 +530,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                 # TODO check if field exists
                 #if not fld.excists:
                 #    add_field_from_dict(self, fc, fld_name, d_fld, feedback)
-                fc = self.bereken_veld(fc, fld, d_fld, feedback)
+                self.bereken_veld(fc, fld, d_fld, feedback)
                 i += 1
         if i == 0:
             feedback.pushWarning("bereken stap '{}' niet gevonden in input_fields. Geen velden toegevoegd".format(bereken))
