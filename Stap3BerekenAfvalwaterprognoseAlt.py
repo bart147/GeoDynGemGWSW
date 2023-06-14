@@ -70,7 +70,6 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         ##self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat_huidige_situatie', 'EINDRESULTAAT_HUIDIGE_SITUATIE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
 
 
-
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
@@ -1332,10 +1331,10 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         return results
 
     def name(self):
-        return 'stap 3.) bereken afvalwaterprognose 2'
+        return 'stap 3.) bereken afvalwaterprognose alt'
 
     def displayName(self):
-        return 'stap 3.) Bereken afvalwaterprognose 2'
+        return 'stap 3.) Bereken afvalwaterprognose alt'
 
     def group(self):
         return ''

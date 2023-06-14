@@ -26,7 +26,8 @@ from qgis.core import (QgsProcessing,
                        QgsProject,
                        QgsMapLayerType,
                        QgsLayerTreeGroup,
-                       QgsVectorFileWriter)
+                       QgsVectorFileWriter,
+                       QgsProcessingParameterNumber)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
 from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
@@ -126,25 +127,31 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         hoofdgroup = group.addGroup("hoofdresultaten")
         subgroup = group.addGroup("tussenresultaten")
         result_folder = self.result_folder
+        if not result_folder:
+            result_folder = os.path.join (cmd_folder, 'results')
+            feedback.pushWarning(f"no result_folder was given, layers are written to default {result_folder}")
         #result_folder = r'G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\JHSW\results'
         rename = {}
         for index, item in enumerate(self.final_layers.items()):
             
             layer = item[1]
             layername = item[0]
-            feedback.pushInfo("layer.id = {}".format(layer.id()))
-            feedback.pushInfo("layer.name = {}".format(layer.name()))
-            feedback.pushInfo("layername = {}".format(layername))
+            # feedback.pushInfo("layer.id = {}".format(layer.id()))
+            # feedback.pushInfo("layer.name = {}".format(layer.name()))
+            # feedback.pushInfo("layername = {}".format(layername))
             #rename[layer.id()] = layername
             #layer.setName(item[0])
-            if 'tbv' in layername or 'Eindresultaat' in layername:
+            if 'tbv' in layername or \
+                'Eindresultaat' in layername or \
+                layername in ['Eindpunten', 'LeidingenNietMeegenomen']: # promote these to hoofdresultaten
                 group_to_add = hoofdgroup
             else:
                 group_to_add = subgroup
-            layer_path = os.path.join (result_folder, layername+".gpkg")
-            ##layer_path = 'memory'
-            QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
-            layer = QgsVectorLayer(layer_path, layername, 'ogr')
+
+            if result_folder:
+                layer_path = os.path.join (result_folder, layername+".gpkg")
+                QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+                layer = QgsVectorLayer(layer_path, layername, 'ogr')
 
             # add style
             style = os.path.join(cmd_folder, "styles", layername + ".qml")
@@ -153,7 +160,10 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
                 layer.loadNamedStyle(style)
             
             project.addMapLayers([layer], False)
-            feedback.pushInfo("group_to_add = {}".format(group_to_add.name()))
+            if layername == 'Eindpunten': # Eindpunten always on top
+                index = 0
+            if 'Bemalingsgebieden' in layername:
+                index = -1
             group_to_add.insertLayer(int(index), layer)
 
         
@@ -185,6 +195,7 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     #     super().__init__(*args, **kwargs)
     #     INPUT = 'INPUT'
     #     OUTPUT = 'OUTPUT'
+    result_folder = None
 
     def tr(self, string):
         """
@@ -266,8 +277,7 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
             'OUTPUT': 'memory:'
         }
         layer = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback)['OUTPUT']
-        result_folder = r'C:\Users\bkropf\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\GeoDynGemGWSW\results'
-        layer_path = os.path.join (result_folder, layer.name()+".gpkg")
+        layer_path = os.path.join (cmd_folder, 'results', layer.name()+".gpkg")
         QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
         layer = QgsVectorLayer(layer_path, layer.name(), 'ogr')
         
@@ -860,6 +870,7 @@ class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
 
         self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
         self.addParameter(QgsProcessingParameterString('uittevoerenstapininputfields', 'uit te voeren stap in input_fields', multiLine=False, defaultValue='st2a'))
         self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
 
@@ -868,6 +879,10 @@ class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
+        if parameters.get('inw_per_adres', None):
+            expression_DWA_BAG = f"[X_WON_TOT] * {parameters['inw_per_adres']} * 0.012"
+            feedback.pushInfo(f'{expression_DWA_BAG=}')
+            d_fld["DWA_BAG"]["expression"] = expression_DWA_BAG
         layer = self.bereken_veld_label(
             layer, 
             parameters['uittevoerenstapininputfields'],
