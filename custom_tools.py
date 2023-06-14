@@ -126,6 +126,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         group = root.insertGroup(0, "Result " + self.displayName())
         hoofdgroup = group.addGroup("hoofdresultaten")
         subgroup = group.addGroup("tussenresultaten")
+        subgroup.setItemVisibilityChecked(False)
         result_folder = self.result_folder
         if not result_folder:
             result_folder = os.path.join (cmd_folder, 'results')
@@ -141,17 +142,21 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             # feedback.pushInfo("layername = {}".format(layername))
             #rename[layer.id()] = layername
             #layer.setName(item[0])
-            if 'tbv' in layername or \
-                'Eindresultaat' in layername or \
-                layername in ['Eindpunten', 'LeidingenNietMeegenomen']: # promote these to hoofdresultaten
-                group_to_add = hoofdgroup
-            else:
-                group_to_add = subgroup
-
             if result_folder:
                 layer_path = os.path.join (result_folder, layername+".gpkg")
                 QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
                 layer = QgsVectorLayer(layer_path, layername, 'ogr')
+
+            # 'tbv' in layername or \
+            #     'Eindresultaat' in layername or \
+            #     'Gebiedsgegevens_lijn' in layername or \
+            #     'Eindpunten' in layername or \
+            if any(txt in layername for txt in [
+                'tbv', 'Eindresultaat', 'Gebiedsgegevens_lijn', 'Eindpunten']) or \
+                layername in ['LeidingenNietMeegenomen', 'Afvoerboom']: # promote these to hoofdresultaten
+                group_to_add = hoofdgroup
+            else:
+                group_to_add = subgroup
 
             # add style
             style = os.path.join(cmd_folder, "styles", layername + ".qml")
@@ -160,11 +165,18 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
                 layer.loadNamedStyle(style)
             
             project.addMapLayers([layer], False)
-            if layername == 'Eindpunten': # Eindpunten always on top
+            if 'Eindpunten' in layername: # Eindpunten always on top
                 index = 0
-            if 'Bemalingsgebieden' in layername:
-                index = -1
+            elif 'Bemalingsgebieden' in layername:
+                index = 99
+            else:
+                index = 1 
             group_to_add.insertLayer(int(index), layer)
+            # if group_to_add == subgroup:
+            #     #set invisable
+            #     node = QgsProject.instance().layerTreeRoot().findLayer(layer)
+            #     if node:
+            #         node.setItemVisibilityChecked(False)
 
         
         # layers = QgsProject.instance().mapLayers()
@@ -1043,6 +1055,41 @@ class CustomToolsRetainFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
                 defaultValue=None
         ))
         
+    def processAlgorithm(self, parameters, context, model_feedback):
+        # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
+        # overall progress through the model
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
+        results = {}
+        outputs = {}
+        
+        # Extract by expression for copy
+        alg_params = {
+            'EXPRESSION': '$id IS NOT NULL',
+            'INPUT': parameters['inputlayer'],
+            'OUTPUT': 'memory:'
+        }
+        layer = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback)['OUTPUT']
+        # apparently writeAsVectorFormat works miracles for alle custom tools except retainfields
+        # layer_path = os.path.join (cmd_folder, 'results', layer.name()+".gpkg")
+        # QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+        # layer = QgsVectorLayer(layer_path, layer.name(), 'ogr')
+        
+        layer = self.customAlgorithm(layer, parameters, feedback)
+        
+        # Extract by expression for copy
+        alg_params = {
+            'EXPRESSION': '$id IS NOT NULL',
+            'INPUT': layer,
+            'OUTPUT': parameters['Output_layer']
+        }
+
+        outputs['result'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        
+        results['Output_layer'] = outputs['result']['OUTPUT']
+        
+        return results
+    
     def customAlgorithm(self, layer, parameters, feedback):
         """
         Here we define our own custom algorithm.
