@@ -113,6 +113,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
     final_layers = None
     result_folder = None
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.final_layers = { }
