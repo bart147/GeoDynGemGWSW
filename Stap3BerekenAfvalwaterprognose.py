@@ -15,20 +15,23 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterVectorLayer,
                        QgsProcessingUtils,
                        QgsProject,
-                       QgsVectorLayer)
+                       QgsVectorLayer,
+                       QgsProcessingParameterNumber)
 from .custom_tools import rename_layers, default_inp_fields, default_layer, QgsProcessingAlgorithmPost, cmd_folder
 
 
 class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Bemalingsgebieden_met_afvoerrelaties_tbv_stap3')))
+        self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('tbv_stap3')))
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
-        self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater (2)', 'Input BAG Verblijfsobjecten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('bag_v', geometryType=0)))
-        ##self.addParameter(QgsProcessingParameterFile('inputfieldscsv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
+        self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
+        self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater (2)', 'Input BAG Verblijfsobjecten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('vbo', geometryType=0)))
+        ##self.addParameter(QgsProcessingParameterFile('input_fields_csv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
         self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
+        self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
         self.addParameter(QgsProcessingParameterFeatureSink('Result_all_fields', 'result_all_fields', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat', 'Eindresultaat', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bgt_intersect', 'bgt_intersect', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
@@ -44,18 +47,25 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
-        parameters['inputfieldscsv'] = default_inp_fields
+        parameters['input_fields_csv'] = default_inp_fields
         dummy_folder = "dummy_gpkg"
         if not parameters['inputves']:
             parameters['inputves'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "ve_empty.gpkg"), "ve_empty", "ogr")
         if not parameters['bgtinlooptabel']:
-            parameters['bgtinlooptabel'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgt_inlooptabel_empty.gpkg"), "bgt_inlooptabel_empty", "ogr")
+            layer = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgtinlooptabel_empty.gpkg"), "bgtinlooptabel_empty", "ogr")
+            QgsProject.instance().addMapLayer(layer, False) # addMapLayer seems to be necessary to load layer but only for bgtinlooptabel? why? 
+            parameters['bgtinlooptabel'] = layer
         if not parameters['inputplancap']:
             parameters['inputplancap'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "plancap_empty.gpkg"), "plancap_empty", "ogr")
         if not parameters['inputdrinkwater']:
             parameters['inputdrinkwater'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "drinkwater_empty.gpkg"), "drinkwater_empty", "ogr")
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
+        self.result_folder = parameters['result_folder']
+        feedback = QgsProcessingMultiStepFeedback(21, model_feedback)
+        results = {}
+        outputs = {}
+
         feedback = QgsProcessingMultiStepFeedback(21, model_feedback)
         results = {}
         outputs = {}
@@ -91,7 +101,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # add fields from csv input fields st2a
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['KoppelOverigeBronnen']['Bemalingsgebieden_joined_stats'],
             'uittevoerenstapininputfields': 'st2a',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -104,8 +114,9 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '01_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['AddFieldsFromCsvInputFieldsSt2a']['Output_layer'],
+            'inw_per_adres': 2.5,
             'uittevoerenstapininputfields': '01_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -118,7 +129,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         # calc fields onderbemaling '03_obm'
         alg_params = {
             'alleendirecteonderbemaling': False,
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFields01_ber']['Output_layer'],
             'uittevoerenstapininputfields': '03_obm',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -143,8 +154,9 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '04_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['VervangAlleNonewaardenMet0VoorVeldenInLijst']['Output_layer'],
+            'inw_per_adres': 2.5,
             'uittevoerenstapininputfields': '04_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -156,8 +168,9 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '04a_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFields04_ber']['Output_layer'],
+            'inw_per_adres': 2.5,
             'uittevoerenstapininputfields': '04a_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -169,8 +182,9 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '05_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFields04a_ber']['Output_layer'],
+            'inw_per_adres': parameters['inw_per_adres'],
             'uittevoerenstapininputfields': '05_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -196,7 +210,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '06_bgt'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['KoppelBgtinlooptabel']['Bgt_intersect_stats'],
             'uittevoerenstapininputfields': '06_bgt',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -221,7 +235,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '07_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['VervangAlleNonewaardenMet0VoorBgtVelden']['Output_layer'],
             'uittevoerenstapininputfields': '07_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -234,7 +248,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '08_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFields07_ber']['Output_layer'],
             'uittevoerenstapininputfields': '08_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -248,7 +262,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         # calc fields onderbemaling '09_obm'
         alg_params = {
             'alleendirecteonderbemaling': False,
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFields08_ber']['Output_layer'],
             'uittevoerenstapininputfields': '09_obm',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -262,7 +276,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         # calc fields onderbemaling '09_obm_1n'
         alg_params = {
             'alleendirecteonderbemaling': True,
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFieldsOnderbemaling09_obm']['Output_layer'],
             'uittevoerenstapininputfields': '09_obm_1n',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -287,7 +301,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '10_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['VervangAlleNonewaardenMet0VoorPoc']['Output_layer'],
             'uittevoerenstapininputfields': '10_ber',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
@@ -300,7 +314,7 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
 
         # calc fields '11_ber'
         alg_params = {
-            'inputfields': parameters['inputfieldscsv'],
+            'inputfields': parameters['input_fields_csv'],
             'inputlayer': outputs['CalcFields10_ber']['Output_layer'],
             'uittevoerenstapininputfields': '11_ber',
             'Output_layer': parameters['Result_all_fields']
@@ -339,15 +353,17 @@ class Stap3BerekenAfvalwaterprognose(QgsProcessingAlgorithmPost):
         # add fieldAlias from csv input fields
         alg_params = {
             'INPUT': outputs['DropEmptyFields']['Output_layer'],
-            'inputfields': parameters['inputfieldscsv']
+            'inputfields': parameters['input_fields_csv']
         }
         outputs['AddFieldaliasFromCsvInputFields'] = processing.run('GeoDynTools:add fieldAlias from csv input fields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
 
         # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
             feedback.pushInfo("keepName = True")
         else:
-            results, context, feedback = rename_layers(results, context, feedback)
+            #results, context, feedback = rename_layers(results, context, feedback)
+            context.setLayersToLoadOnCompletion({})
             for key in results:
                 self.final_layers[key] = QgsProcessingUtils.mapLayerFromString(results[key], context)        
  

@@ -52,6 +52,7 @@ from .Stap1GwswToGeodyn import Stap1GwswToGeodyn
 from .Stap1KikkerToGeodyn import Stap1KikkerToGeodyn
 from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
 from .Stap3BerekenAfvalwaterprognose import Stap3BerekenAfvalwaterprognose
+from .Stap3BerekenAfvalwaterprognoseAlt import Stap3BerekenAfvalwaterprognoseAlt
 from .StapAllemaal import GeodynAlleStappen
 from .StapAllemaal_Kikker import GeodynAlleStappenKikker
 from .StapKoppelBgtinlooptabel import KoppelBgtinlooptabel
@@ -81,6 +82,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         self.addAlgorithm(Stap1KikkerToGeodyn())
         self.addAlgorithm(Stap2Genereer_afvoerrelaties())
         self.addAlgorithm(Stap3BerekenAfvalwaterprognose())
+        self.addAlgorithm(Stap3BerekenAfvalwaterprognoseAlt())
         #self.addAlgorithm(GeodynAlleStappen())
         #self.addAlgorithm(GeodynAlleStappenKikker())
         # add customTools

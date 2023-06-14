@@ -25,7 +25,9 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterBoolean,
                        QgsProject,
                        QgsMapLayerType,
-                       QgsLayerTreeGroup)
+                       QgsLayerTreeGroup,
+                       QgsVectorFileWriter,
+                       QgsProcessingParameterNumber)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
 from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
@@ -55,7 +57,7 @@ def return_result_group():
         group = root.addGroup('Results')
     return group
 
-def rename_layers(results, context, feedback):
+def rename_layers_old(results, context, feedback):
     #QgsProject.instance().reloadAllLayers() 
     for key in results:
         if context.willLoadLayerOnCompletion(results[key]):
@@ -65,6 +67,22 @@ def rename_layers(results, context, feedback):
             globals()[global_key] = Renamer(key) #create unique global renamer instances
             context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
             # add style
+            style = os.path.join(cmd_folder, "styles", key + ".qml")
+            if os.path.exists(style):
+                layer = context.getMapLayer(results[key])
+                layer.loadNamedStyle(style)
+    #QgsProject.instance().reloadAllLayers() 
+    return results, context, feedback
+
+def rename_layers(results, context, feedback):
+    #QgsProject.instance().reloadAllLayers() 
+    for key in results:
+        result = results[key]
+        if context.willLoadLayerOnCompletion(result):
+            feedback.pushInfo("rename layer to {}".format(key))
+            if context.willLoadLayerOnCompletion(result):
+                layer_details = context.layerToLoadOnCompletionDetails(result)
+                layer_details.name = "My output"
             style = os.path.join(cmd_folder, "styles", key + ".qml")
             if os.path.exists(style):
                 layer = context.getMapLayer(results[key])
@@ -93,6 +111,8 @@ def default_layer(wildcard, geometryType=None):
 class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
 
     final_layers = None
+    result_folder = None
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -107,7 +127,12 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         group = root.insertGroup(0, "Result " + self.displayName())
         hoofdgroup = group.addGroup("hoofdresultaten")
         subgroup = group.addGroup("tussenresultaten")
-        
+        subgroup.setItemVisibilityChecked(False)
+        result_folder = self.result_folder
+        if not result_folder:
+            result_folder = os.path.join (cmd_folder, 'results')
+            feedback.pushWarning(f"no result_folder was given, layers are written to default {result_folder}")
+        #result_folder = r'G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\JHSW\results'
         rename = {}
         for index, item in enumerate(self.final_layers.items()):
             
@@ -116,23 +141,54 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             # feedback.pushInfo("layer.id = {}".format(layer.id()))
             # feedback.pushInfo("layer.name = {}".format(layer.name()))
             # feedback.pushInfo("layername = {}".format(layername))
-            rename[layer.id()] = layername
-            layer.setName(item[0])
-            if 'tbv' in layername or layername == 'Eindresultaat':
+            #rename[layer.id()] = layername
+            #layer.setName(item[0])
+            if result_folder:
+                layer_path = os.path.join (result_folder, layername+".gpkg")
+                QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+                layer = QgsVectorLayer(layer_path, layername, 'ogr')
+
+            # 'tbv' in layername or \
+            #     'Eindresultaat' in layername or \
+            #     'Gebiedsgegevens_lijn' in layername or \
+            #     'Eindpunten' in layername or \
+            if any(txt in layername for txt in [
+                'tbv', 'Eindresultaat', 'Gebiedsgegevens_lijn', 'Eindpunten']) or \
+                layername in ['LeidingenNietMeegenomen', 'Afvoerboom']: # promote these to hoofdresultaten
                 group_to_add = hoofdgroup
             else:
                 group_to_add = subgroup
 
+            # add style
+            style = os.path.join(cmd_folder, "styles", layername + ".qml")
+            if os.path.exists(style):
+                #layer = context.getMapLayer(results[key])
+                layer.loadNamedStyle(style)
+            
             project.addMapLayers([layer], False)
+            if 'Eindpunten' in layername: # Eindpunten always on top
+                index = 0
+            elif 'Bemalingsgebieden' in layername:
+                index = 99
+            else:
+                index = 1 
             group_to_add.insertLayer(int(index), layer)
+            # if group_to_add == subgroup:
+            #     #set invisable
+            #     node = QgsProject.instance().layerTreeRoot().findLayer(layer)
+            #     if node:
+            #         node.setItemVisibilityChecked(False)
 
-        layers = QgsProject.instance().mapLayers()
-        for layerid in layers:
-            if layerid in rename:
-                feedback.pushInfo("layerid = {}".format(layerid))
-                feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
-                feedback.pushInfo("rename to = {}".format(rename[layerid]))
-                layers[layerid].setName(rename[layerid])
+        
+        # layers = QgsProject.instance().mapLayers()
+        # for layerid in layers:
+        #     if layerid in rename:
+        #         layer = layers[layerid]
+        #         feedback.pushInfo("layerid = {}".format(layerid))
+        #         feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
+        #         feedback.pushInfo("rename to = {}".format(rename[layerid]))
+        #         layer.setName(rename[layerid])
+
         #QgsProject.instance().reloadAllLayers() 
         self.final_layers.clear()
         return {}
@@ -148,8 +204,11 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    INPUT = 'INPUT'
-    OUTPUT = 'OUTPUT'
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     INPUT = 'INPUT'
+    #     OUTPUT = 'OUTPUT'
+    result_folder = None
 
     def tr(self, string):
         """
@@ -219,7 +278,7 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
-        QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
         results = {}
         outputs = {}
@@ -231,7 +290,10 @@ class CustomToolBasicAlgorithm(QgsProcessingAlgorithm):
             'OUTPUT': 'memory:'
         }
         layer = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback)['OUTPUT']
-
+        layer_path = os.path.join (cmd_folder, 'results', layer.name()+".gpkg")
+        QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+        layer = QgsVectorLayer(layer_path, layer.name(), 'ogr')
+        
         layer = self.customAlgorithm(layer, parameters, feedback)
         
         # Extract by expression for copy
@@ -439,7 +501,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             for fld in d_fld_no_order:
                 self.add_field_from_dict(fc, fld, d_fld, feedback)
         return fc
-
+    
     def bereken_veld(self, fc, fld_name, d_fld, feedback):
         """bereken veld m.b.v. 'expression' in dict
         als dict de key 'mag_niet_0_zijn' bevat, wordt een selectie gemaakt voor het opgegeven veld"""
@@ -454,8 +516,9 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     ['"{}" <> 0'.format(fld) for fld in l_fld])  # [FLD1,FLD2] -> "FLD1 <> 0 and FLD2 <> 0"
                 expr = QgsExpression(where_clause)
                 #print_log(where_clause, "d")
-                it = fc.getFeatures(QgsFeatureRequest(expr))  # iterator object
-                fc.selectByIds([i.id() for i in it])
+                #it = fc.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                #fc.selectByIds([i.id() for i in it])
+                fc.selectByExpression(where_clause)
 
             # calculate field
             context = QgsExpressionContext()
@@ -476,6 +539,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         except Exception as e:
             feedback.pushWarning("probleem bij bereken veld {}! {}".format(fld_name,e))
 
+        return fc
+
     def bereken_veld_label(self, fc, bereken, d_fld, feedback):
         """bereken velden op basis van label 'bereken' en fc in d_fld"""
         feedback.pushInfo("\nvelden met bereken '{}' uitrekenen:".format(bereken))
@@ -494,6 +559,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             feedback.pushWarning("bereken stap '{}' niet gevonden in input_fields. Geen velden toegevoegd".format(bereken))
         else:
             feedback.pushInfo("{} velden berekend".format(i))
+
+        return fc
 
     def bereken_onderbemaling(self, layer, d_fld, parameters, feedback):
         """bereken onderbemalingen voor SUM_WAARDE, SUM_BLA, etc..
@@ -529,8 +596,10 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     feedback.pushWarning("expression has parserError!")
                 if expr.hasEvalError():
                     feedback.pushWarning("expression has Evaluation Error!")
-                it = layer.getFeatures(QgsFeatureRequest(expr))  # iterator object
-                layer.selectByIds([i.id() for i in it])
+                # TODO apparently using iterator object this is the old way
+                # it = layer.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                # layer.selectByIds([i.id() for i in it])
+                layer.selectByExpression(where_clause)
                 feedback.pushDebugInfo("{} features selected".format(layer.selectedFeatureCount()))
                 feedback.pushDebugInfo("selected id's: {}".format(layer.selectedFeatureIds()))
                 for d in fields_to_calc:
@@ -764,7 +833,7 @@ class CustomToolsAddFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
-        self.add_field_from_dict_label(
+        layer = self.add_field_from_dict_label(
             layer, 
             parameters['uittevoerenstapininputfields'],
             d_fld, 
@@ -773,7 +842,7 @@ class CustomToolsAddFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
         return layer
 
 
-class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolsAddFieldsFromDictAlgorithm):
+class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolAllFunctionsAlgorithm):
     """
     This is an example algorithm that takes a vector layer and
     creates a new identical one.
@@ -806,19 +875,35 @@ class CustomToolsCalcFieldsFromDictAlgorithm(CustomToolsAddFieldsFromDictAlgorit
         """
         return self.tr('calc fields from csv input fields')
 
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
+        self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
+        self.addParameter(QgsProcessingParameterString('uittevoerenstapininputfields', 'uit te voeren stap in input_fields', multiLine=False, defaultValue='st2a'))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+
     def customAlgorithm(self, layer, parameters, feedback):
         """
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
-        self.bereken_veld_label(
+        if parameters.get('inw_per_adres', None):
+            expression_DWA_BAG = f"[X_WON_TOT] * {parameters['inw_per_adres']} * 0.012"
+            feedback.pushInfo(f'{expression_DWA_BAG=}')
+            d_fld["DWA_BAG"]["expression"] = expression_DWA_BAG
+        layer = self.bereken_veld_label(
             layer, 
             parameters['uittevoerenstapininputfields'],
             d_fld, 
             feedback
         )
         return layer
-    
+         
 
 class CustomToolsBerekenOnderbemalingAlgorithm(CustomToolAllFunctionsAlgorithm):
     """
@@ -869,7 +954,7 @@ class CustomToolsBerekenOnderbemalingAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         d_fld = self.get_d_velden_csv(parameters['inputfields'])
-        self.bereken_onderbemaling(layer, d_fld, parameters, feedback)
+        layer = self.bereken_onderbemaling(layer, d_fld, parameters, feedback)
         return layer
 
 
@@ -923,7 +1008,7 @@ class CustomToolsVervangNoneDoor0Algorithm(CustomToolAllFunctionsAlgorithm):
         Here we define our own custom algorithm.
         """
         l = parameters['veldenlijst'].split(";")
-        self.vervang_None_door_0_voor_velden_in_lijst(l, layer, feedback)
+        layer = self.vervang_None_door_0_voor_velden_in_lijst(l, layer, feedback)
         return layer
 
 
@@ -971,6 +1056,41 @@ class CustomToolsRetainFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
                 defaultValue=None
         ))
         
+    def processAlgorithm(self, parameters, context, model_feedback):
+        # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
+        # overall progress through the model
+        #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
+        feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
+        results = {}
+        outputs = {}
+        
+        # Extract by expression for copy
+        alg_params = {
+            'EXPRESSION': '$id IS NOT NULL',
+            'INPUT': parameters['inputlayer'],
+            'OUTPUT': 'memory:'
+        }
+        layer = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback)['OUTPUT']
+        # apparently writeAsVectorFormat works miracles for alle custom tools except retainfields
+        # layer_path = os.path.join (cmd_folder, 'results', layer.name()+".gpkg")
+        # QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
+        # layer = QgsVectorLayer(layer_path, layer.name(), 'ogr')
+        
+        layer = self.customAlgorithm(layer, parameters, feedback)
+        
+        # Extract by expression for copy
+        alg_params = {
+            'EXPRESSION': '$id IS NOT NULL',
+            'INPUT': layer,
+            'OUTPUT': parameters['Output_layer']
+        }
+
+        outputs['result'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        
+        results['Output_layer'] = outputs['result']['OUTPUT']
+        
+        return results
+    
     def customAlgorithm(self, layer, parameters, feedback):
         """
         Here we define our own custom algorithm.
@@ -1087,7 +1207,7 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
     All Processing algorithms should extend the QgsProcessingAlgorithm
     class.
     """
-
+    INPUT = 'INPUT'
     # Constants used to refer to parameters and outputs. They will be
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
@@ -1131,6 +1251,7 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
         Here we define the inputs and output of the algorithm, along
         with some other properties.
         """
+        
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
@@ -1138,10 +1259,8 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
                 [QgsProcessing.TypeVectorAnyGeometry]
             )
         )
-        #self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('inputfields', 'input_fields', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue=default_inp_fields))
-        #self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-
+        
     def processAlgorithm(self, parameters, context, model_feedback):
         # effects input directly so no new output is created
         feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
@@ -1156,3 +1275,5 @@ class CustomToolsAddFieldAliasFromCsvAlgorithm(CustomToolAllFunctionsAlgorithm):
         layer = self.add_fieldAlias_from_dict(layer, d_fld, feedback)
         
         return results
+
+    
