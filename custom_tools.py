@@ -153,7 +153,7 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             #     'Gebiedsgegevens_lijn' in layername or \
             #     'Eindpunten' in layername or \
             if any(txt in layername for txt in [
-                'tbv', 'Eindresultaat', 'Gebiedsgegevens_lijn', 'Eindpunten']) or \
+                'tbv', 'Eindresultaat', 'Gebiedsgegevens_lijn', 'Eindpunten', 'Resultaat']) or \
                 layername in ['LeidingenNietMeegenomen', 'Afvoerboom']: # promote these to hoofdresultaten
                 group_to_add = hoofdgroup
             else:
@@ -617,7 +617,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         
         return layer
 
-    def lis2graph(self, layer, feedback):
+    def lis2graph_ori(self, layer, feedback):
         """
         Maakt Graph met LIS-netwerk en bepaalt onderbemalingen.
         Vult [ONTV_VAN] en [X_OBEMAL].
@@ -678,6 +678,72 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_ONTV_VAN_NAME"), l_onderliggende_desc) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_ONTV_1N_NAME"), l_onderliggende_desc_n1) # K_ONTV_1N = 'ZRE-1'
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND_NAME"), d_BM_NM[K_KNP_EIND])              # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
+
+        layer.commitChanges()
+        return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]
+    
+
+    def lis2graph(self, layer, feedback):
+        """
+        Maakt Graph met LIS-netwerk en bepaalt onderbemalingen.
+        Vult [ONTV_VAN] en [X_OBEMAL].
+        Gebruikt [LOOST_OP] en [VAN_KNOOPN] als edge (relation) en VAN_KNOOPN als node
+        """
+        # graph aanmaken
+        graph = Graph()
+        graph_rev = Graph()
+        d_K_ONTV_VAN = {}    # alle onderliggende gemalen
+        d_K_ONTV_VAN_n1 = {} # alle onderliggende gemalen op 1 niveau diep ivm optellen overcapaciteit
+        feedback.pushInfo ("netwerk opslaan als graph...")
+        VAN_FLD = "BEM_ID"
+        NAAR_FLD = "DS_BEM_ID"
+        LABEL = "begin" # "PC_IDs"
+        BM_NM = "BM_NM"
+        d_LABEL = { }
+        d_BM_NM = { }
+        for feature in layer.getFeatures():  # .getFeatures()
+            VAN_KNOOPN = feature[VAN_FLD]
+            LOOST_OP = feature[NAAR_FLD]
+            d_LABEL[VAN_KNOOPN] = feature[LABEL]
+            d_BM_NM[VAN_KNOOPN] = feature[BM_NM] if layer.fields().indexFromName(BM_NM) != -1 else None
+            graph.add_node(VAN_KNOOPN)
+            graph_rev.add_node(VAN_KNOOPN)
+            if LOOST_OP != None:
+                graph.add_edge(VAN_KNOOPN, LOOST_OP, 1)  # richting behouden voor bovenliggende gebied
+                graph_rev.add_edge(LOOST_OP, VAN_KNOOPN, 1)  # richting omdraaien voor onderliggende gebied
+        edges_as_tuple = list(graph.distances)  # lijst met tuples: [('A', 'B'), ('C', 'B')]
+        feedback.pushInfo("onderbemaling bepalen voor rioolgemalen en zuiveringen...")
+        where_clause = "Join_Count > 0"
+        layer.startEditing()
+        for i, feature in enumerate(layer.getFeatures()):  # .getFeatures()
+            ##if not feature["count"] >= 1: continue
+            VAN_KNOOPN = feature[VAN_FLD]
+            ##if not feature[NAAR_FLD]: continue 
+            nodes = dijkstra(graph, VAN_KNOOPN)[0]
+            ##print_log("nodes for {}: {}".format(VAN_KNOOPN,nodes), 'd')
+            K_KNP_EIND, X_OPPOMP = [(key, value) for key, value in sorted(iter(nodes.items()), key=lambda k_v: (k_v[1], k_v[0]))][-1]
+            ##print_log("endnode for {}: {},{}".format(VAN_KNOOPN,K_KNP_EIND, X_OPPOMP),'d')
+            d_edges = dijkstra(graph_rev, VAN_KNOOPN)[1]  # {'B': 'A', 'C': 'B', 'D': 'C'}
+            l_onderliggende_gemalen = str(list(d_edges))  # [u'ZRE-123',u'ZRE-234']
+            l_onderliggende_gemalen = l_onderliggende_gemalen.replace("u'", "'").replace("[", "").replace("]", "")
+            # onderbemalingen 1 niveau diep
+            l_onderliggende_gemalen_n1 = [start for start, end in edges_as_tuple if end == VAN_KNOOPN and start != VAN_KNOOPN]  # dus start['A', 'C'] uit tuples[('A', 'B'),('C', 'B')] als end == 'B'
+            s_onderliggende_gemalen_n1 =  str(l_onderliggende_gemalen_n1).replace("u'", "'").replace("[", "").replace("]", "") # naar str() en verwijder u'tjes en haken
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_GEBIED"), l_onderliggende_gemalen) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_GEBIED"), s_onderliggende_gemalen_n1) # K_ONTV_1N = 'ZRE-1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL"), len(list(d_edges)))  
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMA_1N"), len(list(l_onderliggende_gemalen_n1)))        # X_OBEMAL = 2 (aantal onderbemalingen)
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OPPOMP"),  X_OPPOMP + 1)             # X_OPPOMP = 1 (aantal keer oppompen tot rwzi) met shortestPath ('RWZI','ZRE-4')
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND"), K_KNP_EIND)              # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
+            d_K_ONTV_VAN[VAN_KNOOPN] = l_onderliggende_gemalen
+            d_K_ONTV_VAN_n1[VAN_KNOOPN] =  l_onderliggende_gemalen_n1
+            # convert bemid's to description field
+            l_onderliggende_desc = str([d_LABEL[key] for key in list(d_edges)]) # [u'ZRE-123',u'ZRE-234']
+            l_onderliggende_desc = l_onderliggende_desc.replace("u'", "'").replace("[", "").replace("]", "")
+            l_onderliggende_desc_n1 = str([d_LABEL[key] for key in l_onderliggende_gemalen_n1]).replace("u'", "'").replace("[", "").replace("]", "")
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_afvoerpunten"), l_onderliggende_desc) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_afvoerpunten"), l_onderliggende_desc_n1) # K_ONTV_1N = 'ZRE-1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND_LABEL"), d_BM_NM[K_KNP_EIND])  # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
 
         layer.commitChanges()
         return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]

@@ -48,13 +48,15 @@ from .custom_tools import (CustomToolsAddFieldsFromDictAlgorithm,
                            CustomToolsSortByMultipleFieldsAlgorithm,
                            CustomToolsDropEmptyFieldsAlgorithm,
                            CustomToolsAddFieldAliasFromCsvAlgorithm)
-from .Stap1GwswToGeodyn import Stap1GwswToGeodyn
-from .Stap1KikkerToGeodyn import Stap1KikkerToGeodyn
-from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
-from .Stap3BerekenAfvalwaterprognose import Stap3BerekenAfvalwaterprognose
-from .Stap3BerekenAfvalwaterprognoseAlt import Stap3BerekenAfvalwaterprognoseAlt
-from .StapAllemaal import GeodynAlleStappen
-from .StapAllemaal_Kikker import GeodynAlleStappenKikker
+from .Stap1BepalenAssetKenmerkenAfvoerpuntenRioleringsgebieden import GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden
+from .Stap2BepalenEigenAfvalwateraanbod import GeodynGwswStap2BepalenEigenAfvalwateraanbod
+# from .Stap1GwswToGeodyn import Stap1GwswToGeodyn
+# from .Stap1KikkerToGeodyn import Stap1KikkerToGeodyn
+# from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
+# from .Stap3BerekenAfvalwaterprognose import Stap3BerekenAfvalwaterprognose
+# from .Stap3BerekenAfvalwaterprognoseAlt import Stap3BerekenAfvalwaterprognoseAlt
+# from .StapAllemaal import GeodynAlleStappen
+# from .StapAllemaal_Kikker import GeodynAlleStappenKikker
 from .StapKoppelBgtinlooptabel import KoppelBgtinlooptabel
 from .StapKoppelOverigeBronnen import KoppelOverigeBronnen
 
@@ -78,13 +80,16 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         """
         Loads all algorithms belonging to this provider.
         """
-        self.addAlgorithm(Stap1GwswToGeodyn())
-        self.addAlgorithm(Stap1KikkerToGeodyn())
-        self.addAlgorithm(Stap2Genereer_afvoerrelaties())
-        self.addAlgorithm(Stap3BerekenAfvalwaterprognose())
-        self.addAlgorithm(Stap3BerekenAfvalwaterprognoseAlt())
+        self.addAlgorithm(GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden())
+        self.addAlgorithm(GeodynGwswStap2BepalenEigenAfvalwateraanbod())
+        # self.addAlgorithm(Stap1GwswToGeodyn())
+        # self.addAlgorithm(Stap1KikkerToGeodyn())
+        # self.addAlgorithm(Stap2Genereer_afvoerrelaties())
+        # self.addAlgorithm(Stap3BerekenAfvalwaterprognose())
+        # self.addAlgorithm(Stap3BerekenAfvalwaterprognoseAlt())
         #self.addAlgorithm(GeodynAlleStappen())
         #self.addAlgorithm(GeodynAlleStappenKikker())
+
         # add customTools
         self.addAlgorithm(CustomToolsLis2GraphAlgorithm())
         self.addAlgorithm(CustomToolsAddFieldsFromDictAlgorithm())
