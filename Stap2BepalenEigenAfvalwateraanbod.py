@@ -586,8 +586,8 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'DWA_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': f'IF("BAG_count" IS NULL, 0, {inw_per_adres} * (12/1000) * "BAG_count")',
-            #'FORMULA': f'{inw_per_adres}',
+            #'FORMULA': f'IF("BAG_count" IS NULL, 0, {inw_per_adres} * (12/1000) * "BAG_count")',
+            'FORMULA': f'{inw_per_adres} * (12/1000) * "BAG_count"',
             'INPUT': outputs['FieldCalculatorOppvwoningNull0']['OUTPUT'],
             'OUTPUT': parameters['Dwa_bag_m3h']
         }

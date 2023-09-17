@@ -41,13 +41,6 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         results = {}
         outputs = {}
 
-       
-        for key in parameters:
-            parameter = parameters[key]
-            feedback.pushInfo(str(type(parameters)))
-            feedback.pushInfo(str(parameter))
-        return results
-
         # Retain fields US_BEM_ID
         alg_params = {
             'FIELDS': ['US_BEM_ID'],
