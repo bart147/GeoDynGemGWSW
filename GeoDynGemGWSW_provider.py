@@ -43,6 +43,7 @@ from .custom_tools import (CustomToolsAddFieldsFromDictAlgorithm,
                            CustomToolsCalcFieldsFromDictAlgorithm,
                            CustomToolsLis2GraphAlgorithm,
                            CustomToolsBerekenOnderbemalingAlgorithm,
+                           CustomToolsBerekenOnderbemalingFldsAlgorithm,
                            CustomToolsVervangNoneDoor0Algorithm,
                            CustomToolsRetainFieldsAlgorithm,
                            CustomToolsSortByMultipleFieldsAlgorithm,
@@ -50,6 +51,7 @@ from .custom_tools import (CustomToolsAddFieldsFromDictAlgorithm,
                            CustomToolsAddFieldAliasFromCsvAlgorithm)
 from .Stap1BepalenAssetKenmerkenAfvoerpuntenRioleringsgebieden import GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden
 from .Stap2BepalenEigenAfvalwateraanbod import GeodynGwswStap2BepalenEigenAfvalwateraanbod
+from .Stap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod import GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod
 # from .Stap1GwswToGeodyn import Stap1GwswToGeodyn
 # from .Stap1KikkerToGeodyn import Stap1KikkerToGeodyn
 # from .Stap2Genereer_afvoerrelaties import Stap2Genereer_afvoerrelaties
@@ -82,6 +84,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         """
         self.addAlgorithm(GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden())
         self.addAlgorithm(GeodynGwswStap2BepalenEigenAfvalwateraanbod())
+        self.addAlgorithm(GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod())
         # self.addAlgorithm(Stap1GwswToGeodyn())
         # self.addAlgorithm(Stap1KikkerToGeodyn())
         # self.addAlgorithm(Stap2Genereer_afvoerrelaties())
@@ -96,6 +99,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         self.addAlgorithm(CustomToolsAddFieldAliasFromCsvAlgorithm())
         self.addAlgorithm(CustomToolsCalcFieldsFromDictAlgorithm())
         self.addAlgorithm(CustomToolsBerekenOnderbemalingAlgorithm())
+        self.addAlgorithm(CustomToolsBerekenOnderbemalingFldsAlgorithm())
         self.addAlgorithm(CustomToolsVervangNoneDoor0Algorithm())
         self.addAlgorithm(CustomToolsRetainFieldsAlgorithm())
         self.addAlgorithm(CustomToolsDropEmptyFieldsAlgorithm())

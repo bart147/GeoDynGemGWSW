@@ -562,6 +562,51 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
 
         return fc
 
+    def bereken_onderbemaling_flds(self, layer, parameters, feedback):
+        """bereken onderbemalingen voor SUM_WAARDE.
+        Maakt selectie op basis van veld [ONTV_VAN] -> VAN_KNOOPN IN ('ZRE-123424', 'ZRE-234')"""
+        # sum values op basis van selectie [ONTV_VAN]
+        # model-input: POC_GEM_m3h;US_POC_GEM_m3h,POC_VGS_m3h;US_POC_VGS_m3h,DWA_BAG_m3h;US_DWA_BAG_m3h,PAR_DRINKWATER_m3h;US_PAR_DRINKWATER_m3h,ZAK_DRINKWATER_m3h;US_ZAK_DRINKWATER_m3h,TOT_DRINKWATER_m3h;US_TOT_DRINKWATER_m3h,VE_m3h;US_VE_m3h,ExAFV_2124;US_ExAFV_2124,ExAFV_3039;US_ExAFV_3039,ExAFV_4050;US_ExAFV_4050
+        fields_to_calc = parameters.get('veldenlijst', "").split(",") # "field1;us_field1,field2;us_field2"
+        us_fields = set()
+        layer.startEditing()
+        for feature in layer.getFeatures():
+            begin_fld = parameters.get('id_veld', "")
+            ont_van_fld = parameters.get('ontvangt_van', "")
+            VAN_KNOOPN = feature[begin_fld]
+            ONTV_VAN = feature[ont_van_fld]
+            if not str(ONTV_VAN) in ["NULL", ""," "]: # check of sprake is van onderbemaling
+                feedback.pushDebugInfo("{} {} ontvangt van {}".format(begin_fld,VAN_KNOOPN,ONTV_VAN))
+                where_clause = '"{}" IN ({})'.format(begin_fld, ONTV_VAN)
+                ##where_clause = '"VAN_KNOOPN" = '+"'MERG10'"
+                ##feedback.pushDebugInfo("where_clause = {}".format(where_clause))
+                expr = QgsExpression(where_clause)
+                ##feedback.pushDebugInfo(str(expr))
+                if expr.hasParserError():
+                    feedback.pushWarning("expression has parserError!")
+                if expr.hasEvalError():
+                    feedback.pushWarning("expression has Evaluation Error!")
+                # TODO apparently using iterator object this is the old way
+                # it = layer.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                # layer.selectByIds([i.id() for i in it])
+                layer.selectByExpression(where_clause)
+                feedback.pushDebugInfo("{} features selected".format(layer.selectedFeatureCount()))
+                feedback.pushDebugInfo("selected id's: {}".format(layer.selectedFeatureIds()))
+                for flds in fields_to_calc:
+                    try:
+                        field, sum_field = flds.split(";") # "field1;us_field1"
+                        us_fields.add(sum_field)
+                        sum_values = sum([float(f[field]) for f in layer.selectedFeatures() if str(f[field]) not in ["NULL","nan",""," "]])
+                        layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(sum_field), round(sum_values,2))
+                    except Exception as e:
+                        feedback.pushWarning(str(e))
+
+        layer.commitChanges()
+        layer.selectByIds([])
+        feedback.pushInfo(f"Onderbemalingen succesvol berekend voor {str(us_fields)}")
+        
+        return layer
+
     def bereken_onderbemaling(self, layer, d_fld, parameters, feedback):
         """bereken onderbemalingen voor SUM_WAARDE, SUM_BLA, etc..
         Maakt selectie op basis van veld [ONTV_VAN] -> VAN_KNOOPN IN ('ZRE-123424', 'ZRE-234')"""
@@ -681,7 +726,6 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
 
         layer.commitChanges()
         return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]
-    
 
     def lis2graph(self, layer, feedback):
         """
@@ -695,19 +739,19 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         d_K_ONTV_VAN = {}    # alle onderliggende gemalen
         d_K_ONTV_VAN_n1 = {} # alle onderliggende gemalen op 1 niveau diep ivm optellen overcapaciteit
         feedback.pushInfo ("netwerk opslaan als graph...")
-        VAN_FLD = "BEM_ID"
-        NAAR_FLD = "DS_BEM_ID"
-        LABEL = "begin" # "PC_IDs"
-        LABEL2 = "PC_IDs"
-        BM_NM = "BM_NM"
-        d_LABEL = { }
-        d_LABEL2 = { }
+        VAN_FLD = "BEM_ID"      # unieke id
+        NAAR_FLD = "DS_BEM_ID"  # loost op 
+        AFVOERPUNT = "begin"    # afvoerpuntcode. meenemen als US_afvoerpunten, US_N1_afvoerpunten, AFVOERPUNT_EIND
+        PC_ID = "PC_IDs"        # plancap gebieden meenemen als US_PC_IDs
+        BM_NM = "BM_NM"         # alternatief id field 3
+        d_AFVOERPUNT = { }
+        d_PC_ID = { }
         d_BM_NM = { }
         for feature in layer.getFeatures():  # .getFeatures()
             VAN_KNOOPN = feature[VAN_FLD]
             LOOST_OP = feature[NAAR_FLD]
-            d_LABEL[VAN_KNOOPN] = feature[LABEL]
-            d_LABEL2[VAN_KNOOPN] = feature[LABEL2]
+            d_AFVOERPUNT[VAN_KNOOPN] = feature[AFVOERPUNT]
+            d_PC_ID[VAN_KNOOPN] = feature[PC_ID]
             d_BM_NM[VAN_KNOOPN] = feature[BM_NM] if layer.fields().indexFromName(BM_NM) != -1 else None
             graph.add_node(VAN_KNOOPN)
             graph_rev.add_node(VAN_KNOOPN)
@@ -732,28 +776,28 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             # onderbemalingen 1 niveau diep
             l_onderliggende_gemalen_n1 = [start for start, end in edges_as_tuple if end == VAN_KNOOPN and start != VAN_KNOOPN]  # dus start['A', 'C'] uit tuples[('A', 'B'),('C', 'B')] als end == 'B'
             s_onderliggende_gemalen_n1 =  str(l_onderliggende_gemalen_n1).replace("u'", "'").replace("[", "").replace("]", "") # naar str() en verwijder u'tjes en haken
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_GEBIED"), l_onderliggende_gemalen) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_GEBIED"), s_onderliggende_gemalen_n1) # K_ONTV_1N = 'ZRE-1'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL"), len(list(d_edges)))  
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_GEBIED"), l_onderliggende_gemalen) # 'BEM001','BEM002','BEM003'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_GEBIED"), s_onderliggende_gemalen_n1) # 'BEM002','BEM003'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL"), len(list(d_edges)))  # 3 onderbemalingen
             # feedback.pushInfo(f"{VAN_KNOOPN}")
             # feedback.pushInfo(f"{len(list(d_edges))}")
             # feedback.pushInfo(f"{len(list(l_onderliggende_gemalen_n1))}")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL_1N"), len(list(l_onderliggende_gemalen_n1)))        # X_OBEMAL = 2 (aantal onderbemalingen)
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OPPOMP"),  X_OPPOMP + 1)             # X_OPPOMP = 1 (aantal keer oppompen tot rwzi) met shortestPath ('RWZI','ZRE-4')
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND"), K_KNP_EIND)              # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL_1N"), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OPPOMP"),  X_OPPOMP + 1)              # aantal keer oppompen tot rwzi
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("BEM_ID_EIND"), K_KNP_EIND)              # eindbemalingsgebied: BEM009
             d_K_ONTV_VAN[VAN_KNOOPN] = l_onderliggende_gemalen
             d_K_ONTV_VAN_n1[VAN_KNOOPN] =  l_onderliggende_gemalen_n1
             # convert bemid's to description field
-            l_onderliggende_desc = str([d_LABEL[key] for key in list(d_edges)]) # [u'ZRE-123',u'ZRE-234']
+            l_onderliggende_desc = str([d_AFVOERPUNT[key] for key in list(d_edges)]) # [u'ZRE-123',u'ZRE-234']
             l_onderliggende_desc = l_onderliggende_desc.replace("u'", "'").replace("[", "").replace("]", "")
-            l_onderliggende_desc_n1 = str([d_LABEL[key] for key in l_onderliggende_gemalen_n1]).replace("u'", "'").replace("[", "").replace("]", "")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_afvoerpunten"), l_onderliggende_desc) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_afvoerpunten"), l_onderliggende_desc_n1) # K_ONTV_1N = 'ZRE-1'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("K_KNP_EIND_LABEL"), d_BM_NM[K_KNP_EIND])  # eindbemalingsgebied / overnamepunt. bepaald uit netwerk.
+            l_onderliggende_desc_n1 = str([d_AFVOERPUNT[key] for key in l_onderliggende_gemalen_n1]).replace("u'", "'").replace("[", "").replace("]", "")
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_afvoerpunten"), l_onderliggende_desc) # '38_9','345_23','52_1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_afvoerpunten"), l_onderliggende_desc_n1) # '345_23','52_1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("AFVOERPUNT_EIND"), d_BM_NM[K_KNP_EIND])  # laatste afvoerpunt code
             # add PC_IDs 
-            l_onderliggende_label2 = str([d_LABEL2[key] for key in list(d_edges) if str(d_LABEL2[key]) != "NULL"]) # [u'ZRE-123',u'ZRE-234']
-            l_onderliggende_label2 = l_onderliggende_label2.replace("u'", "'").replace("[", "").replace("]", "")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_PC_IDs"), l_onderliggende_label2) # K_ONTV_VAN = 'ZRE-1','ZRE-2'
+            l_onderliggende_PC_ID = str([d_PC_ID[key] for key in list(d_edges) if str(d_PC_ID[key]) != "NULL"]) # [u'ZRE-123',u'ZRE-234']
+            l_onderliggende_PC_ID = l_onderliggende_PC_ID.replace("u'", "'").replace("[", "").replace("]", "")
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_PC_IDs"), l_onderliggende_PC_ID) # lijst met onderliggende plancap id's
 
         layer.commitChanges()
         return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]
@@ -1033,6 +1077,56 @@ class CustomToolsBerekenOnderbemalingAlgorithm(CustomToolAllFunctionsAlgorithm):
         layer = self.bereken_onderbemaling(layer, d_fld, parameters, feedback)
         return layer
 
+
+class CustomToolsBerekenOnderbemalingFldsAlgorithm(CustomToolAllFunctionsAlgorithm):
+    """
+    This is an example algorithm that takes a vector layer and
+    creates a new identical one.
+    """
+
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+
+
+    def createInstance(self):
+        return CustomToolsBerekenOnderbemalingFldsAlgorithm()
+
+    def name(self):
+        """
+        Returns the algorithm name, used for identifying the algorithm. This
+        string should be fixed for the algorithm, and must not be localised.
+        The name should be unique within each provider. Names should contain
+        lowercase alphanumeric characters only and no spaces or other
+        formatting characters.
+        """
+        return 'calc fields upstream'
+
+    def displayName(self):
+        """
+        Returns the translated algorithm name, which should be used for any
+        user-visible display of the algorithm name.
+        """
+        return self.tr('calc fields upstream')
+
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))      
+        self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='BEM_ID'))
+        self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='US_GEBIED'))
+        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_GEM_m3h;US_POC_GEM_m3h,POC_VGS_m3h;US_POC_VGS_m3h'))
+            
+    def customAlgorithm(self, layer, parameters, feedback):
+        """
+        Here we define our own custom algorithm.
+        """
+        layer = self.bereken_onderbemaling_flds(layer, parameters, feedback)
+        return layer
+    
 
 class CustomToolsVervangNoneDoor0Algorithm(CustomToolAllFunctionsAlgorithm):
     """

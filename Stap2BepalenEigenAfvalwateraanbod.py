@@ -27,7 +27,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGTinlooptabel', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('drinkwater', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
         self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
-        self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
+        self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap_', geometryType=2)))
         self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('ResultaatStap1Rioleringsgebieden')))
         self.addParameter(QgsProcessingParameterVectorLayer('ve', 'VE', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
         self.addParameter(QgsProcessingParameterFeatureSink('PlancapPerBem_id', 'Plancap per BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
@@ -63,6 +63,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
+        inw_per_adres = parameters['inw_per_adres'] # also replace 'FORMULA' @inw_per_adres by  'FORMULA': f'IF("BAG_count" IS NULL, 0, {inw_per_adres} * (12/1000) * "BAG_count")',
         parameters['input_fields_csv'] = default_inp_fields
         dummy_folder = "dummy_gpkg"
         if not parameters['ve']:
@@ -585,10 +586,12 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'DWA_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'IF("BAG_count" IS NULL, 0, @inw_per_adres * (12/1000) * "BAG_count")',
+            'FORMULA': f'IF("BAG_count" IS NULL, 0, {inw_per_adres} * (12/1000) * "BAG_count")',
+            #'FORMULA': f'{inw_per_adres}',
             'INPUT': outputs['FieldCalculatorOppvwoningNull0']['OUTPUT'],
             'OUTPUT': parameters['Dwa_bag_m3h']
         }
+        feedback.pushInfo(alg_params['FORMULA'])
         outputs['FieldCalculatorDwa_bag'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Dwa_bag_m3h'] = outputs['FieldCalculatorDwa_bag']['OUTPUT']
 
