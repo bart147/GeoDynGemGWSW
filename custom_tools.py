@@ -778,11 +778,11 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             s_onderliggende_gemalen_n1 =  str(l_onderliggende_gemalen_n1).replace("u'", "'").replace("[", "").replace("]", "") # naar str() en verwijder u'tjes en haken
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_GEBIED"), l_onderliggende_gemalen) # 'BEM001','BEM002','BEM003'
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_GEBIED"), s_onderliggende_gemalen_n1) # 'BEM002','BEM003'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL"), len(list(d_edges)))  # 3 onderbemalingen
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_US_GEBIED"), len(list(d_edges)))  # 3 onderbemalingen
             # feedback.pushInfo(f"{VAN_KNOOPN}")
             # feedback.pushInfo(f"{len(list(d_edges))}")
             # feedback.pushInfo(f"{len(list(l_onderliggende_gemalen_n1))}")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OBEMAL_1N"), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_US_N1_GEBIED"), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OPPOMP"),  X_OPPOMP + 1)              # aantal keer oppompen tot rwzi
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("BEM_ID_EIND"), K_KNP_EIND)              # eindbemalingsgebied: BEM009
             d_K_ONTV_VAN[VAN_KNOOPN] = l_onderliggende_gemalen
