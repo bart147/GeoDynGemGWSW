@@ -566,7 +566,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         """bereken onderbemalingen voor SUM_WAARDE.
         Maakt selectie op basis van veld [ONTV_VAN] -> VAN_KNOOPN IN ('ZRE-123424', 'ZRE-234')"""
         # sum values op basis van selectie [ONTV_VAN]
-        # model-input: POC_GEM_m3h;US_POC_GEM_m3h,POC_VGS_m3h;US_POC_VGS_m3h,DWA_BAG_m3h;US_DWA_BAG_m3h,PAR_DRINKWATER_m3h;US_PAR_DRINKWATER_m3h,ZAK_DRINKWATER_m3h;US_ZAK_DRINKWATER_m3h,TOT_DRINKWATER_m3h;US_TOT_DRINKWATER_m3h,VE_m3h;US_VE_m3h,ExAFV_2124;US_ExAFV_2124,ExAFV_3039;US_ExAFV_3039,ExAFV_4050;US_ExAFV_4050
+        # model-input: POC_GEM_m3h;US_POC_GEM_m3h,POC_VGS_m3h;US_POC_VGS_m3h,DWA_BAG_m3h;US_DWA_BAG_m3h,PAR_DRINKWATER_m3h;US_PAR_DRINKWATER_m3h,ZAK_DRINKWATER_m3h;US_ZAK_DRINKWATER_m3h,TOT_DRINKWATER_m3h;US_TOT_DRINKWATER_m3h,VE_m3h;US_VE_m3h,ExAFW_2124;US_ExAFW_2124,ExAFW_3039;US_ExAFW_3039,ExAFW_4050;US_ExAFW_4050
         fields_to_calc = parameters.get('veldenlijst', "").split(",") # "field1;us_field1,field2;us_field2"
         us_fields = set()
         layer.startEditing()
