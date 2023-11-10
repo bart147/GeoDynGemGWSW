@@ -28,38 +28,34 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterVectorLayer('drinkwater', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
         self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
         self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap_', geometryType=2)))
-        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('ResultaatStap1Rioleringsgebieden')))
+        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Resultaat_stap_1_rioleringsgebieden')))
         self.addParameter(QgsProcessingParameterVectorLayer('ve', 'VE', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
         self.addParameter(QgsProcessingParameterFeatureSink('PlancapPerBem_id', 'Plancap per BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwater', 'POC BAG DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwaterVe', 'POC BAG DRINKWATER VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('ResultaatStap2RioleringsgebiedenMetAfvalwateraanbodUitEigenGebied', 'Resultaat stap 2: Rioleringsgebieden met afvalwateraanbod uit eigen gebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat_stap_2_Rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
         self.addParameter(QgsProcessingParameterFeatureSink('Dwa_bag_m3h', 'DWA_BAG_m3/h', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('BgtIntersectEnOppervlakteAttribuut', 'BGT intersect en oppervlakte attribuut', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('AangeslotenOppervlakEnPoc', 'Aangesloten oppervlak en POC', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Aangesloten_oppervlak_en_poc_eigen_gebied', 'Aangesloten_oppervlak_en_POC_eigen_gebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('BgtIntersectEnOppervlakteAttribuut', 'BGT intersect en oppervlakte attribuut', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
         self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
 
-        # self.addParameter(QgsProcessingParameterVectorLayer('bemalingsgebiedenstats', 'Bemalingsgebieden_met_afvoerrelaties_tbv_stap3', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('tbv_stap3')))
-        # self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGT Inlooptabel', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
-        # self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater', 'Input Drinkwater', optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
+        # self.addParameter(QgsProcessingParameterVectorLayer('bag_verblijfsobject', 'BAG verblijfsobject', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('vbo', geometryType=0)))
+        # self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGTinlooptabel', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
+        # self.addParameter(QgsProcessingParameterVectorLayer('drinkwater', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
         # self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
-        # self.addParameter(QgsProcessingParameterVectorLayer('inputdrinkwater (2)', 'Input BAG Verblijfsobjecten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('vbo', geometryType=0)))
-        # ##self.addParameter(QgsProcessingParameterFile('input_fields_csv', 'input fields csv', behavior=QgsProcessingParameterFile.File, fileFilter='CSV Files (*.csv)', defaultValue='G:\\02_Werkplaatsen\\07_IAN\\bk\\projecten\\GeoDynGem\\2022\\inp_fields.csv'))
-        # self.addParameter(QgsProcessingParameterVectorLayer('inputplancap', 'input Plancap', optional=True, types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
-        # self.addParameter(QgsProcessingParameterVectorLayer('inputves', "Input VE's", optional=True, types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
+        # self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap_', geometryType=2)))
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('ResultaatStap1Rioleringsgebieden')))
+        # self.addParameter(QgsProcessingParameterVectorLayer('ve', 'VE', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
+        # # self.addParameter(QgsProcessingParameterFeatureSink('PlancapPerBem_id', 'Plancap per BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwater', 'POC BAG DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwaterVe', 'POC BAG DRINKWATER VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('ResultaatStap2RioleringsgebiedenMetAfvalwateraanbodUitEigenGebied', 'Resultaat stap 2: Rioleringsgebieden met afvalwateraanbod uit eigen gebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Dwa_bag_m3h', 'DWA_BAG_m3/h', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('BgtIntersectEnOppervlakteAttribuut', 'BGT intersect en oppervlakte attribuut', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('AangeslotenOppervlakEnPoc', 'Aangesloten oppervlak en POC', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         # self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Result_all_fields', 'result_all_fields', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Eindresultaat', 'Eindresultaat', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Bgt_intersect', 'bgt_intersect', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Bemalingsgebieden_joined_stats', 'Bemalingsgebieden_joined_stats', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Exafw_per_bem_id', 'ExAFW_per_bem_id', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Plancap_pc_id', 'PLANCAP_PC_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Stats_drinkwater', 'STATS_DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Stats_vbo', 'STATS_VBO', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Stats_ve', 'STATS_VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Meerdere_plancaps_in_bemalingsgebied', 'meerdere_plancaps_in_bemalingsgebied', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Plancap_in_meerdere_bemalingsgebieden', 'plancap_in_meerdere_bemalingsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
 
+        
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
@@ -79,43 +75,30 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         # let op: vanaf if parameters['bgtinlooptabel']: is het script afwijkend van model tbv optionaliteit bgt.
         self.result_folder = parameters['result_folder']
-        feedback = QgsProcessingMultiStepFeedback(51, model_feedback)
+
+        feedback = QgsProcessingMultiStepFeedback(54, model_feedback)
         results = {}
         outputs = {}
 
-       # Field calculator BAG
+        # Fix geometries Plancap
         alg_params = {
-            'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'BAG',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': '1',
-            'INPUT': parameters['bag_verblijfsobject'],
+            'INPUT': parameters['plancap'],
+            'METHOD': 0,  # Linework
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorBag'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FixGeometriesPlancap'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(1)
         if feedback.isCanceled():
             return {}
 
-        # Create spatial index Resultaat stap 1: Rioleringsgebieden
+        # Create spatial index VE
         alg_params = {
-            'INPUT': parameters['resultaat_stap_1_rioleringsgebieden']
+            'INPUT': parameters['ve']
         }
-        outputs['CreateSpatialIndexResultaatStap1Rioleringsgebieden'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['CreateSpatialIndexVe'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(2)
-        if feedback.isCanceled():
-            return {}
-
-        # Create spatial index Drinkwater
-        alg_params = {
-            'INPUT': parameters['drinkwater']
-        }
-        outputs['CreateSpatialIndexDrinkwater'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(3)
         if feedback.isCanceled():
             return {}
 
@@ -127,57 +110,53 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FixGeometriesBgtinlooptabel'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(3)
+        if feedback.isCanceled():
+            return {}
+
+        # Create spatial index Resultaat stap 1: Rioleringsgebieden
+        alg_params = {
+            'INPUT': parameters['resultaat_stap_1_rioleringsgebieden']
+        }
+        outputs['CreateSpatialIndexResultaatStap1Rioleringsgebieden'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
-        # Fix geometries Plancap
+        # Field calculator BAG
         alg_params = {
-            'INPUT': parameters['plancap'],
-            'METHOD': 0,  # Linework
+            'FIELD_LENGTH': 10,
+            'FIELD_NAME': 'BAG',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': '1',
+            'INPUT': parameters['bag_verblijfsobject'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FixGeometriesPlancap'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorBag'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(5)
         if feedback.isCanceled():
             return {}
 
-        # Create spatial index VE
+        # Create spatial index Drinkwater
         alg_params = {
-            'INPUT': parameters['ve']
+            'INPUT': parameters['drinkwater']
         }
-        outputs['CreateSpatialIndexVe'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['CreateSpatialIndexDrinkwater'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(6)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator stap2_datum
+        # Create spatial index BGTinlooptabel
         alg_params = {
-            'FIELD_LENGTH': 50,
-            'FIELD_NAME': 'stap2_datum',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': "format_date(now(),\r\n'yyyy-MM-dd hh:mm:ss')",
-            'INPUT': outputs['CreateSpatialIndexResultaatStap1Rioleringsgebieden']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'INPUT': outputs['FixGeometriesBgtinlooptabel']['OUTPUT']
         }
-        outputs['FieldCalculatorStap2_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['CreateSpatialIndexBgtinlooptabel'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(7)
-        if feedback.isCanceled():
-            return {}
-
-        # retainfields BEM_ID
-        alg_params = {
-            'inputlayer': outputs['FieldCalculatorStap2_datum']['OUTPUT'],
-            'veldenlijst': 'BEM_ID',
-            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['RetainfieldsBem_id'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(8)
         if feedback.isCanceled():
             return {}
 
@@ -193,17 +172,23 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorPlancapId'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(9)
+        feedback.setCurrentStep(8)
         if feedback.isCanceled():
             return {}
 
-        # Create spatial index BGTinlooptabel
+        # Field calculator stap2_datum
         alg_params = {
-            'INPUT': outputs['FixGeometriesBgtinlooptabel']['OUTPUT']
+            'FIELD_LENGTH': 50,
+            'FIELD_NAME': 'stap2_datum',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': "format_date(now(),\r\n'yyyy-MM-dd hh:mm:ss')",
+            'INPUT': outputs['CreateSpatialIndexResultaatStap1Rioleringsgebieden']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['CreateSpatialIndexBgtinlooptabel'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorStap2_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(10)
+        feedback.setCurrentStep(9)
         if feedback.isCanceled():
             return {}
 
@@ -213,23 +198,19 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['CreateSpatialIndexBag'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(11)
+        feedback.setCurrentStep(10)
         if feedback.isCanceled():
             return {}
 
-        # Intersection BGT inlooptabel met rioleringsgebieden tbv stap 3
+        # retainfields BEM_ID
         alg_params = {
-            'GRID_SIZE': None,
-            'INPUT': outputs['CreateSpatialIndexBgtinlooptabel']['OUTPUT'],
-            'INPUT_FIELDS': [''],
-            'OVERLAY': outputs['FieldCalculatorStap2_datum']['OUTPUT'],
-            'OVERLAY_FIELDS': ['BEM_ID'],
-            'OVERLAY_FIELDS_PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'inputlayer': outputs['FieldCalculatorStap2_datum']['OUTPUT'],
+            'veldenlijst': 'BEM_ID',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['IntersectionBgtInlooptabelMetRioleringsgebiedenTbvStap3'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RetainfieldsBem_id'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(12)
+        feedback.setCurrentStep(11)
         if feedback.isCanceled():
             return {}
 
@@ -239,7 +220,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['CreateSpatialIndexPlancap'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(13)
+        feedback.setCurrentStep(12)
         if feedback.isCanceled():
             return {}
 
@@ -255,7 +236,35 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['IntersectionRioleringsgebiedenMetPlancap'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(13)
+        if feedback.isCanceled():
+            return {}
+
+        # Intersection BGT inlooptabel met rioleringsgebieden tbv stap 3
+        alg_params = {
+            'GRID_SIZE': None,
+            'INPUT': outputs['CreateSpatialIndexBgtinlooptabel']['OUTPUT'],
+            'INPUT_FIELDS': [''],
+            'OVERLAY': outputs['FieldCalculatorStap2_datum']['OUTPUT'],
+            'OVERLAY_FIELDS': ['BEM_ID'],
+            'OVERLAY_FIELDS_PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['IntersectionBgtInlooptabelMetRioleringsgebiedenTbvStap3'] = processing.run('native:intersection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(14)
+        if feedback.isCanceled():
+            return {}
+
+        # Add geometry attributes
+        alg_params = {
+            'CALC_METHOD': 0,  # Layer CRS
+            'INPUT': outputs['IntersectionRioleringsgebiedenMetPlancap']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['AddGeometryAttributes'] = processing.run('qgis:exportaddgeometrycolumns', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(15)
         if feedback.isCanceled():
             return {}
 
@@ -272,7 +281,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         outputs['FieldCalculatorBgtinlooptabelOppv'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['BgtIntersectEnOppervlakteAttribuut'] = outputs['FieldCalculatorBgtinlooptabelOppv']['OUTPUT']
 
-        feedback.setCurrentStep(15)
+        feedback.setCurrentStep(16)
         if feedback.isCanceled():
             return {}
 
@@ -288,19 +297,33 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorGem_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(16)
+        feedback.setCurrentStep(17)
         if feedback.isCanceled():
             return {}
 
-        # Add geometry attributes
+        # Order by expression Plancap area van hoog naar laag
         alg_params = {
-            'CALC_METHOD': 0,  # Layer CRS
-            'INPUT': outputs['IntersectionRioleringsgebiedenMetPlancap']['OUTPUT'],
+            'ASCENDING': False,
+            'EXPRESSION': 'area',
+            'INPUT': outputs['AddGeometryAttributes']['OUTPUT'],
+            'NULLS_FIRST': False,
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['AddGeometryAttributes'] = processing.run('qgis:exportaddgeometrycolumns', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['OrderByExpressionPlancapAreaVanHoogNaarLaag'] = processing.run('native:orderbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(17)
+        feedback.setCurrentStep(18)
+        if feedback.isCanceled():
+            return {}
+
+        # Delete duplicates by attribute kleinste Plancap-polygonen per PC_ID verwijderen
+        alg_params = {
+            'FIELDS': ['PC_ID'],
+            'INPUT': outputs['OrderByExpressionPlancapAreaVanHoogNaarLaag']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DeleteDuplicatesByAttributeKleinstePlancappolygonenPerPc_idVerwijderen'] = processing.run('native:removeduplicatesbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(19)
         if feedback.isCanceled():
             return {}
 
@@ -316,7 +339,22 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorHwa_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(18)
+        feedback.setCurrentStep(20)
+        if feedback.isCanceled():
+            return {}
+
+        # Aggregate plancap hoeveelheden per jaartal per rioleringsgebied
+        # PlanCap wordt aan het rioleringsgebied met grootste overlap gehangen
+        alg_params = {
+            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'BEM_ID','length': 50,'name': 'BEM_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_2124','length': 0,'name': 'ExAFW_2124','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_2529','length': 0,'name': 'ExAFW_2529','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_3039','length': 0,'name': 'ExAFW_3039','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'sum','delimiter': ', ','input': 'ExAFW_4050','length': 0,'name': 'ExAFW_4050','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'concatenate_unique','delimiter': ',','input': 'PC_ID','length': 500,'name': 'PC_IDs','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'}],
+            'GROUP_BY': 'BEM_ID',
+            'INPUT': outputs['DeleteDuplicatesByAttributeKleinstePlancappolygonenPerPc_idVerwijderen']['OUTPUT'],
+            'OUTPUT': parameters['PlancapPerBem_id']
+        }
+        outputs['AggregatePlancapHoeveelhedenPerJaartalPerRioleringsgebied'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['PlancapPerBem_id'] = outputs['AggregatePlancapHoeveelhedenPerJaartalPerRioleringsgebied']['OUTPUT']
+
+        feedback.setCurrentStep(21)
         if feedback.isCanceled():
             return {}
 
@@ -332,33 +370,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorVgs_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(19)
-        if feedback.isCanceled():
-            return {}
-
-        # Order by expression Plancap area van hoog naar laag
-        alg_params = {
-            'ASCENDING': False,
-            'EXPRESSION': 'area',
-            'INPUT': outputs['AddGeometryAttributes']['OUTPUT'],
-            'NULLS_FIRST': False,
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['OrderByExpressionPlancapAreaVanHoogNaarLaag'] = processing.run('native:orderbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(20)
-        if feedback.isCanceled():
-            return {}
-
-        # Delete duplicates by attribute kleinste Plancap-polygonen per PC_ID verwijderen
-        alg_params = {
-            'FIELDS': ['PC_ID'],
-            'INPUT': outputs['OrderByExpressionPlancapAreaVanHoogNaarLaag']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['DeleteDuplicatesByAttributeKleinstePlancappolygonenPerPc_idVerwijderen'] = processing.run('native:removeduplicatesbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(21)
+        feedback.setCurrentStep(22)
         if feedback.isCanceled():
             return {}
 
@@ -373,21 +385,6 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorDwa_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(22)
-        if feedback.isCanceled():
-            return {}
-
-        # Aggregate plancap hoeveelheden per jaartal per rioleringsgebied
-        # PlanCap wordt aan het rioleringsgebied met grootste overlap gehangen
-        alg_params = {
-            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'BEM_ID','length': 50,'name': 'BEM_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_2124','length': 0,'name': 'ExAFW_2124','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_2529','length': 0,'name': 'ExAFW_2529','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_3039','length': 0,'name': 'ExAFW_3039','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'sum','delimiter': ',','input': 'ExAFW_4050','length': 0,'name': 'ExAFW_4050','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'concatenate_unique','delimiter': ',','input': 'PC_ID','length': 150,'name': 'PC_IDs','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'}],
-            'GROUP_BY': 'BEM_ID',
-            'INPUT': outputs['DeleteDuplicatesByAttributeKleinstePlancappolygonenPerPc_idVerwijderen']['OUTPUT'],
-            'OUTPUT': parameters['PlancapPerBem_id']
-        }
-        outputs['AggregatePlancapHoeveelhedenPerJaartalPerRioleringsgebied'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['PlancapPerBem_id'] = outputs['AggregatePlancapHoeveelhedenPerJaartalPerRioleringsgebied']['OUTPUT']
 
         feedback.setCurrentStep(23)
         if feedback.isCanceled():
@@ -472,6 +469,22 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
+        # Field calculator GEM+VGS_ha
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'GEM+VGS_ha',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("GEM_ha"+"VGS_ha",2)',
+            'INPUT': outputs['JoinAttributesByFieldValueAangeslotenOppervlakAanRioleringsgebieden']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorGemvgs_ha'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(29)
+        if feedback.isCanceled():
+            return {}
+
         # Field calculator POC_GEM_m3h
         alg_params = {
             'FIELD_LENGTH': 10,
@@ -479,12 +492,12 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round(if("GEM_ha" IS NULL, 0, ("GEM_ha"*10000) * (0.7/1000)),2)',
-            'INPUT': outputs['JoinAttributesByFieldValueAangeslotenOppervlakAanRioleringsgebieden']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorGemvgs_ha']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorPoc_gem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(29)
+        feedback.setCurrentStep(30)
         if feedback.isCanceled():
             return {}
 
@@ -496,22 +509,38 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round(if("VGS_ha" IS NULL, 0, ("VGS_ha"*10000) * (0.7/1000)),2)',
             'INPUT': outputs['FieldCalculatorPoc_gem_m3h']['OUTPUT'],
-            'OUTPUT': parameters['AangeslotenOppervlakEnPoc']
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorPoc_vgs_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['AangeslotenOppervlakEnPoc'] = outputs['FieldCalculatorPoc_vgs_m3h']['OUTPUT']
 
-        feedback.setCurrentStep(30)
+        feedback.setCurrentStep(31)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_GEM+VGS_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_GEM+VGS_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("POC_GEM_m3h"+"POC_VGS_m3h",2)',
+            'INPUT': outputs['FieldCalculatorPoc_vgs_m3h']['OUTPUT'],
+            'OUTPUT': parameters['Aangesloten_oppervlak_en_poc_eigen_gebied']
+        }
+        outputs['FieldCalculatorPoc_gemvgs_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Aangesloten_oppervlak_en_poc_eigen_gebied'] = outputs['FieldCalculatorPoc_gemvgs_m3h']['OUTPUT']
+
+        feedback.setCurrentStep(32)
         if feedback.isCanceled():
             return {}
 
         # Create spatial index aangesloten oppervlak rioleringsgebieden
         alg_params = {
-            'INPUT': outputs['FieldCalculatorPoc_vgs_m3h']['OUTPUT']
+            'INPUT': outputs['FieldCalculatorPoc_gemvgs_m3h']['OUTPUT']
         }
         outputs['CreateSpatialIndexAangeslotenOppervlakRioleringsgebieden'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(31)
+        feedback.setCurrentStep(33)
         if feedback.isCanceled():
             return {}
 
@@ -527,7 +556,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['JoinAttributesByLocationSummaryAantalBagObjecten'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(32)
+        feedback.setCurrentStep(34)
         if feedback.isCanceled():
             return {}
 
@@ -543,7 +572,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorBag_countNull0'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(33)
+        feedback.setCurrentStep(35)
         if feedback.isCanceled():
             return {}
 
@@ -560,7 +589,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorOppvwoning'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(34)
+        feedback.setCurrentStep(36)
         if feedback.isCanceled():
             return {}
 
@@ -576,7 +605,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorOppvwoningNull0'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(35)
+        feedback.setCurrentStep(37)
         if feedback.isCanceled():
             return {}
 
@@ -586,16 +615,14 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'DWA_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            #'FORMULA': f'IF("BAG_count" IS NULL, 0, {inw_per_adres} * (12/1000) * "BAG_count")',
-            'FORMULA': f'{inw_per_adres} * (12/1000) * "BAG_count"',
+            'FORMULA': 'IF("BAG_count" IS NULL, 0, @inw_per_adres * (12/1000) * "BAG_count")',
             'INPUT': outputs['FieldCalculatorOppvwoningNull0']['OUTPUT'],
             'OUTPUT': parameters['Dwa_bag_m3h']
         }
-        feedback.pushInfo(alg_params['FORMULA'])
         outputs['FieldCalculatorDwa_bag'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Dwa_bag_m3h'] = outputs['FieldCalculatorDwa_bag']['OUTPUT']
 
-        feedback.setCurrentStep(36)
+        feedback.setCurrentStep(38)
         if feedback.isCanceled():
             return {}
 
@@ -605,7 +632,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['CreateSpatialIndexDwa_bag'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(37)
+        feedback.setCurrentStep(39)
         if feedback.isCanceled():
             return {}
 
@@ -621,7 +648,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['JoinAttributesByLocationSummaryDrinkwater'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(38)
+        feedback.setCurrentStep(40)
         if feedback.isCanceled():
             return {}
 
@@ -637,7 +664,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorPar_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(39)
+        feedback.setCurrentStep(41)
         if feedback.isCanceled():
             return {}
 
@@ -653,7 +680,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorZak_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(40)
+        feedback.setCurrentStep(42)
         if feedback.isCanceled():
             return {}
 
@@ -669,7 +696,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorTot_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(41)
+        feedback.setCurrentStep(43)
         if feedback.isCanceled():
             return {}
 
@@ -682,7 +709,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         outputs['DropFieldsPar_sumEnZak_sum'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['PocBagDrinkwater'] = outputs['DropFieldsPar_sumEnZak_sum']['OUTPUT']
 
-        feedback.setCurrentStep(42)
+        feedback.setCurrentStep(44)
         if feedback.isCanceled():
             return {}
 
@@ -692,7 +719,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['CreateSpatialIndexPocBagDrinkwater'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(43)
+        feedback.setCurrentStep(45)
         if feedback.isCanceled():
             return {}
 
@@ -708,7 +735,23 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['JoinAttributesByLocationSummaryVe'] = processing.run('qgis:joinbylocationsummary', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(44)
+        feedback.setCurrentStep(46)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator VE_count
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'VE_count',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("GRONDSLAG_sum" IS NULL, 0,round("GRONDSLAG_sum",2))',
+            'INPUT': outputs['JoinAttributesByLocationSummaryVe']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorVe_count'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(47)
         if feedback.isCanceled():
             return {}
 
@@ -719,12 +762,12 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("GRONDSLAG_sum" IS NULL, 0,round("GRONDSLAG_sum" * (12/1000),2))',
-            'INPUT': outputs['JoinAttributesByLocationSummaryVe']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorVe_count']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorVe_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(45)
+        feedback.setCurrentStep(48)
         if feedback.isCanceled():
             return {}
 
@@ -737,7 +780,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         outputs['DropFieldsGrondslag_sum'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['PocBagDrinkwaterVe'] = outputs['DropFieldsGrondslag_sum']['OUTPUT']
 
-        feedback.setCurrentStep(46)
+        feedback.setCurrentStep(49)
         if feedback.isCanceled():
             return {}
 
@@ -755,7 +798,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['JoinAttributesByFieldValuePlancapAanRioleringsgebieden'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(47)
+        feedback.setCurrentStep(50)
         if feedback.isCanceled():
             return {}
 
@@ -771,7 +814,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorExafw_2124Null0'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(48)
+        feedback.setCurrentStep(51)
         if feedback.isCanceled():
             return {}
 
@@ -787,7 +830,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorExafw_2529Null0'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(49)
+        feedback.setCurrentStep(52)
         if feedback.isCanceled():
             return {}
 
@@ -803,7 +846,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         }
         outputs['FieldCalculatorExafw_3039Null0'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(50)
+        feedback.setCurrentStep(53)
         if feedback.isCanceled():
             return {}
 
@@ -815,10 +858,10 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("ExAFW_4050" IS NULL, 0, "ExAFW_4050")',
             'INPUT': outputs['FieldCalculatorExafw_3039Null0']['OUTPUT'],
-            'OUTPUT': parameters['ResultaatStap2RioleringsgebiedenMetAfvalwateraanbodUitEigenGebied']
+            'OUTPUT': parameters['Resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied']
         }
         outputs['FieldCalculatorExafw_4050Null0'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['ResultaatStap2RioleringsgebiedenMetAfvalwateraanbodUitEigenGebied'] = outputs['FieldCalculatorExafw_4050Null0']['OUTPUT']
+        results['Resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied'] = outputs['FieldCalculatorExafw_4050Null0']['OUTPUT']
 
 
         # --- this is needed to rename layers. looks funky, but works!
