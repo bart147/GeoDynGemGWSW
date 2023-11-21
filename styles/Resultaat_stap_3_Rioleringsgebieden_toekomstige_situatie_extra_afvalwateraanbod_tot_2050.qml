@@ -910,42 +910,42 @@
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_N1_GEBIED">
+    <field configurationFlags="None" name="N1_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_GEBIED">
+    <field configurationFlags="None" name="Onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_N1_afvoerpunten">
+    <field configurationFlags="None" name="N1_afvoerpunten_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_afvoerpunten">
+    <field configurationFlags="None" name="Afvoerpunten_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="X_US_GEBIED">
+    <field configurationFlags="None" name="Aantal_onderbemalingen">
       <editWidget type="Range">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="X_US_N1_GEBIED">
+    <field configurationFlags="None" name="N1_aantal_onderbemalingen">
       <editWidget type="Range">
         <config>
           <Option/>
@@ -959,119 +959,119 @@
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="BEM_ID_EIND">
+    <field configurationFlags="None" name="BEM_ID_afleveringspunt">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="AFVOERPUNT_EIND">
+    <field configurationFlags="None" name="Naam_afleveringspunt">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_PC_IDs">
+    <field configurationFlags="None" name="PC_IDs_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_POC_GEM_m3h">
+    <field configurationFlags="None" name="POC_GEM_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_POC_VGS_m3h">
+    <field configurationFlags="None" name="POC_VGS_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_POC_GEM+VGS_m3h">
+    <field configurationFlags="None" name="POC_GEM+VGS_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_DWA_BAG_m3h">
+    <field configurationFlags="None" name="DWA_BAG_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_BAG_count">
+    <field configurationFlags="None" name="BAG_count_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_PAR_DRINKWATER_m3h">
+    <field configurationFlags="None" name="PAR_DRINKWATER_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_ZAK_DRINKWATER_m3h">
+    <field configurationFlags="None" name="ZAK_DRINKWATER_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_TOT_DRINKWATER_m3h">
+    <field configurationFlags="None" name="TOT_DRINKWATER_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_VE_m3h">
+    <field configurationFlags="None" name="VE_onderbemalingen_m3h">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_VE_count">
+    <field configurationFlags="None" name="VE_onderbemalingen_count">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_ExAFW_2124">
+    <field configurationFlags="None" name="ExAFW_2124_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_ExAFW_2529">
+    <field configurationFlags="None" name="ExAFW_2529_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_ExAFW_3039">
+    <field configurationFlags="None" name="ExAFW_3039_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="US_ExAFW_4050">
+    <field configurationFlags="None" name="ExAFW_4050_onderbemalingen">
       <editWidget type="TextEdit">
         <config>
           <Option/>
@@ -1188,21 +1188,21 @@
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="TOT_BAG+POC_m3h">
+    <field configurationFlags="None" name="Afvalwateraanbod_obv_BAG">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="TOT_DRINKWATER+POC_m3h">
+    <field configurationFlags="None" name="Afvalwateraanbod_obv_Drinkwater">
       <editWidget type="TextEdit">
         <config>
           <Option/>
         </config>
       </editWidget>
     </field>
-    <field configurationFlags="None" name="TOT_VE+POC_m3h">
+    <field configurationFlags="None" name="Afvalwateraanbod_obv_VE">
       <editWidget type="TextEdit">
         <config>
           <Option/>
@@ -1350,30 +1350,30 @@
     <alias name="" index="49" field="ExAFW_4050"/>
     <alias name="" index="50" field="PC_IDs"/>
     <alias name="" index="51" field="stap3_datum"/>
-    <alias name="" index="52" field="US_N1_GEBIED"/>
-    <alias name="" index="53" field="US_GEBIED"/>
-    <alias name="" index="54" field="US_N1_afvoerpunten"/>
-    <alias name="" index="55" field="US_afvoerpunten"/>
-    <alias name="" index="56" field="X_US_GEBIED"/>
-    <alias name="" index="57" field="X_US_N1_GEBIED"/>
+    <alias name="" index="52" field="N1_onderbemalingen"/>
+    <alias name="" index="53" field="Onderbemalingen"/>
+    <alias name="" index="54" field="N1_afvoerpunten_onderbemalingen"/>
+    <alias name="" index="55" field="Afvoerpunten_onderbemalingen"/>
+    <alias name="" index="56" field="Aantal_onderbemalingen"/>
+    <alias name="" index="57" field="N1_aantal_onderbemalingen"/>
     <alias name="" index="58" field="X_OPPOMP"/>
-    <alias name="" index="59" field="BEM_ID_EIND"/>
-    <alias name="" index="60" field="AFVOERPUNT_EIND"/>
-    <alias name="" index="61" field="US_PC_IDs"/>
-    <alias name="" index="62" field="US_POC_GEM_m3h"/>
-    <alias name="" index="63" field="US_POC_VGS_m3h"/>
-    <alias name="" index="64" field="US_POC_GEM+VGS_m3h"/>
-    <alias name="" index="65" field="US_DWA_BAG_m3h"/>
-    <alias name="" index="66" field="US_BAG_count"/>
-    <alias name="" index="67" field="US_PAR_DRINKWATER_m3h"/>
-    <alias name="" index="68" field="US_ZAK_DRINKWATER_m3h"/>
-    <alias name="" index="69" field="US_TOT_DRINKWATER_m3h"/>
-    <alias name="" index="70" field="US_VE_m3h"/>
-    <alias name="" index="71" field="US_VE_count"/>
-    <alias name="" index="72" field="US_ExAFW_2124"/>
-    <alias name="" index="73" field="US_ExAFW_2529"/>
-    <alias name="" index="74" field="US_ExAFW_3039"/>
-    <alias name="" index="75" field="US_ExAFW_4050"/>
+    <alias name="" index="59" field="BEM_ID_afleveringspunt"/>
+    <alias name="" index="60" field="Naam_afleveringspunt"/>
+    <alias name="" index="61" field="PC_IDs_onderbemalingen"/>
+    <alias name="" index="62" field="POC_GEM_onderbemalingen_m3h"/>
+    <alias name="" index="63" field="POC_VGS_onderbemalingen_m3h"/>
+    <alias name="" index="64" field="POC_GEM+VGS_onderbemalingen_m3h"/>
+    <alias name="" index="65" field="DWA_BAG_onderbemalingen_m3h"/>
+    <alias name="" index="66" field="BAG_count_onderbemalingen"/>
+    <alias name="" index="67" field="PAR_DRINKWATER_onderbemalingen_m3h"/>
+    <alias name="" index="68" field="ZAK_DRINKWATER_onderbemalingen_m3h"/>
+    <alias name="" index="69" field="TOT_DRINKWATER_onderbemalingen_m3h"/>
+    <alias name="" index="70" field="VE_onderbemalingen_m3h"/>
+    <alias name="" index="71" field="VE_onderbemalingen_count"/>
+    <alias name="" index="72" field="ExAFW_2124_onderbemalingen"/>
+    <alias name="" index="73" field="ExAFW_2529_onderbemalingen"/>
+    <alias name="" index="74" field="ExAFW_3039_onderbemalingen"/>
+    <alias name="" index="75" field="ExAFW_4050_onderbemalingen"/>
     <alias name="" index="76" field="SOM_POC_GEM_m3h"/>
     <alias name="" index="77" field="SOM_POC_VGS_m3h"/>
     <alias name="" index="78" field="SOM_POC_GEM+VGS_m3h"/>
@@ -1388,9 +1388,9 @@
     <alias name="" index="87" field="SOM_ExAFW_2529"/>
     <alias name="" index="88" field="SOM_ExAFW_3039"/>
     <alias name="" index="89" field="SOM_ExAFW_4050"/>
-    <alias name="" index="90" field="TOT_BAG+POC_m3h"/>
-    <alias name="" index="91" field="TOT_DRINKWATER+POC_m3h"/>
-    <alias name="" index="92" field="TOT_VE+POC_m3h"/>
+    <alias name="" index="90" field="Afvalwateraanbod_obv_BAG"/>
+    <alias name="" index="91" field="Afvalwateraanbod_obv_Drinkwater"/>
+    <alias name="" index="92" field="Afvalwateraanbod_obv_VE"/>
     <alias name="" index="93" field="mm_Berging"/>
     <alias name="" index="94" field="MAX_VULTIJD_DWA_h"/>
     <alias name="" index="95" field="MIN_VULTIJD_DWA_h"/>
@@ -1457,30 +1457,30 @@
     <default applyOnUpdate="0" field="ExAFW_4050" expression=""/>
     <default applyOnUpdate="0" field="PC_IDs" expression=""/>
     <default applyOnUpdate="0" field="stap3_datum" expression=""/>
-    <default applyOnUpdate="0" field="US_N1_GEBIED" expression=""/>
-    <default applyOnUpdate="0" field="US_GEBIED" expression=""/>
-    <default applyOnUpdate="0" field="US_N1_afvoerpunten" expression=""/>
-    <default applyOnUpdate="0" field="US_afvoerpunten" expression=""/>
-    <default applyOnUpdate="0" field="X_US_GEBIED" expression=""/>
-    <default applyOnUpdate="0" field="X_US_N1_GEBIED" expression=""/>
+    <default applyOnUpdate="0" field="N1_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="N1_afvoerpunten_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Afvoerpunten_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="N1_aantal_onderbemalingen" expression=""/>
     <default applyOnUpdate="0" field="X_OPPOMP" expression=""/>
-    <default applyOnUpdate="0" field="BEM_ID_EIND" expression=""/>
-    <default applyOnUpdate="0" field="AFVOERPUNT_EIND" expression=""/>
-    <default applyOnUpdate="0" field="US_PC_IDs" expression=""/>
-    <default applyOnUpdate="0" field="US_POC_GEM_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_POC_VGS_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_POC_GEM+VGS_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_DWA_BAG_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_BAG_count" expression=""/>
-    <default applyOnUpdate="0" field="US_PAR_DRINKWATER_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_ZAK_DRINKWATER_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_TOT_DRINKWATER_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_VE_m3h" expression=""/>
-    <default applyOnUpdate="0" field="US_VE_count" expression=""/>
-    <default applyOnUpdate="0" field="US_ExAFW_2124" expression=""/>
-    <default applyOnUpdate="0" field="US_ExAFW_2529" expression=""/>
-    <default applyOnUpdate="0" field="US_ExAFW_3039" expression=""/>
-    <default applyOnUpdate="0" field="US_ExAFW_4050" expression=""/>
+    <default applyOnUpdate="0" field="BEM_ID_afleveringspunt" expression=""/>
+    <default applyOnUpdate="0" field="Naam_afleveringspunt" expression=""/>
+    <default applyOnUpdate="0" field="PC_IDs_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="POC_GEM_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_VGS_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_GEM+VGS_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="DWA_BAG_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="BAG_count_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="PAR_DRINKWATER_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="ZAK_DRINKWATER_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="TOT_DRINKWATER_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="VE_onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="VE_onderbemalingen_count" expression=""/>
+    <default applyOnUpdate="0" field="ExAFW_2124_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="ExAFW_2529_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="ExAFW_3039_onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="ExAFW_4050_onderbemalingen" expression=""/>
     <default applyOnUpdate="0" field="SOM_POC_GEM_m3h" expression=""/>
     <default applyOnUpdate="0" field="SOM_POC_VGS_m3h" expression=""/>
     <default applyOnUpdate="0" field="SOM_POC_GEM+VGS_m3h" expression=""/>
@@ -1495,9 +1495,9 @@
     <default applyOnUpdate="0" field="SOM_ExAFW_2529" expression=""/>
     <default applyOnUpdate="0" field="SOM_ExAFW_3039" expression=""/>
     <default applyOnUpdate="0" field="SOM_ExAFW_4050" expression=""/>
-    <default applyOnUpdate="0" field="TOT_BAG+POC_m3h" expression=""/>
-    <default applyOnUpdate="0" field="TOT_DRINKWATER+POC_m3h" expression=""/>
-    <default applyOnUpdate="0" field="TOT_VE+POC_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_BAG" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_Drinkwater" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_VE" expression=""/>
     <default applyOnUpdate="0" field="mm_Berging" expression=""/>
     <default applyOnUpdate="0" field="MAX_VULTIJD_DWA_h" expression=""/>
     <default applyOnUpdate="0" field="MIN_VULTIJD_DWA_h" expression=""/>
@@ -1564,30 +1564,30 @@
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="ExAFW_4050" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="PC_IDs" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="stap3_datum" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_N1_GEBIED" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_GEBIED" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_N1_afvoerpunten" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_afvoerpunten" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="X_US_GEBIED" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="X_US_N1_GEBIED" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="N1_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="N1_afvoerpunten_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Afvoerpunten_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Aantal_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="N1_aantal_onderbemalingen" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="X_OPPOMP" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="BEM_ID_EIND" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="AFVOERPUNT_EIND" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_PC_IDs" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_POC_GEM_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_POC_VGS_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_POC_GEM+VGS_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_DWA_BAG_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_BAG_count" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_PAR_DRINKWATER_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_ZAK_DRINKWATER_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_TOT_DRINKWATER_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_VE_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_VE_count" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_ExAFW_2124" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_ExAFW_2529" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_ExAFW_3039" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="US_ExAFW_4050" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="BEM_ID_afleveringspunt" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Naam_afleveringspunt" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="PC_IDs_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="POC_GEM_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="POC_VGS_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="POC_GEM+VGS_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="DWA_BAG_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="BAG_count_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="PAR_DRINKWATER_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="ZAK_DRINKWATER_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="TOT_DRINKWATER_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="VE_onderbemalingen_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="VE_onderbemalingen_count" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="ExAFW_2124_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="ExAFW_2529_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="ExAFW_3039_onderbemalingen" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="ExAFW_4050_onderbemalingen" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="SOM_POC_GEM_m3h" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="SOM_POC_VGS_m3h" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="SOM_POC_GEM+VGS_m3h" unique_strength="0"/>
@@ -1602,9 +1602,9 @@
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="SOM_ExAFW_2529" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="SOM_ExAFW_3039" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="SOM_ExAFW_4050" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="TOT_BAG+POC_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="TOT_DRINKWATER+POC_m3h" unique_strength="0"/>
-    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="TOT_VE+POC_m3h" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Afvalwateraanbod_obv_BAG" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Afvalwateraanbod_obv_Drinkwater" unique_strength="0"/>
+    <constraint notnull_strength="0" constraints="0" exp_strength="0" field="Afvalwateraanbod_obv_VE" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="mm_Berging" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="MAX_VULTIJD_DWA_h" unique_strength="0"/>
     <constraint notnull_strength="0" constraints="0" exp_strength="0" field="MIN_VULTIJD_DWA_h" unique_strength="0"/>
@@ -1671,30 +1671,30 @@
     <constraint exp="" desc="" field="ExAFW_4050"/>
     <constraint exp="" desc="" field="PC_IDs"/>
     <constraint exp="" desc="" field="stap3_datum"/>
-    <constraint exp="" desc="" field="US_N1_GEBIED"/>
-    <constraint exp="" desc="" field="US_GEBIED"/>
-    <constraint exp="" desc="" field="US_N1_afvoerpunten"/>
-    <constraint exp="" desc="" field="US_afvoerpunten"/>
-    <constraint exp="" desc="" field="X_US_GEBIED"/>
-    <constraint exp="" desc="" field="X_US_N1_GEBIED"/>
+    <constraint exp="" desc="" field="N1_onderbemalingen"/>
+    <constraint exp="" desc="" field="Onderbemalingen"/>
+    <constraint exp="" desc="" field="N1_afvoerpunten_onderbemalingen"/>
+    <constraint exp="" desc="" field="Afvoerpunten_onderbemalingen"/>
+    <constraint exp="" desc="" field="Aantal_onderbemalingen"/>
+    <constraint exp="" desc="" field="N1_aantal_onderbemalingen"/>
     <constraint exp="" desc="" field="X_OPPOMP"/>
-    <constraint exp="" desc="" field="BEM_ID_EIND"/>
-    <constraint exp="" desc="" field="AFVOERPUNT_EIND"/>
-    <constraint exp="" desc="" field="US_PC_IDs"/>
-    <constraint exp="" desc="" field="US_POC_GEM_m3h"/>
-    <constraint exp="" desc="" field="US_POC_VGS_m3h"/>
-    <constraint exp="" desc="" field="US_POC_GEM+VGS_m3h"/>
-    <constraint exp="" desc="" field="US_DWA_BAG_m3h"/>
-    <constraint exp="" desc="" field="US_BAG_count"/>
-    <constraint exp="" desc="" field="US_PAR_DRINKWATER_m3h"/>
-    <constraint exp="" desc="" field="US_ZAK_DRINKWATER_m3h"/>
-    <constraint exp="" desc="" field="US_TOT_DRINKWATER_m3h"/>
-    <constraint exp="" desc="" field="US_VE_m3h"/>
-    <constraint exp="" desc="" field="US_VE_count"/>
-    <constraint exp="" desc="" field="US_ExAFW_2124"/>
-    <constraint exp="" desc="" field="US_ExAFW_2529"/>
-    <constraint exp="" desc="" field="US_ExAFW_3039"/>
-    <constraint exp="" desc="" field="US_ExAFW_4050"/>
+    <constraint exp="" desc="" field="BEM_ID_afleveringspunt"/>
+    <constraint exp="" desc="" field="Naam_afleveringspunt"/>
+    <constraint exp="" desc="" field="PC_IDs_onderbemalingen"/>
+    <constraint exp="" desc="" field="POC_GEM_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="POC_VGS_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="POC_GEM+VGS_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="DWA_BAG_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="BAG_count_onderbemalingen"/>
+    <constraint exp="" desc="" field="PAR_DRINKWATER_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="ZAK_DRINKWATER_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="TOT_DRINKWATER_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="VE_onderbemalingen_m3h"/>
+    <constraint exp="" desc="" field="VE_onderbemalingen_count"/>
+    <constraint exp="" desc="" field="ExAFW_2124_onderbemalingen"/>
+    <constraint exp="" desc="" field="ExAFW_2529_onderbemalingen"/>
+    <constraint exp="" desc="" field="ExAFW_3039_onderbemalingen"/>
+    <constraint exp="" desc="" field="ExAFW_4050_onderbemalingen"/>
     <constraint exp="" desc="" field="SOM_POC_GEM_m3h"/>
     <constraint exp="" desc="" field="SOM_POC_VGS_m3h"/>
     <constraint exp="" desc="" field="SOM_POC_GEM+VGS_m3h"/>
@@ -1709,9 +1709,9 @@
     <constraint exp="" desc="" field="SOM_ExAFW_2529"/>
     <constraint exp="" desc="" field="SOM_ExAFW_3039"/>
     <constraint exp="" desc="" field="SOM_ExAFW_4050"/>
-    <constraint exp="" desc="" field="TOT_BAG+POC_m3h"/>
-    <constraint exp="" desc="" field="TOT_DRINKWATER+POC_m3h"/>
-    <constraint exp="" desc="" field="TOT_VE+POC_m3h"/>
+    <constraint exp="" desc="" field="Afvalwateraanbod_obv_BAG"/>
+    <constraint exp="" desc="" field="Afvalwateraanbod_obv_Drinkwater"/>
+    <constraint exp="" desc="" field="Afvalwateraanbod_obv_VE"/>
     <constraint exp="" desc="" field="mm_Berging"/>
     <constraint exp="" desc="" field="MAX_VULTIJD_DWA_h"/>
     <constraint exp="" desc="" field="MIN_VULTIJD_DWA_h"/>
@@ -1783,30 +1783,30 @@
       <column type="field" hidden="0" name="ExAFW_4050" width="-1"/>
       <column type="field" hidden="0" name="PC_IDs" width="-1"/>
       <column type="field" hidden="0" name="stap3_datum" width="-1"/>
-      <column type="field" hidden="0" name="US_N1_GEBIED" width="-1"/>
-      <column type="field" hidden="0" name="US_GEBIED" width="-1"/>
-      <column type="field" hidden="0" name="US_N1_afvoerpunten" width="-1"/>
-      <column type="field" hidden="0" name="US_afvoerpunten" width="-1"/>
-      <column type="field" hidden="0" name="X_US_GEBIED" width="-1"/>
-      <column type="field" hidden="0" name="X_US_N1_GEBIED" width="-1"/>
+      <column type="field" hidden="0" name="N1_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="Onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="N1_afvoerpunten_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="Afvoerpunten_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="Aantal_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="N1_aantal_onderbemalingen" width="-1"/>
       <column type="field" hidden="0" name="X_OPPOMP" width="-1"/>
-      <column type="field" hidden="0" name="BEM_ID_EIND" width="-1"/>
-      <column type="field" hidden="0" name="AFVOERPUNT_EIND" width="-1"/>
-      <column type="field" hidden="0" name="US_PC_IDs" width="-1"/>
-      <column type="field" hidden="0" name="US_POC_GEM_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_POC_VGS_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_POC_GEM+VGS_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_DWA_BAG_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_BAG_count" width="-1"/>
-      <column type="field" hidden="0" name="US_PAR_DRINKWATER_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_ZAK_DRINKWATER_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_TOT_DRINKWATER_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_VE_m3h" width="-1"/>
-      <column type="field" hidden="0" name="US_VE_count" width="-1"/>
-      <column type="field" hidden="0" name="US_ExAFW_2124" width="-1"/>
-      <column type="field" hidden="0" name="US_ExAFW_2529" width="-1"/>
-      <column type="field" hidden="0" name="US_ExAFW_3039" width="-1"/>
-      <column type="field" hidden="0" name="US_ExAFW_4050" width="-1"/>
+      <column type="field" hidden="0" name="BEM_ID_afleveringspunt" width="-1"/>
+      <column type="field" hidden="0" name="Naam_afleveringspunt" width="-1"/>
+      <column type="field" hidden="0" name="PC_IDs_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="POC_GEM_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="POC_VGS_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="POC_GEM+VGS_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="DWA_BAG_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="BAG_count_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="PAR_DRINKWATER_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="ZAK_DRINKWATER_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="TOT_DRINKWATER_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="VE_onderbemalingen_m3h" width="-1"/>
+      <column type="field" hidden="0" name="VE_onderbemalingen_count" width="-1"/>
+      <column type="field" hidden="0" name="ExAFW_2124_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="ExAFW_2529_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="ExAFW_3039_onderbemalingen" width="-1"/>
+      <column type="field" hidden="0" name="ExAFW_4050_onderbemalingen" width="-1"/>
       <column type="field" hidden="0" name="SOM_POC_GEM_m3h" width="-1"/>
       <column type="field" hidden="0" name="SOM_POC_VGS_m3h" width="-1"/>
       <column type="field" hidden="0" name="SOM_POC_GEM+VGS_m3h" width="-1"/>
@@ -1821,9 +1821,9 @@
       <column type="field" hidden="0" name="SOM_ExAFW_2529" width="-1"/>
       <column type="field" hidden="0" name="SOM_ExAFW_3039" width="-1"/>
       <column type="field" hidden="0" name="SOM_ExAFW_4050" width="-1"/>
-      <column type="field" hidden="0" name="TOT_BAG+POC_m3h" width="-1"/>
-      <column type="field" hidden="0" name="TOT_DRINKWATER+POC_m3h" width="-1"/>
-      <column type="field" hidden="0" name="TOT_VE+POC_m3h" width="-1"/>
+      <column type="field" hidden="0" name="Afvalwateraanbod_obv_BAG" width="-1"/>
+      <column type="field" hidden="0" name="Afvalwateraanbod_obv_Drinkwater" width="-1"/>
+      <column type="field" hidden="0" name="Afvalwateraanbod_obv_VE" width="-1"/>
       <column type="field" hidden="0" name="mm_Berging" width="-1"/>
       <column type="field" hidden="0" name="MAX_VULTIJD_DWA_h" width="-1"/>
       <column type="field" hidden="0" name="MIN_VULTIJD_DWA_h" width="-1"/>
@@ -1928,13 +1928,13 @@ def my_form_open(dialog, layer, feature):
     </attributeEditorField>
   </attributeEditorForm>
   <editable>
-    <field name="AFVOERPUNT_EIND" editable="1"/>
+    <field name="Naam_afleveringspunt" editable="1"/>
     <field name="AanslagniveauBoven" editable="1"/>
     <field name="Aantalpompen" editable="1"/>
     <field name="AfslagniveauBoven" editable="1"/>
     <field name="BAG_count" editable="1"/>
     <field name="BEM_ID" editable="1"/>
-    <field name="BEM_ID_EIND" editable="1"/>
+    <field name="BEM_ID_afleveringspunt" editable="1"/>
     <field name="Count_Doorlaatniveau" editable="1"/>
     <field name="Count_Drempelniveau" editable="1"/>
     <field name="DIT_ha" editable="1"/>
@@ -1987,40 +1987,40 @@ def my_form_open(dialog, layer, feature):
     <field name="SUM_M3_LEI" editable="1"/>
     <field name="Stelselnamen" editable="1"/>
     <field name="TOT_BAG+POC+PC_m3h" editable="1"/>
-    <field name="TOT_BAG+POC_m3h" editable="1"/>
+    <field name="Afvalwateraanbod_obv_BAG" editable="1"/>
     <field name="TOT_DRINKWATER+POC+PC_m3h" editable="1"/>
-    <field name="TOT_DRINKWATER+POC_m3h" editable="1"/>
+    <field name="Afvalwateraanbod_obv_Drinkwater" editable="1"/>
     <field name="TOT_DRINKWATER_m3h" editable="1"/>
     <field name="TOT_VE+POC+PC_m3h" editable="1"/>
-    <field name="TOT_VE+POC_m3h" editable="1"/>
-    <field name="US_BAG_count" editable="1"/>
+    <field name="Afvalwateraanbod_obv_VE" editable="1"/>
+    <field name="BAG_count_onderbemalingen" editable="1"/>
     <field name="US_BEM_ID" editable="1"/>
-    <field name="US_DWA_BAG_m3h" editable="1"/>
-    <field name="US_ExAFW_2124" editable="1"/>
-    <field name="US_ExAFW_2529" editable="1"/>
-    <field name="US_ExAFW_3039" editable="1"/>
-    <field name="US_ExAFW_4050" editable="1"/>
-    <field name="US_GEBIED" editable="1"/>
-    <field name="US_N1_GEBIED" editable="1"/>
-    <field name="US_N1_afvoerpunten" editable="1"/>
-    <field name="US_PAR_DRINKWATER_m3h" editable="1"/>
-    <field name="US_PC_IDs" editable="1"/>
-    <field name="US_POC_GEM+VGS_m3h" editable="1"/>
-    <field name="US_POC_GEM_m3h" editable="1"/>
-    <field name="US_POC_VGS_m3h" editable="1"/>
+    <field name="DWA_BAG_onderbemalingen_m3h" editable="1"/>
+    <field name="ExAFW_2124_onderbemalingen" editable="1"/>
+    <field name="ExAFW_2529_onderbemalingen" editable="1"/>
+    <field name="ExAFW_3039_onderbemalingen" editable="1"/>
+    <field name="ExAFW_4050_onderbemalingen" editable="1"/>
+    <field name="Onderbemalingen" editable="1"/>
+    <field name="N1_onderbemalingen" editable="1"/>
+    <field name="N1_afvoerpunten_onderbemalingen" editable="1"/>
+    <field name="PAR_DRINKWATER_onderbemalingen_m3h" editable="1"/>
+    <field name="PC_IDs_onderbemalingen" editable="1"/>
+    <field name="POC_GEM+VGS_onderbemalingen_m3h" editable="1"/>
+    <field name="POC_GEM_onderbemalingen_m3h" editable="1"/>
+    <field name="POC_VGS_onderbemalingen_m3h" editable="1"/>
     <field name="US_STELSEL_ID" editable="1"/>
-    <field name="US_TOT_DRINKWATER_m3h" editable="1"/>
-    <field name="US_VE_count" editable="1"/>
-    <field name="US_VE_m3h" editable="1"/>
-    <field name="US_ZAK_DRINKWATER_m3h" editable="1"/>
-    <field name="US_afvoerpunten" editable="1"/>
+    <field name="TOT_DRINKWATER_onderbemalingen_m3h" editable="1"/>
+    <field name="VE_onderbemalingen_count" editable="1"/>
+    <field name="VE_onderbemalingen_m3h" editable="1"/>
+    <field name="ZAK_DRINKWATER_onderbemalingen_m3h" editable="1"/>
+    <field name="Afvoerpunten_onderbemalingen" editable="1"/>
     <field name="VE_count" editable="1"/>
     <field name="VE_m3h" editable="1"/>
     <field name="VGS_ha" editable="1"/>
     <field name="WATER_ha" editable="1"/>
     <field name="X_OPPOMP" editable="1"/>
-    <field name="X_US_GEBIED" editable="1"/>
-    <field name="X_US_N1_GEBIED" editable="1"/>
+    <field name="Aantal_onderbemalingen" editable="1"/>
+    <field name="N1_aantal_onderbemalingen" editable="1"/>
     <field name="ZAK_DRINKWATER_m3h" editable="1"/>
     <field name="begin" editable="1"/>
     <field name="eind" editable="1"/>
@@ -2035,13 +2035,13 @@ def my_form_open(dialog, layer, feature):
     <field name="typen" editable="1"/>
   </editable>
   <labelOnTop>
-    <field name="AFVOERPUNT_EIND" labelOnTop="0"/>
+    <field name="Naam_afleveringspunt" labelOnTop="0"/>
     <field name="AanslagniveauBoven" labelOnTop="0"/>
     <field name="Aantalpompen" labelOnTop="0"/>
     <field name="AfslagniveauBoven" labelOnTop="0"/>
     <field name="BAG_count" labelOnTop="0"/>
     <field name="BEM_ID" labelOnTop="0"/>
-    <field name="BEM_ID_EIND" labelOnTop="0"/>
+    <field name="BEM_ID_afleveringspunt" labelOnTop="0"/>
     <field name="Count_Doorlaatniveau" labelOnTop="0"/>
     <field name="Count_Drempelniveau" labelOnTop="0"/>
     <field name="DIT_ha" labelOnTop="0"/>
@@ -2094,40 +2094,40 @@ def my_form_open(dialog, layer, feature):
     <field name="SUM_M3_LEI" labelOnTop="0"/>
     <field name="Stelselnamen" labelOnTop="0"/>
     <field name="TOT_BAG+POC+PC_m3h" labelOnTop="0"/>
-    <field name="TOT_BAG+POC_m3h" labelOnTop="0"/>
+    <field name="Afvalwateraanbod_obv_BAG" labelOnTop="0"/>
     <field name="TOT_DRINKWATER+POC+PC_m3h" labelOnTop="0"/>
-    <field name="TOT_DRINKWATER+POC_m3h" labelOnTop="0"/>
+    <field name="Afvalwateraanbod_obv_Drinkwater" labelOnTop="0"/>
     <field name="TOT_DRINKWATER_m3h" labelOnTop="0"/>
     <field name="TOT_VE+POC+PC_m3h" labelOnTop="0"/>
-    <field name="TOT_VE+POC_m3h" labelOnTop="0"/>
-    <field name="US_BAG_count" labelOnTop="0"/>
+    <field name="Afvalwateraanbod_obv_VE" labelOnTop="0"/>
+    <field name="BAG_count_onderbemalingen" labelOnTop="0"/>
     <field name="US_BEM_ID" labelOnTop="0"/>
-    <field name="US_DWA_BAG_m3h" labelOnTop="0"/>
-    <field name="US_ExAFW_2124" labelOnTop="0"/>
-    <field name="US_ExAFW_2529" labelOnTop="0"/>
-    <field name="US_ExAFW_3039" labelOnTop="0"/>
-    <field name="US_ExAFW_4050" labelOnTop="0"/>
-    <field name="US_GEBIED" labelOnTop="0"/>
-    <field name="US_N1_GEBIED" labelOnTop="0"/>
-    <field name="US_N1_afvoerpunten" labelOnTop="0"/>
-    <field name="US_PAR_DRINKWATER_m3h" labelOnTop="0"/>
-    <field name="US_PC_IDs" labelOnTop="0"/>
-    <field name="US_POC_GEM+VGS_m3h" labelOnTop="0"/>
-    <field name="US_POC_GEM_m3h" labelOnTop="0"/>
-    <field name="US_POC_VGS_m3h" labelOnTop="0"/>
+    <field name="DWA_BAG_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="ExAFW_2124_onderbemalingen" labelOnTop="0"/>
+    <field name="ExAFW_2529_onderbemalingen" labelOnTop="0"/>
+    <field name="ExAFW_3039_onderbemalingen" labelOnTop="0"/>
+    <field name="ExAFW_4050_onderbemalingen" labelOnTop="0"/>
+    <field name="Onderbemalingen" labelOnTop="0"/>
+    <field name="N1_onderbemalingen" labelOnTop="0"/>
+    <field name="N1_afvoerpunten_onderbemalingen" labelOnTop="0"/>
+    <field name="PAR_DRINKWATER_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="PC_IDs_onderbemalingen" labelOnTop="0"/>
+    <field name="POC_GEM+VGS_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="POC_GEM_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="POC_VGS_onderbemalingen_m3h" labelOnTop="0"/>
     <field name="US_STELSEL_ID" labelOnTop="0"/>
-    <field name="US_TOT_DRINKWATER_m3h" labelOnTop="0"/>
-    <field name="US_VE_count" labelOnTop="0"/>
-    <field name="US_VE_m3h" labelOnTop="0"/>
-    <field name="US_ZAK_DRINKWATER_m3h" labelOnTop="0"/>
-    <field name="US_afvoerpunten" labelOnTop="0"/>
+    <field name="TOT_DRINKWATER_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="VE_onderbemalingen_count" labelOnTop="0"/>
+    <field name="VE_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="ZAK_DRINKWATER_onderbemalingen_m3h" labelOnTop="0"/>
+    <field name="Afvoerpunten_onderbemalingen" labelOnTop="0"/>
     <field name="VE_count" labelOnTop="0"/>
     <field name="VE_m3h" labelOnTop="0"/>
     <field name="VGS_ha" labelOnTop="0"/>
     <field name="WATER_ha" labelOnTop="0"/>
     <field name="X_OPPOMP" labelOnTop="0"/>
-    <field name="X_US_GEBIED" labelOnTop="0"/>
-    <field name="X_US_N1_GEBIED" labelOnTop="0"/>
+    <field name="Aantal_onderbemalingen" labelOnTop="0"/>
+    <field name="N1_aantal_onderbemalingen" labelOnTop="0"/>
     <field name="ZAK_DRINKWATER_m3h" labelOnTop="0"/>
     <field name="begin" labelOnTop="0"/>
     <field name="eind" labelOnTop="0"/>
@@ -2142,13 +2142,13 @@ def my_form_open(dialog, layer, feature):
     <field name="typen" labelOnTop="0"/>
   </labelOnTop>
   <reuseLastValue>
-    <field reuseLastValue="0" name="AFVOERPUNT_EIND"/>
+    <field reuseLastValue="0" name="Naam_afleveringspunt"/>
     <field reuseLastValue="0" name="AanslagniveauBoven"/>
     <field reuseLastValue="0" name="Aantalpompen"/>
     <field reuseLastValue="0" name="AfslagniveauBoven"/>
     <field reuseLastValue="0" name="BAG_count"/>
     <field reuseLastValue="0" name="BEM_ID"/>
-    <field reuseLastValue="0" name="BEM_ID_EIND"/>
+    <field reuseLastValue="0" name="BEM_ID_afleveringspunt"/>
     <field reuseLastValue="0" name="Count_Doorlaatniveau"/>
     <field reuseLastValue="0" name="Count_Drempelniveau"/>
     <field reuseLastValue="0" name="DIT_ha"/>
@@ -2201,40 +2201,40 @@ def my_form_open(dialog, layer, feature):
     <field reuseLastValue="0" name="SUM_M3_LEI"/>
     <field reuseLastValue="0" name="Stelselnamen"/>
     <field reuseLastValue="0" name="TOT_BAG+POC+PC_m3h"/>
-    <field reuseLastValue="0" name="TOT_BAG+POC_m3h"/>
+    <field reuseLastValue="0" name="Afvalwateraanbod_obv_BAG"/>
     <field reuseLastValue="0" name="TOT_DRINKWATER+POC+PC_m3h"/>
-    <field reuseLastValue="0" name="TOT_DRINKWATER+POC_m3h"/>
+    <field reuseLastValue="0" name="Afvalwateraanbod_obv_Drinkwater"/>
     <field reuseLastValue="0" name="TOT_DRINKWATER_m3h"/>
     <field reuseLastValue="0" name="TOT_VE+POC+PC_m3h"/>
-    <field reuseLastValue="0" name="TOT_VE+POC_m3h"/>
-    <field reuseLastValue="0" name="US_BAG_count"/>
+    <field reuseLastValue="0" name="Afvalwateraanbod_obv_VE"/>
+    <field reuseLastValue="0" name="BAG_count_onderbemalingen"/>
     <field reuseLastValue="0" name="US_BEM_ID"/>
-    <field reuseLastValue="0" name="US_DWA_BAG_m3h"/>
-    <field reuseLastValue="0" name="US_ExAFW_2124"/>
-    <field reuseLastValue="0" name="US_ExAFW_2529"/>
-    <field reuseLastValue="0" name="US_ExAFW_3039"/>
-    <field reuseLastValue="0" name="US_ExAFW_4050"/>
-    <field reuseLastValue="0" name="US_GEBIED"/>
-    <field reuseLastValue="0" name="US_N1_GEBIED"/>
-    <field reuseLastValue="0" name="US_N1_afvoerpunten"/>
-    <field reuseLastValue="0" name="US_PAR_DRINKWATER_m3h"/>
-    <field reuseLastValue="0" name="US_PC_IDs"/>
-    <field reuseLastValue="0" name="US_POC_GEM+VGS_m3h"/>
-    <field reuseLastValue="0" name="US_POC_GEM_m3h"/>
-    <field reuseLastValue="0" name="US_POC_VGS_m3h"/>
+    <field reuseLastValue="0" name="DWA_BAG_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="ExAFW_2124_onderbemalingen"/>
+    <field reuseLastValue="0" name="ExAFW_2529_onderbemalingen"/>
+    <field reuseLastValue="0" name="ExAFW_3039_onderbemalingen"/>
+    <field reuseLastValue="0" name="ExAFW_4050_onderbemalingen"/>
+    <field reuseLastValue="0" name="Onderbemalingen"/>
+    <field reuseLastValue="0" name="N1_onderbemalingen"/>
+    <field reuseLastValue="0" name="N1_afvoerpunten_onderbemalingen"/>
+    <field reuseLastValue="0" name="PAR_DRINKWATER_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="PC_IDs_onderbemalingen"/>
+    <field reuseLastValue="0" name="POC_GEM+VGS_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="POC_GEM_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="POC_VGS_onderbemalingen_m3h"/>
     <field reuseLastValue="0" name="US_STELSEL_ID"/>
-    <field reuseLastValue="0" name="US_TOT_DRINKWATER_m3h"/>
-    <field reuseLastValue="0" name="US_VE_count"/>
-    <field reuseLastValue="0" name="US_VE_m3h"/>
-    <field reuseLastValue="0" name="US_ZAK_DRINKWATER_m3h"/>
-    <field reuseLastValue="0" name="US_afvoerpunten"/>
+    <field reuseLastValue="0" name="TOT_DRINKWATER_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="VE_onderbemalingen_count"/>
+    <field reuseLastValue="0" name="VE_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="ZAK_DRINKWATER_onderbemalingen_m3h"/>
+    <field reuseLastValue="0" name="Afvoerpunten_onderbemalingen"/>
     <field reuseLastValue="0" name="VE_count"/>
     <field reuseLastValue="0" name="VE_m3h"/>
     <field reuseLastValue="0" name="VGS_ha"/>
     <field reuseLastValue="0" name="WATER_ha"/>
     <field reuseLastValue="0" name="X_OPPOMP"/>
-    <field reuseLastValue="0" name="X_US_GEBIED"/>
-    <field reuseLastValue="0" name="X_US_N1_GEBIED"/>
+    <field reuseLastValue="0" name="Aantal_onderbemalingen"/>
+    <field reuseLastValue="0" name="N1_aantal_onderbemalingen"/>
     <field reuseLastValue="0" name="ZAK_DRINKWATER_m3h"/>
     <field reuseLastValue="0" name="begin"/>
     <field reuseLastValue="0" name="eind"/>

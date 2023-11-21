@@ -566,7 +566,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         """bereken onderbemalingen voor SUM_WAARDE.
         Maakt selectie op basis van veld [ONTV_VAN] -> VAN_KNOOPN IN ('ZRE-123424', 'ZRE-234')"""
         # sum values op basis van selectie [ONTV_VAN]
-        # model-input: POC_GEM_m3h;US_POC_GEM_m3h,POC_VGS_m3h;US_POC_VGS_m3h,DWA_BAG_m3h;US_DWA_BAG_m3h,PAR_DRINKWATER_m3h;US_PAR_DRINKWATER_m3h,ZAK_DRINKWATER_m3h;US_ZAK_DRINKWATER_m3h,TOT_DRINKWATER_m3h;US_TOT_DRINKWATER_m3h,VE_m3h;US_VE_m3h,ExAFW_2124;US_ExAFW_2124,ExAFW_3039;US_ExAFW_3039,ExAFW_4050;US_ExAFW_4050
+        # model-input: POC_GEM_m3h;POC_GEM_onderbemalingen_m3h,POC_VGS_m3h;POC_VGS_onderbemalingen_m3h,DWA_BAG_m3h;DWA_BAG_onderbemalingen_m3h,PAR_DRINKWATER_m3h;PAR_DRINKWATER_onderbemalingen_m3h,ZAK_DRINKWATER_m3h;ZAK_DRINKWATER_onderbemalingen_m3h,TOT_DRINKWATER_m3h;TOT_DRINKWATER_onderbemalingen_m3h,VE_m3h;VE_onderbemalingen_m3h,ExAFW_2124;ExAFW_2124_onderbemalingen,ExAFW_3039;ExAFW_3039_onderbemalingen,ExAFW_4050;ExAFW_4050_onderbemalingen
         fields_to_calc = parameters.get('veldenlijst', "").split(",") # "field1;us_field1,field2;us_field2"
         us_fields = set()
         layer.startEditing()
@@ -741,8 +741,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         feedback.pushInfo ("netwerk opslaan als graph...")
         VAN_FLD = "BEM_ID"      # unieke id
         NAAR_FLD = "DS_BEM_ID"  # loost op 
-        AFVOERPUNT = "begin"    # afvoerpuntcode. meenemen als US_afvoerpunten, US_N1_afvoerpunten, AFVOERPUNT_EIND
-        PC_ID = "PC_IDs"        # plancap gebieden meenemen als US_PC_IDs
+        AFVOERPUNT = "begin"    # afvoerpuntcode. meenemen als Afvoerpunten_onderbemalingen, N1_afvoerpunten_onderbemalingen, Naam_afleveringspunt
+        PC_ID = "PC_IDs"        # plancap gebieden meenemen als PC_IDs_onderbemalingen
         BM_NM = "BM_NM"         # alternatief id field 3
         d_AFVOERPUNT = { }
         d_PC_ID = { }
@@ -776,28 +776,28 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             # onderbemalingen 1 niveau diep
             l_onderliggende_gemalen_n1 = [start for start, end in edges_as_tuple if end == VAN_KNOOPN and start != VAN_KNOOPN]  # dus start['A', 'C'] uit tuples[('A', 'B'),('C', 'B')] als end == 'B'
             s_onderliggende_gemalen_n1 =  str(l_onderliggende_gemalen_n1).replace("u'", "'").replace("[", "").replace("]", "") # naar str() en verwijder u'tjes en haken
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_GEBIED"), l_onderliggende_gemalen) # 'BEM001','BEM002','BEM003'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_GEBIED"), s_onderliggende_gemalen_n1) # 'BEM002','BEM003'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_US_GEBIED"), len(list(d_edges)))  # 3 onderbemalingen
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Onderbemalingen"), l_onderliggende_gemalen) # 'BEM001','BEM002','BEM003'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("N1_onderbemalingen"), s_onderliggende_gemalen_n1) # 'BEM002','BEM003'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Aantal_onderbemalingen"), len(list(d_edges)))  # 3 onderbemalingen
             # feedback.pushInfo(f"{VAN_KNOOPN}")
             # feedback.pushInfo(f"{len(list(d_edges))}")
             # feedback.pushInfo(f"{len(list(l_onderliggende_gemalen_n1))}")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_US_N1_GEBIED"), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("N1_aantal_onderbemalingen"), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
             layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OPPOMP"),  X_OPPOMP + 1)              # aantal keer oppompen tot rwzi
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("BEM_ID_EIND"), K_KNP_EIND)              # eindbemalingsgebied: BEM009
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("BEM_ID_afleveringspunt"), K_KNP_EIND)              # eindbemalingsgebied: BEM009
             d_K_ONTV_VAN[VAN_KNOOPN] = l_onderliggende_gemalen
             d_K_ONTV_VAN_n1[VAN_KNOOPN] =  l_onderliggende_gemalen_n1
             # convert bemid's to description field
             l_onderliggende_desc = str([d_AFVOERPUNT[key] for key in list(d_edges)]) # [u'ZRE-123',u'ZRE-234']
             l_onderliggende_desc = l_onderliggende_desc.replace("u'", "'").replace("[", "").replace("]", "")
             l_onderliggende_desc_n1 = str([d_AFVOERPUNT[key] for key in l_onderliggende_gemalen_n1]).replace("u'", "'").replace("[", "").replace("]", "")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_afvoerpunten"), l_onderliggende_desc) # '38_9','345_23','52_1'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_N1_afvoerpunten"), l_onderliggende_desc_n1) # '345_23','52_1'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("AFVOERPUNT_EIND"), d_BM_NM[K_KNP_EIND])  # laatste afvoerpunt code
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Afvoerpunten_onderbemalingen"), l_onderliggende_desc) # '38_9','345_23','52_1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("N1_afvoerpunten_onderbemalingen"), l_onderliggende_desc_n1) # '345_23','52_1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Naam_afleveringspunt"), d_BM_NM[K_KNP_EIND])  # laatste afvoerpunt code
             # add PC_IDs 
             l_onderliggende_PC_ID = str([d_PC_ID[key] for key in list(d_edges) if str(d_PC_ID[key]) != "NULL"]) # [u'ZRE-123',u'ZRE-234']
             l_onderliggende_PC_ID = l_onderliggende_PC_ID.replace("u'", "'").replace("[", "").replace("]", "")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("US_PC_IDs"), l_onderliggende_PC_ID) # lijst met onderliggende plancap id's
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("PC_IDs_onderbemalingen"), l_onderliggende_PC_ID) # lijst met onderliggende plancap id's
 
         layer.commitChanges()
         return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]
@@ -1117,8 +1117,8 @@ class CustomToolsBerekenOnderbemalingFldsAlgorithm(CustomToolAllFunctionsAlgorit
         self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))      
         self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='BEM_ID'))
-        self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='US_GEBIED'))
-        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_GEM_m3h;US_POC_GEM_m3h,POC_VGS_m3h;US_POC_VGS_m3h'))
+        self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='Onderbemalingen'))
+        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_GEM_m3h;POC_GEM_onderbemalingen_m3h,POC_VGS_m3h;POC_VGS_onderbemalingen_m3h'))
             
     def customAlgorithm(self, layer, parameters, feedback):
         """

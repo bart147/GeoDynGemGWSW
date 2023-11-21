@@ -867,7 +867,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories US_VE_m3h
+        # Statistics by categories VE_onderbemalingen_m3h
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['NAAR_BEM_ID'],
             'INPUT': outputs['DropFieldsGrondslag_sum']['OUTPUT'],
@@ -880,7 +880,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories US_DWA_BAG_m3h
+        # Statistics by categories DWA_BAG_onderbemalingen_m3h
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['NAAR_BEM_ID'],
             'INPUT': outputs['DropFieldsGrondslag_sum']['OUTPUT'],
@@ -893,7 +893,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories US_POC_GEM_m3h
+        # Statistics by categories POC_GEM_onderbemalingen_m3h
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['NAAR_BEM_ID'],
             'INPUT': outputs['DropFieldsGrondslag_sum']['OUTPUT'],
@@ -906,7 +906,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories US_TOT_DRINKWATER_m3h
+        # Statistics by categories TOT_DRINKWATER_onderbemalingen_m3h
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['NAAR_BEM_ID'],
             'INPUT': outputs['DropFieldsGrondslag_sum']['OUTPUT'],
@@ -919,7 +919,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value US_DWA_BAG_m3h
+        # Join attributes by field value DWA_BAG_onderbemalingen_m3h
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID',
@@ -937,7 +937,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Statistics by categories US_POC_VGS_m3h
+        # Statistics by categories POC_VGS_onderbemalingen_m3h
         alg_params = {
             'CATEGORIES_FIELD_NAME': ['NAAR_BEM_ID'],
             'INPUT': outputs['DropFieldsGrondslag_sum']['OUTPUT'],
@@ -950,10 +950,10 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Field calculator US_DWA_BAG_m3h
+        # Field calculator DWA_BAG_onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'US_DWA_BAG_m3h',
+            'FIELD_NAME': 'DWA_BAG_onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("sum" IS NULL, 0, round("sum",2))',
@@ -966,7 +966,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Drop field(s) US_DWA_BAG_m3h - sum
+        # Drop field(s) DWA_BAG_onderbemalingen_m3h - sum
         alg_params = {
             'COLUMN': ['sum'],
             'INPUT': outputs['FieldCalculatorUs_dwa_bag_m3h']['OUTPUT'],
@@ -978,7 +978,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value US_TOT_DRINKWATER_m3h
+        # Join attributes by field value TOT_DRINKWATER_onderbemalingen_m3h
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID',
@@ -996,10 +996,10 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Field calculator US_TOT_DRINKWATER_m3h
+        # Field calculator TOT_DRINKWATER_onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'US_TOT_DRINKWATER_m3h',
+            'FIELD_NAME': 'TOT_DRINKWATER_onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("sum" IS NULL, 0, round("sum",2))',
@@ -1012,7 +1012,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Drop field(s) US_TOT_DRINKWATER_m3h
+        # Drop field(s) TOT_DRINKWATER_onderbemalingen_m3h
         alg_params = {
             'COLUMN': ['sum'],
             'INPUT': outputs['FieldCalculatorUs_tot_drinkwater_m3h']['OUTPUT'],
@@ -1024,7 +1024,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value US_VE_m3h
+        # Join attributes by field value VE_onderbemalingen_m3h
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID',
@@ -1042,10 +1042,10 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Field calculator US_VE_m3h
+        # Field calculator VE_onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'US_VE_m3h',
+            'FIELD_NAME': 'VE_onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("sum" IS NULL, 0, round("sum",2))',
@@ -1058,7 +1058,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Drop field(s) US_VE_m3h - sum
+        # Drop field(s) VE_onderbemalingen_m3h - sum
         alg_params = {
             'COLUMN': ['sum'],
             'INPUT': outputs['FieldCalculatorUs_ve_m3h']['OUTPUT'],
@@ -1070,7 +1070,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value US_POC_GEM_m3h
+        # Join attributes by field value POC_GEM_onderbemalingen_m3h
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID',
@@ -1088,10 +1088,10 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Field calculator US_POC_GEM_m3h
+        # Field calculator POC_GEM_onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'US_POC_GEM_m3h',
+            'FIELD_NAME': 'POC_GEM_onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("sum" IS NULL, 0, round("sum",2))',
@@ -1104,7 +1104,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Drop field(s) US_POC_GEM_m3h - sum
+        # Drop field(s) POC_GEM_onderbemalingen_m3h - sum
         alg_params = {
             'COLUMN': ['sum'],
             'INPUT': outputs['FieldCalculatorUs_poc_gem_m3h']['OUTPUT'],
@@ -1116,7 +1116,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value US_POC_VGS_m3h
+        # Join attributes by field value POC_VGS_onderbemalingen_m3h
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'BEM_ID',
@@ -1134,10 +1134,10 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Field calculator US_POC_VGS_m3h
+        # Field calculator POC_VGS_onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 10,
-            'FIELD_NAME': 'US_POC_VGS_m3h',
+            'FIELD_NAME': 'POC_VGS_onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if( "sum" IS NULL, 0, round("sum",2))',
@@ -1150,7 +1150,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
         if feedback.isCanceled():
             return {}
 
-        # Drop field(s) US_POC_VGS_m3h - sum
+        # Drop field(s) POC_VGS_onderbemalingen_m3h - sum
         alg_params = {
             'COLUMN': ['sum'],
             'INPUT': outputs['FieldCalculatorUs_poc_vgs_m3h']['OUTPUT'],
@@ -1168,7 +1168,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'SOM_DWA_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("DWA_BAG_m3h" + "US_DWA_BAG_m3h" , 2)',
+            'FORMULA': 'round("DWA_BAG_m3h" + "DWA_BAG_onderbemalingen_m3h" , 2)',
             'INPUT': outputs['DropFieldsUs_poc_vgs_m3hSum']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -1184,7 +1184,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'SOM_DRINKWATER_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round( "TOT_DRINKWATER_m3h" + "US_TOT_DRINKWATER_m3h" , 2)',
+            'FORMULA': 'round( "TOT_DRINKWATER_m3h" + "TOT_DRINKWATER_onderbemalingen_m3h" , 2)',
             'INPUT': outputs['FieldCalculatorSom_dwa_bag_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -1200,7 +1200,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'SOM_VE_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round( "VE_m3h" + "US_VE_m3h",2)',
+            'FORMULA': 'round( "VE_m3h" + "VE_onderbemalingen_m3h",2)',
             'INPUT': outputs['FieldCalculatorSom_drinkwater_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -1216,7 +1216,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'SOM_POC_GEM_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round( "POC_GEM_m3h" + "US_POC_GEM_m3h" , 2)',
+            'FORMULA': 'round( "POC_GEM_m3h" + "POC_GEM_onderbemalingen_m3h" , 2)',
             'INPUT': outputs['FieldCalculatorSom_ve_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
@@ -1232,7 +1232,7 @@ class Stap3BerekenAfvalwaterprognoseAlt(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'SOM_POC_VGS_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("POC_VGS_m3h" + "US_POC_VGS_m3h", 2)',
+            'FORMULA': 'round("POC_VGS_m3h" + "POC_VGS_onderbemalingen_m3h", 2)',
             'INPUT': outputs['FieldCalculatorSom_poc_gem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
