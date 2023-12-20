@@ -18,7 +18,8 @@ the water Authority HHNK and designed by Mark Lamers.
 https://github.com/bart147/GeoDynGemGWSW/blob/master/doc/HandleidingGeoDynGemGWSW.pdf
 
 # Installation
-- Install the plugin with Plugin Manager in QGIS or download here https://plugins.qgis.org/plugins/GeoDynGemGWSW/
+- Install the plugin with QGIS Plugin Manager (https://plugins.qgis.org/plugins/GeoDynGemGWSW/)
+- Or download this repository and install from zip-file with QGIS Plugin Manager
 - Requires QGIS 3.28 or higher
 
 # Test data
