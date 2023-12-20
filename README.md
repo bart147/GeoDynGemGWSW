@@ -19,10 +19,10 @@ https://github.com/bart147/GeoDynGemGWSW/blob/master/doc/HandleidingGeoDynGemGWS
 
 # Installation
 - Install the plugin with Plugin Manager in QGIS or download here https://plugins.qgis.org/plugins/GeoDynGemGWSW/
-- Requires QGIS 3.16 or higher
+- Requires QGIS 3.28 or higher
 
 # Test data
 Some imaginary data for testing can be downloaded from the repo:
-https://github.com/bart147/GeoDynGemGWSW/blob/master/input_test_gpkg
+https://github.com/bart147/GeoDynGemGWSW/blob/main/input_test_gpkg/BergenNH_testdata.zip
 
 
