@@ -4,9 +4,9 @@
 
 [general]
 name=GeoDynGem GWSW
-qgisMinimumVersion=3.0
+qgisMinimumVersion=3.28
 description=sewerage prognosis tool for municipalities with support for GWSW-standard
-version=0.1
+version=1.0
 author=bkgis
 email=b.kropf@bkgis.nl
 
@@ -20,7 +20,11 @@ repository=https://github.com/bart147/GeoDynGemGWSW
 
 hasProcessingProvider=yes
 # Uncomment the following line and add your changelog:
-changelog=v0.1 	(2022-12-21) first release
+changelog=The changelog lists the plugin versions
+    and their changes as in the example below:
+    1.0 - (2023-12-20) first stable release
+    0.2 - (2022-12-22) second release
+    0.1 - (2022-12-21) first release
 
 # Tags are comma separated with spaces allowed
 tags=python
