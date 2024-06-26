@@ -41,7 +41,7 @@
             <Option value="MM" name="dash_pattern_offset_unit" type="QString"/>
             <Option value="0" name="draw_inside_polygon" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
-            <Option value="183,72,75,255" name="line_color" type="QString"/>
+            <Option value="213,180,60,255" name="line_color" type="QString"/>
             <Option value="solid" name="line_style" type="QString"/>
             <Option value="0.6" name="line_width" type="QString"/>
             <Option value="MM" name="line_width_unit" type="QString"/>
@@ -81,12 +81,12 @@
         <layer enabled="1" pass="0" locked="0" class="SimpleFill">
           <Option type="Map">
             <Option value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale" type="QString"/>
-            <Option value="183,72,75,255" name="color" type="QString"/>
+            <Option value="213,180,60,255" name="color" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
             <Option value="0,0" name="offset" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
             <Option value="MM" name="offset_unit" type="QString"/>
-            <Option value="131,51,54,255" name="outline_color" type="QString"/>
+            <Option value="152,129,43,255" name="outline_color" type="QString"/>
             <Option value="solid" name="outline_style" type="QString"/>
             <Option value="0.2" name="outline_width" type="QString"/>
             <Option value="MM" name="outline_width_unit" type="QString"/>
@@ -115,14 +115,14 @@
           <Option type="Map">
             <Option value="0" name="angle" type="QString"/>
             <Option value="square" name="cap_style" type="QString"/>
-            <Option value="183,72,75,255" name="color" type="QString"/>
+            <Option value="213,180,60,255" name="color" type="QString"/>
             <Option value="1" name="horizontal_anchor_point" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
             <Option value="diamond" name="name" type="QString"/>
             <Option value="0,0" name="offset" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
             <Option value="MM" name="offset_unit" type="QString"/>
-            <Option value="131,51,54,255" name="outline_color" type="QString"/>
+            <Option value="152,129,43,255" name="outline_color" type="QString"/>
             <Option value="solid" name="outline_style" type="QString"/>
             <Option value="0.2" name="outline_width" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale" type="QString"/>
@@ -192,14 +192,14 @@
               <Option type="Map">
                 <Option value="0" name="angle" type="QString"/>
                 <Option value="square" name="cap_style" type="QString"/>
-                <Option value="255,2,184,255" name="color" type="QString"/>
+                <Option value="0,0,0,255" name="color" type="QString"/>
                 <Option value="1" name="horizontal_anchor_point" type="QString"/>
                 <Option value="bevel" name="joinstyle" type="QString"/>
                 <Option value="filled_arrowhead" name="name" type="QString"/>
                 <Option value="0,0" name="offset" type="QString"/>
                 <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
                 <Option value="MM" name="offset_unit" type="QString"/>
-                <Option value="255,2,184,255" name="outline_color" type="QString"/>
+                <Option value="35,35,35,255" name="outline_color" type="QString"/>
                 <Option value="solid" name="outline_style" type="QString"/>
                 <Option value="0" name="outline_width" type="QString"/>
                 <Option value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale" type="QString"/>
@@ -232,7 +232,7 @@
             <Option value="MM" name="dash_pattern_offset_unit" type="QString"/>
             <Option value="0" name="draw_inside_polygon" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
-            <Option value="255,2,184,255" name="line_color" type="QString"/>
+            <Option value="35,35,35,255" name="line_color" type="QString"/>
             <Option value="solid" name="line_style" type="QString"/>
             <Option value="0.26" name="line_width" type="QString"/>
             <Option value="MM" name="line_width_unit" type="QString"/>
@@ -276,8 +276,7 @@
   <layerOpacity>1</layerOpacity>
   <SingleCategoryDiagramRenderer attributeLegend="1" diagramType="Histogram">
     <DiagramCategory sizeType="MM" spacing="5" showAxis="1" sizeScale="3x:0,0,0,0,0,0" penColor="#000000" spacingUnit="MM" scaleBasedVisibility="0" maxScaleDenominator="1e+08" barWidth="5" scaleDependency="Area" lineSizeType="MM" width="15" enabled="0" minimumSize="0" backgroundColor="#ffffff" minScaleDenominator="0" penWidth="0" opacity="1" backgroundAlpha="255" labelPlacementMethod="XHeight" diagramOrientation="Up" direction="0" spacingUnitScale="3x:0,0,0,0,0,0" height="15" lineSizeScale="3x:0,0,0,0,0,0" penAlpha="255" rotationOffset="270">
-      <fontProperties strikethrough="0" style="" italic="0" underline="0" bold="0" description="MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0"/>
-      <attribute field="" colorOpacity="1" color="#000000" label=""/>
+      <fontProperties strikethrough="0" style="" italic="0" underline="0" bold="0" description="MS Shell Dlg 2,9.75,-1,5,50,0,0,0,0,0"/>
       <axisSymbol>
         <symbol frame_rate="10" name="" force_rhr="0" type="line" alpha="1" clip_to_extent="1" is_animated="0">
           <data_defined_properties>
@@ -446,7 +445,7 @@
     <fieldstyles/>
   </conditionalstyles>
   <storedexpressions/>
-  <previewExpression>"begin"</previewExpression>
+  <previewExpression>"Rioolgemaal"</previewExpression>
   <mapTip></mapTip>
   <layerGeometryType>1</layerGeometryType>
 </qgis>
