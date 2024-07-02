@@ -28,7 +28,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         self.addParameter(QgsProcessingParameterVectorLayer('drinkwater', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
         self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
         self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
-        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Resultaat_stap_1_rioleringsgebieden')))
+        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Resultaat_stap1_rioleringsgebieden')))
         self.addParameter(QgsProcessingParameterVectorLayer('ve', 'VE', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
         self.addParameter(QgsProcessingParameterFeatureSink('PlancapPerBem_id', 'Plancap per BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwater', 'POC BAG DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
@@ -79,9 +79,9 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         
         ################################ IMPORTANT! ####################################
         # after pasting also replace text below for the Field calculator DWA_BAG
-        # 'FORMULA': 'IF("BAG_count" IS NULL, 0, @inw_per_adres * (12/1000) * "BAG_count")',
+        # 'FORMULA':  'round(IF("Aantal_Adressen_Eigen_Rioleringsgebied" IS NULL, 0, @inw_per_adres * (12/1000) * "Aantal_Adressen_Eigen_Rioleringsgebied"),2)',
         # by
-        # 'FORMULA': f'IF("BAG_count" IS NULL, 0, {inw_per_adres} * (12/1000) * "BAG_count")',
+        # 'FORMULA': f'round(IF("Aantal_Adressen_Eigen_Rioleringsgebied" IS NULL, 0, {inw_per_adres} * (12/1000) * "Aantal_Adressen_Eigen_Rioleringsgebied"),2)',
         ################################ IMPORTANT! ####################################
 
         feedback = QgsProcessingMultiStepFeedback(55, model_feedback)
@@ -623,7 +623,7 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
             'FIELD_NAME': 'DWA_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(IF("Aantal_Adressen_Eigen_Rioleringsgebied" IS NULL, 0, @inw_per_adres * (12/1000) * "Aantal_Adressen_Eigen_Rioleringsgebied"),2)',
+            'FORMULA': f'round(IF("Aantal_Adressen_Eigen_Rioleringsgebied" IS NULL, 0, {inw_per_adres} * (12/1000) * "Aantal_Adressen_Eigen_Rioleringsgebied"),2)',
             'INPUT': outputs['FieldCalculatorAangesloten_oppervlak_per_woning_m2Null0']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
