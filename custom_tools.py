@@ -1317,8 +1317,7 @@ class CustomToolsBerekenOnderbemalingFldsPOCAlgorithm(CustomToolAllFunctionsAlgo
         self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))      
         self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='Bemalingsgebied_ID'))
         self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='Onderbemalingsgeb_IDs_1_Niveau_Diep'))
-        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_Praktijk_Onderbem_DWA_obv_BAG_m3h;Sommatie_POC_Praktijk_DWA_obv_BAG_m3h'))
-            
+                    
     def customAlgorithm(self, layer, parameters, feedback):
         """
         Here we define our own custom algorithm.
