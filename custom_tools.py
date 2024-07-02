@@ -1267,7 +1267,7 @@ class CustomToolsBerekenOnderbemalingFldsAlgorithm(CustomToolAllFunctionsAlgorit
         self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))      
         self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='Bemalingsgebied_ID'))
         self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='Onderbemalingsgebied_IDs'))
-        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='DWA_BAG_m3h;DWA_BAG_Onderbemalingen_m3h,POC_Theorie_Gemengd_m3h;POC_Theorie_Gemengd_Onderbem_m3h'))
+        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_Theorie_Gemengd_m3h;POC_Theorie_Gemengd_Onderbem_m3h,POC_Theorie_VGS_m3h;POC_Theorie_VGS_Onderbem_m3h,DWA_BAG_m3h;DWA_BAG_Onderbemalingen_m3h,Drinkwater_Particulier_m3h;Drinkwater_Part_Onderbem_m3h,Drinkwater_Zakelijk_m3h;Drinkwater_Zak_Onderbem_m3h,Drinkwater_Totaal_m3h;Drinkwater_Totaal_Onderbem_m3h,DWA_VEs_m3h;DWA_VEs_Onderbemalingen_m3h,Extra_DWA_Periode_2124_m3h;Extra_DWA_Periode_Onderbem_2124_m3h,Extra_DWA_Periode_2529_m3h;Extra_DWA_Periode_Onderbem_2529_m3h,Extra_DWA_Periode_3039_m3h;Extra_DWA_Periode_Onderbem_3039_m3h,Extra_DWA_Periode_4050_m3h;Extra_DWA_Periode_Onderbem_4050_m3h'))
             
     def customAlgorithm(self, layer, parameters, feedback):
         """
