@@ -44,6 +44,7 @@ from .custom_tools import (CustomToolsAddFieldsFromDictAlgorithm,
                            CustomToolsLis2GraphAlgorithm,
                            CustomToolsBerekenOnderbemalingAlgorithm,
                            CustomToolsBerekenOnderbemalingFldsAlgorithm,
+                           CustomToolsBerekenOnderbemalingFldsPOCAlgorithm,
                            CustomToolsVervangNoneDoor0Algorithm,
                            CustomToolsRetainFieldsAlgorithm,
                            CustomToolsSortByMultipleFieldsAlgorithm,
@@ -100,6 +101,7 @@ class GeoDynGemGWSWProvider(QgsProcessingProvider):
         self.addAlgorithm(CustomToolsCalcFieldsFromDictAlgorithm())
         self.addAlgorithm(CustomToolsBerekenOnderbemalingAlgorithm())
         self.addAlgorithm(CustomToolsBerekenOnderbemalingFldsAlgorithm())
+        self.addAlgorithm(CustomToolsBerekenOnderbemalingFldsPOCAlgorithm())
         self.addAlgorithm(CustomToolsVervangNoneDoor0Algorithm())
         self.addAlgorithm(CustomToolsRetainFieldsAlgorithm())
         self.addAlgorithm(CustomToolsDropEmptyFieldsAlgorithm())

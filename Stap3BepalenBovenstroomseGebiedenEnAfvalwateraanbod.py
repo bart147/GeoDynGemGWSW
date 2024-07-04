@@ -23,30 +23,81 @@ from .custom_tools import rename_layers, default_inp_fields, default_layer, QgsP
 class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessingAlgorithmPost):
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_afvoerpunten', 'Resultaat stap 1: Afvoerpunten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('Resultaat_stap_1_afvoerpunten')))
-        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat stap 2: Rioleringsgebieden met afvalwateraanbod uit eigen gebied', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied')))
-        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', 'Resultaat_stap_3_Afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050', 'Resultaat_stap_3_Rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', 'Resultaat_stap_3_Rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_afvoerboom', 'Resultaat_Stap1_Afvoerboom', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('resultaat_stap1_afvoerboom')))
+        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_afvoerpunten', 'Resultaat_Stap1_Afvoerpunten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('resultaat_stap1_afvoerpunten')))
+        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_afvoerrelatie', 'Resultaat_Stap1_Afvoerrelatie', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('resultaat_stap1_afvoerrelatie')))
+        self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat_stap_2_Rioleringsgebieden_Met_Afvalwateraanbod_Uit_Eigen_Gebied', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Resultaat_stap2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied')))
+        self.addParameter(QgsProcessingParameterFeatureSink('CalcFieldsUpstream', 'calc fields upstream', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Lis2graph', 'lis2graph', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_afvoerrelatie', 'Resultaat_Stap3_Rioleringsgebieden_Afvoerrelatie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_afvoerboom', 'Resultaat_Stap3_Rioleringsgebieden_Afvoerboom', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_afvoerpunten_kengetallen', 'Resultaat_Stap3_Afvoerpunten_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_kengetallen', 'Resultaat_Stap3_Rioleringsgebieden_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit', 'Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Bouwprojecten_ids', 'Bouwprojecten_IDs', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
+        self.addParameter(QgsProcessingParameterFeatureSink('CalcFieldsUpstreamInput', 'calc fields upstream input', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Retained_fields_for_testing_poc_calculation', 'retained_fields_for_testing_poc_calculation', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
-      
-        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_afvoerpunten', 'Resultaat stap 1: Afvoerpunten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ResultaatStap1Afvoerpunten')))
-        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat stap 2: Rioleringsgebieden met afvalwateraanbod uit eigen gebied', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('ResultaatStap2RioleringsgebiedenMetAfvalwateraanbodUitEigenGebied')))
-        # self.addParameter(QgsProcessingParameterFeatureSink('ResultaatStap3AfvoerpuntenRioleringsgebiedenKenmerkenSommatieAfvalwateraanbodBergingVultijdLedigingstijd', 'Resultaat stap 3: Afvoerpunten rioleringsgebieden kenmerken, sommatie afvalwateraanbod, berging, vultijd, ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Onderbemaling_test', 'onderbemaling_test', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('TussenresultaatHuidigeSituatieAfvalwateraanbod', 'Tussenresultaat: huidige situatie afvalwateraanbod', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('ResultaatStap3RioleringsgebiedenToekomstigeSituatieAfvalwateraanbod2050', 'Resultaat stap 3: Rioleringsgebieden toekomstige situatie afvalwateraanbod 2050', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('ResultaatStap3RioleringsgebiedenSommatieAfvalwateraanbodBergingVultijdLedigingstijd', 'Resultaat stap 3: Rioleringsgebieden sommatie afvalwateraanbod, berging, vultijd, ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_afvoerpunten', 'Resultaat stap 1: Afvoerpunten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('Resultaat_stap_1_afvoerpunten')))
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat stap 2: Rioleringsgebieden met afvalwateraanbod uit eigen gebied', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied')))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', 'Resultaat_stap_3_Afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050', 'Resultaat_stap_3_Rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', 'Resultaat_stap_3_Rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         # self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
-      
+         
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         self.result_folder = parameters['result_folder']
 
-        feedback = QgsProcessingMultiStepFeedback(60, model_feedback)
+        feedback = QgsProcessingMultiStepFeedback(84, model_feedback)
         results = {}
         outputs = {}
+
+        # Retain fields Bemalingsgebied_ID_Afvoerpunt
+        alg_params = {
+            'FIELDS': ['Bemalingsgebied_ID_Afvoerpunt'],
+            'INPUT': parameters['resultaat_stap1_afvoerpunten'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['RetainFieldsBemalingsgebied_id_afvoerpunt'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(1)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvoerboom Stap3_datum
+        alg_params = {
+            'FIELD_LENGTH': 50,
+            'FIELD_NAME': 'Stap3_datum',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': "format_date(now(),\r\n'yyyy-MM-dd hh:mm:ss')",
+            'INPUT': parameters['resultaat_stap1_afvoerboom'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvoerboomStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(2)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvoerrelatie Stap3_datum
+        alg_params = {
+            'FIELD_LENGTH': 50,
+            'FIELD_NAME': 'Stap3_datum',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': "format_date(now(),\r\n'yyyy-MM-dd hh:mm:ss')",
+            'INPUT': parameters['resultaat_stap1_afvoerrelatie'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvoerrelatieStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(3)
+        if feedback.isCanceled():
+            return {}
 
         # Create spatial index
         alg_params = {
@@ -54,26 +105,27 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['CreateSpatialIndex'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(1)
+        feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
-        # Retain fields US_BEM_ID
+        # retainfields Resultaat_Stap1_Afvoerboom
         alg_params = {
-            'FIELDS': ['US_BEM_ID'],
-            'INPUT': parameters['resultaat_stap_1_afvoerpunten'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'inputlayer': outputs['FieldCalculatorAfvoerboomStap3_datum']['OUTPUT'],
+            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
+            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerboom']
         }
-        outputs['RetainFieldsUs_bem_id'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RetainfieldsResultaat_stap1_afvoerboom'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_afvoerboom'] = outputs['RetainfieldsResultaat_stap1_afvoerboom']['Output_layer']
 
-        feedback.setCurrentStep(2)
+        feedback.setCurrentStep(5)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator stap3_datum
+        # Field calculator Stap3_datum
         alg_params = {
             'FIELD_LENGTH': 50,
-            'FIELD_NAME': 'stap3_datum',
+            'FIELD_NAME': 'Stap3_datum',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 2,  # Text (string)
             'FORMULA': "format_date(now(),\r\n'yyyy-MM-dd hh:mm:ss')",
@@ -82,917 +134,1248 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(3)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator N1_onderbemalingen
-        # Bovenstroomse BEM_ID's die direct op rioleringsgebied lozen
-        alg_params = {
-            'FIELD_LENGTH': 1000,
-            'FIELD_NAME': 'N1_onderbemalingen',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': '"Onderbemalingen niveau 1"',
-            'INPUT': outputs['FieldCalculatorStap3_datum']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorN1_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(4)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Onderbemalingen
-        # Bovenstroomse BEM_ID's die direct of indirect op rioleringsgebied lozen
-        alg_params = {
-            'FIELD_LENGTH': 1000,
-            'FIELD_NAME': 'Onderbemalingen',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': '"Onderbemalingen alles niveaus"',
-            'INPUT': outputs['FieldCalculatorN1_onderbemalingen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorOnderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(5)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator N1_afvoerpunten_onderbemalingen
-        # Bovenstroomse afvoerpunten/rioolgemalen die direct op rioleringsgebied lozen
-        alg_params = {
-            'FIELD_LENGTH': 1000,
-            'FIELD_NAME': 'N1_afvoerpunten_onderbemalingen',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': '"Afvoerpunten onderbemalingen niveau 1"',
-            'INPUT': outputs['FieldCalculatorOnderbemalingen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorN1_afvoerpunten_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(6)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvoerpunten_onderbemalingen
-        # Bovenstroomse afvoerpunten/rioolgemalen die direct of indirect op rioleringsgebied lozen
+        # retainfields Resultaat_Stap1_Afvoerrelatie
         alg_params = {
-            'FIELD_LENGTH': 1000,
-            'FIELD_NAME': 'Afvoerpunten_onderbemalingen',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': '"Afvoerpunten ondrbemalingen"',
-            'INPUT': outputs['FieldCalculatorN1_afvoerpunten_onderbemalingen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'inputlayer': outputs['FieldCalculatorAfvoerrelatieStap3_datum']['OUTPUT'],
+            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
+            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerrelatie']
         }
-        outputs['FieldCalculatorAfvoerpunten_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RetainfieldsResultaat_stap1_afvoerrelatie'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_afvoerrelatie'] = outputs['RetainfieldsResultaat_stap1_afvoerrelatie']['Output_layer']
 
         feedback.setCurrentStep(7)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Aantal_onderbemalingen
+        # Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Aantal_onderbemalingen',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,  # Integer (32 bit)
-            'FORMULA': '0',
-            'INPUT': outputs['FieldCalculatorAfvoerpunten_onderbemalingen']['OUTPUT'],
+            'FIELD_NAME': 'Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(if("POC_Theorie_Totaal_m3h" IS NOT NULL AND "POC_Theorie_Totaal_m3h" > 0, if("Afvoercapaciteit_m3h" IS NOT NULL,"Afvoercapaciteit_m3h",NULL) ,"DWA_BAG_m3h"),2)',
+            'INPUT': outputs['FieldCalculatorStap3_datum']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorAantal_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['Eigen_gebied_max_afvalwateraanbod_praktijk_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(8)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator N1_aantal_onderbemalingen
+        # Field calculator Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'N1_aantal_onderbemalingen',
+            'FIELD_NAME': 'Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(if("POC_Theorie_Totaal_m3h" IS NOT NULL AND "POC_Theorie_Totaal_m3h" > 0, if("Afvoercapaciteit_m3h" IS NOT NULL,"Afvoercapaciteit_m3h",NULL) ,"Drinkwater_Totaal_m3h"),2)',
+            'INPUT': outputs['Eigen_gebied_max_afvalwateraanbod_praktijk_obv_bag_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorEigen_gebied_max_afvalwateraanbod_praktijk_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(9)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(if("POC_Theorie_Totaal_m3h" IS NOT NULL AND "POC_Theorie_Totaal_m3h" > 0, if("Afvoercapaciteit_m3h" IS NOT NULL,"Afvoercapaciteit_m3h",NULL) ,"DWA_VEs_m3h"),2)',
+            'INPUT': outputs['FieldCalculatorEigen_gebied_max_afvalwateraanbod_praktijk_obv_drinkwater_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorEigen_gebied_max_afvalwateraanbod_praktijk_obv_ve_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(10)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Onderbemalingsgeb_IDs_1_Niveau_Diep
+        # Bovenstroomse BEM_ID's die direct op rioleringsgebied lozen
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Onderbemalingsgeb_IDs_1_Niveau_Diep',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': '0',
+            'INPUT': outputs['FieldCalculatorEigen_gebied_max_afvalwateraanbod_praktijk_obv_ve_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorOnderbemalingsgeb_ids_1_niveau_diep'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(11)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Onderbemalingsgebied_IDs
+        # Bovenstroomse BEM_ID's die direct of indirect op rioleringsgebied lozen
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Onderbemalingsgebied_IDs',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': '"Onderbemalingsgebied_IDs"',
+            'INPUT': outputs['FieldCalculatorOnderbemalingsgeb_ids_1_niveau_diep']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorOnderbemalingsgebied_ids'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(12)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvoerpunten_1_Niveau_Diep
+        # Bovenstroomse afvoerpunten/rioolgemalen die direct op rioleringsgebied lozen
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvoerpunten_1_Niveau_Diep',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': '"Afvoerpunten_1_Niveau_Diep"',
+            'INPUT': outputs['FieldCalculatorOnderbemalingsgebied_ids']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvoerpunten_1_niveau_diep'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(13)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvoerpunten_Van_Onderbemalingen
+        # Bovenstroomse afvoerpunten/rioolgemalen die direct of indirect op rioleringsgebied lozen
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvoerpunten_Van_Onderbemalingen',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': '"Afvoerpunten_Van_Onderbemalingen"',
+            'INPUT': outputs['FieldCalculatorAfvoerpunten_1_niveau_diep']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvoerpunten_van_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(14)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Aantal_Onderbemalingen_1_Niveau_Diep
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Aantal_Onderbemalingen_1_Niveau_Diep',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer (32 bit)
+            'FORMULA': '0',
+            'INPUT': outputs['FieldCalculatorAfvoerpunten_van_onderbemalingen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAantal_onderbemalingen_1_niveau_diep'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(15)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Aantal_Onderbemalingen 
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Aantal_Onderbemalingen',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer (32 bit)
+            'FORMULA': '0',
+            'INPUT': outputs['FieldCalculatorAantal_onderbemalingen_1_niveau_diep']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAantal_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(16)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Aantal_Keer_Oppompen_Tot_Afleverpunt
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Aantal_Keer_Oppompen_Tot_Afleverpunt',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 1,  # Integer (32 bit)
             'FORMULA': '0',
             'INPUT': outputs['FieldCalculatorAantal_onderbemalingen']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorN1_aantal_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorAantal_keer_oppompen_tot_afleverpunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(9)
+        feedback.setCurrentStep(17)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator X_OPPOMP
+        # Field calculator Rioleringsgebied_ID_Overnamepunt
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'X_OPPOMP',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 1,  # Integer (32 bit)
-            'FORMULA': '0',
-            'INPUT': outputs['FieldCalculatorN1_aantal_onderbemalingen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorX_oppomp'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(10)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator BEM_ID_afleveringspunt
-        alg_params = {
-            'FIELD_LENGTH': 50,
-            'FIELD_NAME': 'BEM_ID_afleveringspunt',
+            'FIELD_NAME': 'Rioleringsgebied_ID_Overnamepunt',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 2,  # Text (string)
             'FORMULA': '""',
-            'INPUT': outputs['FieldCalculatorX_oppomp']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorAantal_keer_oppompen_tot_afleverpunt']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorBem_id_afleveringspunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorRioleringsgebied_id_overnamepunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(11)
+        feedback.setCurrentStep(18)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Naam_afleveringspunt
+        # Field calculator Naam_Overnamepunt
         alg_params = {
-            'FIELD_LENGTH': 50,
-            'FIELD_NAME': 'Naam_afleveringspunt',
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Naam_Overnamepunt',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 2,  # Text (string)
             'FORMULA': '""',
-            'INPUT': outputs['FieldCalculatorBem_id_afleveringspunt']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorRioleringsgebied_id_overnamepunt']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorNaam_afleveringspunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorNaam_overnamepunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(12)
+        feedback.setCurrentStep(19)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator PC_IDs_onderbemalingen
+        # Field calculator Bouwprojecten_IDs_Onderbemalingen
         # Bouwprojecten in bovenstroomse rioleringsgebieden die direct of indirect op rioleringsgebied lozen
         alg_params = {
-            'FIELD_LENGTH': 500,
-            'FIELD_NAME': 'PC_IDs_onderbemalingen',
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Bouwprojecten_IDs_Onderbemalingen',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 2,  # Text (string)
             'FORMULA': '""',
-            'INPUT': outputs['FieldCalculatorNaam_afleveringspunt']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'INPUT': outputs['FieldCalculatorNaam_overnamepunt']['OUTPUT'],
+            'OUTPUT': parameters['Bouwprojecten_ids']
         }
-        outputs['FieldCalculatorPc_ids_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorBouwprojecten_ids_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Bouwprojecten_ids'] = outputs['FieldCalculatorBouwprojecten_ids_onderbemalingen']['OUTPUT']
 
-        feedback.setCurrentStep(13)
+        feedback.setCurrentStep(20)
         if feedback.isCanceled():
             return {}
 
         # lis2graph
+        # Onderbemalingsvelden worden hier gevuld.
         alg_params = {
-            'inputlayer': outputs['FieldCalculatorPc_ids_onderbemalingen']['OUTPUT'],
-            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+            'inputlayer': outputs['FieldCalculatorBouwprojecten_ids_onderbemalingen']['OUTPUT'],
+            'Output_layer': parameters['Lis2graph']
         }
         outputs['Lis2graph'] = processing.run('GeoDynTools:lis2graph', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Lis2graph'] = outputs['Lis2graph']['Output_layer']
 
-        feedback.setCurrentStep(14)
+        feedback.setCurrentStep(21)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator POC_GEM_onderbemalingen_m3h
+        # Field calculator DWA_BAG_Onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'POC_GEM_onderbemalingen_m3h',
+            'FIELD_NAME': 'DWA_BAG_Onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round(0,2)',
             'INPUT': outputs['Lis2graph']['Output_layer'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorPoc_gem_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(15)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator POC_VGS_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'POC_VGS_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorPoc_gem_onderbemalingen_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorPoc_vgs_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(16)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator POC_GEM+VGS_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'POC_GEM+VGS_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorPoc_vgs_onderbemalingen_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorPoc_gemvgs_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(17)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator DWA_BAG_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'DWA_BAG_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorPoc_gemvgs_onderbemalingen_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
         outputs['FieldCalculatorDwa_bag_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(18)
+        feedback.setCurrentStep(22)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator BAG_count_onderbemalingen
+        # Field calculator Aantal_Adressen_In_Onderbemalingen
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'BAG_count_onderbemalingen',
+            'FIELD_NAME': 'Aantal_Adressen_In_Onderbemalingen',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round("DWA_BAG_onderbemalingen_m3h"/(12/1000),0)',
             'INPUT': outputs['FieldCalculatorDwa_bag_onderbemalingen_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorBag_count_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(19)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator PAR_DRINKWATER_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'PAR_DRINKWATER_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorBag_count_onderbemalingen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorPar_drinkwater_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(20)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator ZAK_DRINKWATER_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'ZAK_DRINKWATER_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorPar_drinkwater_onderbemalingen_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorZak_drinkwater_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(21)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator TOT_DRINKWATER_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'TOT_DRINKWATER_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorZak_drinkwater_onderbemalingen_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorTot_drinkwater_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(22)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator VE_onderbemalingen_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'VE_onderbemalingen_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorTot_drinkwater_onderbemalingen_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorVe_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorAantal_adressen_in_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(23)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator VE_onderbemalingen_count
+        # Field calculator Drinkwater_Part_Onderbem_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'VE_onderbemalingen_count',
-            'FIELD_PRECISION': 0,
+            'FIELD_NAME': 'Drinkwater_Part_Onderbem_m3h',
+            'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("VE_onderbemalingen_m3h"/(12/1000),0)',
-            'INPUT': outputs['FieldCalculatorVe_onderbemalingen_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorAantal_adressen_in_onderbemalingen']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorVe_onderbemalingen_count'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorDrinkwater_part_onderbem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(24)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator ExAFW_2124_onderbemalingen
+        # Field calculator Drinkwater_Zak_Onderbem_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'ExAFW_2124_onderbemalingen',
+            'FIELD_NAME': 'Drinkwater_Zak_Onderbem_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorVe_onderbemalingen_count']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorDrinkwater_part_onderbem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorExafw_2124_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorDrinkwater_zak_onderbem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(25)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator ExAFW_2529_onderbemalingen
+        # Field calculator Drinkwater_Totaal_Onderbem_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'ExAFW_2529_onderbemalingen',
+            'FIELD_NAME': 'Drinkwater_Totaal_Onderbem_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorExafw_2124_onderbemalingen']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorDrinkwater_zak_onderbem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorExafw_2529_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorDrinkwater_totaal_onderbem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(26)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator ExAFW_3039_onderbemalingen
+        # Field calculator DWA_VEs_Onderbemalingen_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'ExAFW_3039_onderbemalingen',
+            'FIELD_NAME': 'DWA_VEs_Onderbemalingen_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorExafw_2529_onderbemalingen']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorDrinkwater_totaal_onderbem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorExafw_3039_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorDwa_ves_onderbemalingen_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(27)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator ExAFW_4050_onderbemalingen
+        # Field calculator Aantal_VEs_Onderbemalingen
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'ExAFW_4050_onderbemalingen',
+            'FIELD_NAME': 'Aantal_VEs_Onderbemalingen',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorExafw_3039_onderbemalingen']['OUTPUT'],
+            'FORMULA': 'round("DWA_VEs_Onderbemalingen_m3h"/(12/1000),0)',
+            'INPUT': outputs['FieldCalculatorDwa_ves_onderbemalingen_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorExafw_4050_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorAantal_ves_onderbemalingen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(28)
         if feedback.isCanceled():
             return {}
 
-        # calc fields upstream
+        # Field calculator Extra_DWA_Periode_Onderbem_2124_m3h
         alg_params = {
-            'id_veld': 'BEM_ID',
-            'inputlayer': outputs['FieldCalculatorExafw_4050_onderbemalingen']['OUTPUT'],
-            'ontvangt_van': 'Onderbemalingen',
-            'veldenlijst': 'POC_GEM_m3h;POC_GEM_onderbemalingen_m3h,POC_VGS_m3h;POC_VGS_onderbemalingen_m3h,DWA_BAG_m3h;DWA_BAG_onderbemalingen_m3h,PAR_DRINKWATER_m3h;PAR_DRINKWATER_onderbemalingen_m3h,ZAK_DRINKWATER_m3h;ZAK_DRINKWATER_onderbemalingen_m3h,TOT_DRINKWATER_m3h;TOT_DRINKWATER_onderbemalingen_m3h,VE_m3h;VE_onderbemalingen_m3h,ExAFW_2124;ExAFW_2124_onderbemalingen,ExAFW_3039;ExAFW_3039_onderbemalingen,ExAFW_4050;ExAFW_4050_onderbemalingen',
-            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Extra_DWA_Periode_Onderbem_2124_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorAantal_ves_onderbemalingen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['CalcFieldsUpstream'] = processing.run('GeoDynTools:calc fields upstream', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorExtra_dwa_periode_onderbem_2124_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(29)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_POC_GEM_m3h
+        # Field calculator Extra_DWA_Periode_Onderbem_2529_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_POC_GEM_m3h',
+            'FIELD_NAME': 'Extra_DWA_Periode_Onderbem_2529_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("POC_GEM_m3h"+"POC_GEM_onderbemalingen_m3h",2)',
-            'INPUT': outputs['CalcFieldsUpstream']['Output_layer'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorExtra_dwa_periode_onderbem_2124_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_poc_gem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorExtra_dwa_periode_onderbem_2529_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(30)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_POC_VGS_m3h
+        # Field calculator Extra_DWA_Periode_Onderbem_3039_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_POC_VGS_m3h',
+            'FIELD_NAME': 'Extra_DWA_Periode_Onderbem_3039_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("POC_VGS_m3h"+"POC_VGS_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorSom_poc_gem_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorExtra_dwa_periode_onderbem_2529_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_poc_vgs_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorExtra_dwa_periode_onderbem_3039_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(31)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_POC_GEM+VGS_m3h
+        # Field calculator Extra_DWA_Periode_Onderbem_4050_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_POC_GEM+VGS_m3h',
-            'FIELD_PRECISION': 2,
+            'FIELD_NAME': 'Extra_DWA_Periode_Onderbem_4050_m3h',
+            'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("POC_GEM_m3h"+"POC_VGS_m3h"+"POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorSom_poc_vgs_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorExtra_dwa_periode_onderbem_3039_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_poc_gemvgs_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorExtra_dwa_periode_onderbem_4050_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(32)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_DWA_BAG_m3h
+        # Field calculator POC_Theorie_Gemengd_Onderbem_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_DWA_BAG_m3h',
+            'FIELD_NAME': 'POC_Theorie_Gemengd_Onderbem_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("DWA_BAG_m3h"+"DWA_BAG_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorSom_poc_gemvgs_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorExtra_dwa_periode_onderbem_4050_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_dwa_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_theorie_gemengd_onderbem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(33)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_BAG_count
+        # Field calculator POC_Theorie_VGS_Onderbem_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_BAG_count',
-            'FIELD_PRECISION': 0,
+            'FIELD_NAME': 'POC_Theorie_VGS_Onderbem_m3h',
+            'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(("DWA_BAG_m3h"+"DWA_BAG_onderbemalingen_m3h")/(12/1000),0)',
-            'INPUT': outputs['FieldCalculatorSom_dwa_bag_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorPoc_theorie_gemengd_onderbem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_bag_count'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_theorie_vgs_onderbem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(34)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_PAR_DRINKWATER_m3h
+        # Field calculator POC_Theorie_Totaal_Onderbem_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_PAR_DRINKWATER_m3h',
+            'FIELD_NAME': 'POC_Theorie_Totaal_Onderbem_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("PAR_DRINKWATER_m3h"+"PAR_DRINKWATER_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorSom_bag_count']['OUTPUT'],
+            'FORMULA': 'round("POC_Theorie_Gemengd_Onderbem_m3h"+"POC_Theorie_VGS_Onderbem_m3h",2)',
+            'INPUT': outputs['FieldCalculatorPoc_theorie_vgs_onderbem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_par_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_theorie_totaal_onderbem_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(35)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_ZAK_DRINKWATER_m3h
+        # Field calculator POC_Praktijk_Onderbem_DWA_obv_BAG_m3h
+        # Hier met Bart over sparren.
+        # 
+        # Als "POC_Theorie_Totaal_m3h" > 0, dan de afvoercapaciteit van het rioolgemaal meenenen in de optelling
+        # Als "POC_Theorie_Totaal_m3h" = 0 of "POC_Theorie_Totaal_m3h" IS NULL, dan de droogweerafvoer van het rioolgemaal meenenen in de optelling
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_ZAK_DRINKWATER_m3h',
-            'FIELD_PRECISION': 2,
+            'FIELD_NAME': 'POC_Praktijk_Onderbem_DWA_obv_BAG_m3h',
+            'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("ZAK_DRINKWATER_m3h"+"ZAK_DRINKWATER_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorSom_par_drinkwater_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorPoc_theorie_totaal_onderbem_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_zak_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(36)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_TOT_DRINKWATER_m3h
+        # Field calculator POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_TOT_DRINKWATER_m3h',
-            'FIELD_PRECISION': 2,
+            'FIELD_NAME': 'POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h',
+            'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("TOT_DRINKWATER_m3h"+"TOT_DRINKWATER_onderbemalingen_m3h" ,2)',
-            'INPUT': outputs['FieldCalculatorSom_zak_drinkwater_m3h']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_bag_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_tot_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(37)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_VE_m3h
+        # Field calculator POC_Praktijk_Onderbem_DWA_obv_VEs_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_VE_m3h',
-            'FIELD_PRECISION': 2,
+            'FIELD_NAME': 'POC_Praktijk_Onderbem_DWA_obv_VEs_m3h',
+            'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("VE_m3h"+"VE_onderbemalingen_m3h",2)',
-            'INPUT': outputs['FieldCalculatorSom_tot_drinkwater_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_drinkwater_m3h']['OUTPUT'],
+            'OUTPUT': parameters['CalcFieldsUpstreamInput']
         }
-        outputs['FieldCalculatorSom_ve_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['CalcFieldsUpstreamInput'] = outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_ves_m3h']['OUTPUT']
 
         feedback.setCurrentStep(38)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_VE_count
+        # calc fields upstream
         alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_VE_count',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("VE_count"+"VE_onderbemalingen_count",0)',
-            'INPUT': outputs['FieldCalculatorSom_ve_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'id_veld': 'Bemalingsgebied_ID',
+            'inputlayer': outputs['FieldCalculatorPoc_praktijk_onderbem_dwa_obv_ves_m3h']['OUTPUT'],
+            'ontvangt_van': 'Onderbemalingsgebied_IDs',
+            'veldenlijst': 'POC_Theorie_Gemengd_m3h;POC_Theorie_Gemengd_Onderbem_m3h,POC_Theorie_VGS_m3h;POC_Theorie_VGS_Onderbem_m3h,DWA_BAG_m3h;DWA_BAG_Onderbemalingen_m3h,Drinkwater_Particulier_m3h;Drinkwater_Part_Onderbem_m3h,Drinkwater_Zakelijk_m3h;Drinkwater_Zak_Onderbem_m3h,Drinkwater_Totaal_m3h;Drinkwater_Totaal_Onderbem_m3h,DWA_VEs_m3h;DWA_VEs_Onderbemalingen_m3h,Extra_DWA_Periode_2124_m3h;Extra_DWA_Periode_Onderbem_2124_m3h,Extra_DWA_Periode_2529_m3h;Extra_DWA_Periode_Onderbem_2529_m3h,Extra_DWA_Periode_3039_m3h;Extra_DWA_Periode_Onderbem_3039_m3h,Extra_DWA_Periode_4050_m3h;Extra_DWA_Periode_Onderbem_4050_m3h',
+            'Output_layer': parameters['CalcFieldsUpstream']
         }
-        outputs['FieldCalculatorSom_ve_count'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['CalcFieldsUpstream'] = processing.run('GeoDynTools:calc fields upstream', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['CalcFieldsUpstream'] = outputs['CalcFieldsUpstream']['Output_layer']
 
         feedback.setCurrentStep(39)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_ExAFW_2124
+        # Field calculator Sommatie_DWA_BAG_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_ExAFW_2124',
+            'FIELD_NAME': 'Sommatie_DWA_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("ExAFW_2124"+"ExAFW_2124_onderbemalingen",2)',
-            'INPUT': outputs['FieldCalculatorSom_ve_count']['OUTPUT'],
+            'FORMULA': 'round("DWA_BAG_m3h"+"DWA_BAG_Onderbemalingen_m3h",2)',
+            'INPUT': outputs['CalcFieldsUpstream']['Output_layer'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_exafw_2124'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_dwa_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(40)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_ExAFW_2529
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_ExAFW_2529',
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("ExAFW_2529"+"ExAFW_2529_onderbemalingen",2)',
-            'INPUT': outputs['FieldCalculatorSom_exafw_2124']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorSommatie_dwa_bag_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_exafw_2529'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgebied_obv_droogweerafvoer_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(41)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_ExAFW_3039
+        # Field calculator Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_ExAFW_3039',
+            'FIELD_NAME': 'Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("ExAFW_3039"+"ExAFW_3039_onderbemalingen",2)',
-            'INPUT': outputs['FieldCalculatorSom_exafw_2529']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgebied_obv_droogweerafvoer_obv_bag_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_exafw_3039'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_afvalwateraanbod_obv_bag_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(42)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator SOM_ExAFW_4050
+        # Field calculator Sommatie_POC_Praktijk_DWA_obv_BAG_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'SOM_ExAFW_4050',
+            'FIELD_NAME': 'Sommatie_POC_Praktijk_DWA_obv_BAG_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("ExAFW_4050"+"ExAFW_4050_onderbemalingen",2)',
-            'INPUT': outputs['FieldCalculatorSom_exafw_3039']['OUTPUT'],
+            'FORMULA': 'round(0,2)',
+            'INPUT': outputs['FieldCalculatorSommatie_afvalwateraanbod_obv_bag_en_poc_praktijk_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorSom_exafw_4050'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_poc_praktijk_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(43)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvalwateraanbod_obv_BAG_m3h
+        # calc fields upstream POC with iteration
         alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_obv_BAG_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_DWA_BAG_m3h">0,round("SOM_POC_GEM_m3h"+"SOM_POC_VGS_m3h"+"SOM_DWA_BAG_m3h",2),0)',
-            'INPUT': outputs['FieldCalculatorSom_exafw_4050']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'id_veld': 'Bemalingsgebied_ID',
+            'inputlayer': outputs['FieldCalculatorSommatie_poc_praktijk_dwa_obv_bag_m3h']['OUTPUT'],
+            'ontvangt_van': 'Onderbemalingsgeb_IDs_1_Niveau_Diep',
+            'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['CalcFieldsUpstreamPocWithIteration'] = processing.run('GeoDynTools:calc fields upstream POC with iteration', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(44)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvalwateraanbod_obv_drinkwater_m3h
+        # Field calculator Sommatie_POC_Theorie_Gemengd_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_obv_drinkwater_m3h',
+            'FIELD_NAME': 'Sommatie_POC_Theorie_Gemengd_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_TOT_DRINKWATER_m3h">0,round("SOM_POC_GEM_m3h"+"SOM_POC_VGS_m3h"+"SOM_TOT_DRINKWATER_m3h",2),0)',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_bag_m3h']['OUTPUT'],
+            'FORMULA': 'round("POC_Theorie_Gemengd_m3h"+"POC_Theorie_Gemengd_Onderbem_m3h",2)',
+            'INPUT': outputs['CalcFieldsUpstreamPocWithIteration']['Output_layer'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_poc_theorie_gemengd_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(45)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvalwateraanbod_obv_VE_m3h
+        # Field calculator Sommatie_POC_Theorie_VGS_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_obv_VE_m3h',
+            'FIELD_NAME': 'Sommatie_POC_Theorie_VGS_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_VE_m3h">0,round("SOM_POC_GEM_m3h"+"SOM_POC_VGS_m3h"+"SOM_VE_m3h",2),0)',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_m3h']['OUTPUT'],
+            'FORMULA': 'round("POC_Theorie_VGS_m3h"+"POC_Theorie_VGS_Onderbem_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_poc_theorie_gemengd_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_ve_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_poc_theorie_vgs_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(46)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator mm_Berging
+        # Retain fields
         alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'mm_Berging',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(("M3_StelselBerging"/((("GEM_ha"+"VGS_ha")*10000)+(("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h")/(0.7/1000))))*1000,2)',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ve_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'FIELDS': ['BM_NM','Bemalingsgebied_ID','Afvoercapaciteit_m3h','Bemalingsgebied_ID_Lozingspunt','POC_Theorie_Totaal_m3h','DWA_BAG_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h','Onderbemalingsgeb_IDs_1_Niveau_Diep','Onderbemalingsgebied_IDs','Aantal_Keer_Oppompen_Tot_Afleverpunt','DWA_BAG_Onderbemalingen_m3h','POC_Praktijk_Onderbem_DWA_obv_BAG_m3h','Sommatie_POC_Praktijk_DWA_obv_BAG_m3h','Sommatie_DWA_BAG_m3h'],
+            'INPUT': outputs['CalcFieldsUpstreamPocWithIteration']['Output_layer'],
+            'OUTPUT': parameters['Retained_fields_for_testing_poc_calculation']
         }
-        outputs['FieldCalculatorMm_berging'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RetainFields'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Retained_fields_for_testing_poc_calculation'] = outputs['RetainFields']['OUTPUT']
 
         feedback.setCurrentStep(47)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MAX_VULTIJD_DWA_h
+        # Field calculator Sommatie_POC_Theorie_Totaal_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MAX_VULTIJD_DWA_h',
+            'FIELD_NAME': 'Sommatie_POC_Theorie_Totaal_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_TOT_DRINKWATER_m3h" = 0 AND "SOM_VE_m3h" = 0,\r\nround("M3_StelselBerging"/"SOM_DWA_BAG_m3h",2),\r\nif("SOM_TOT_DRINKWATER_m3h" > 0 AND "SOM_VE_m3h" = 0,\r\nround("M3_StelselBerging"/min("SOM_DWA_BAG_m3h","SOM_TOT_DRINKWATER_m3h"),2),\r\nif("SOM_TOT_DRINKWATER_m3h" = 0 AND "SOM_VE_m3h" > 0,\r\nround("M3_StelselBerging"/min("SOM_DWA_BAG_m3h","SOM_VE_m3h"),2),\r\nif("SOM_TOT_DRINKWATER_m3h" > 0 AND "SOM_VE_m3h" > 0,\r\nround("M3_StelselBerging"/min("SOM_DWA_BAG_m3h","SOM_TOT_DRINKWATER_m3h","SOM_VE_m3h"),2),0))))',
-            'INPUT': outputs['FieldCalculatorMm_berging']['OUTPUT'],
+            'FORMULA': 'round("Sommatie_POC_Theorie_Gemengd_m3h"+"Sommatie_POC_Theorie_VGS_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_poc_theorie_vgs_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMax_vultijd_dwa_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_poc_theorie_totaal_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(48)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MIN_VULTIJD_DWA_h
+        # Field calculator Sommatie_Adressen
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MIN_VULTIJD_DWA_h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("M3_StelselBerging"/max("SOM_DWA_BAG_m3h","SOM_TOT_DRINKWATER_m3h","SOM_VE_m3h"),2)',
-            'INPUT': outputs['FieldCalculatorMax_vultijd_dwa_h']['OUTPUT'],
+            'FIELD_NAME': 'Sommatie_Adressen',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer (32 bit)
+            'FORMULA': '"Aantal_Adressen_Eigen_Rioleringsgebied"+"Aantal_Adressen_In_Onderbemalingen"',
+            'INPUT': outputs['FieldCalculatorSommatie_poc_theorie_totaal_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMin_vultijd_dwa_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_adressen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(49)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MAX_LEDIGINGSTIJD_h
+        # Field calculator Sommatie_Drinkwater_Part_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MAX_LEDIGINGSTIJD_h',
+            'FIELD_NAME': 'Sommatie_Drinkwater_Part_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("Afvalwateraanbod_obv_drinkwater_m3h" = 0 AND "Afvalwateraanbod_obv_VE_m3h" = 0,\r\nround("M3_StelselBerging"/"Afvalwateraanbod_obv_BAG_m3h",2),\r\nif("Afvalwateraanbod_obv_drinkwater_m3h" > 0 AND "Afvalwateraanbod_obv_VE_m3h" = 0,\r\nround("M3_StelselBerging"/min("Afvalwateraanbod_obv_BAG_m3h","Afvalwateraanbod_obv_drinkwater_m3h"),2),\r\nif("Afvalwateraanbod_obv_drinkwater_m3h" = 0 AND "Afvalwateraanbod_obv_VE_m3h" > 0,\r\nround("M3_StelselBerging"/min("Afvalwateraanbod_obv_BAG_m3h","Afvalwateraanbod_obv_VE_m3h"),2),\r\nif("Afvalwateraanbod_obv_drinkwater_m3h" > 0 AND "Afvalwateraanbod_obv_VE_m3h" > 0,\r\nround("M3_StelselBerging"/min("Afvalwateraanbod_obv_BAG_m3h","Afvalwateraanbod_obv_drinkwater_m3h","Afvalwateraanbod_obv_VE_m3h"),2),0))))',
-            'INPUT': outputs['FieldCalculatorMin_vultijd_dwa_h']['OUTPUT'],
+            'FORMULA': 'round("Drinkwater_Particulier_m3h"+"Drinkwater_Part_Onderbem_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_adressen']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMax_ledigingstijd_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_drinkwater_part_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(50)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MIN_LEDIGINGSTIJD_h
+        # Field calculator Sommatie_Drinkwater_Zak_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MIN_LEDIGINGSTIJD_h',
+            'FIELD_NAME': 'Sommatie_Drinkwater_Zak_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("M3_StelselBerging"/max("Afvalwateraanbod_obv_BAG_m3h","Afvalwateraanbod_obv_drinkwater_m3h","Afvalwateraanbod_obv_VE_m3h"),2)',
-            'INPUT': outputs['FieldCalculatorMax_ledigingstijd_h']['OUTPUT'],
+            'FORMULA': 'round("Drinkwater_Zakelijk_m3h"+"Drinkwater_Zak_Onderbem_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_drinkwater_part_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMin_ledigingstijd_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_drinkwater_zak_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(51)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MIN_POC_PRAKTIJK_m3h
+        # Field calculator Sommatie_Drinkwater_Totaal_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MIN_POC_PRAKTIJK_m3h',
+            'FIELD_NAME': 'Sommatie_Drinkwater_Totaal_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("Pompcapaciteit"-max("SOM_DWA_BAG_m3h","SOM_TOT_DRINKWATER_m3h","SOM_VE_m3h")-("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h"),2)',
-            'INPUT': outputs['FieldCalculatorMin_ledigingstijd_h']['OUTPUT'],
+            'FORMULA': 'round("Drinkwater_Totaal_m3h"+"Drinkwater_Totaal_Onderbem_m3h" ,2)',
+            'INPUT': outputs['FieldCalculatorSommatie_drinkwater_zak_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMin_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_drinkwater_totaal_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(52)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MAX_POC_PRAKTIJK_m3h
+        # Field calculator Sommatie_DWA_VEs_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MAX_POC_PRAKTIJK_m3h',
+            'FIELD_NAME': 'Sommatie_DWA_VEs_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_TOT_DRINKWATER_m3h" = 0 AND "SOM_VE_m3h" = 0,\r\nround("Pompcapaciteit"-"SOM_DWA_BAG_m3h"-("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h"),2),\r\n\r\nif("SOM_TOT_DRINKWATER_m3h" > 0 AND "SOM_VE_m3h" = 0,\r\nround("Pompcapaciteit"-min("SOM_DWA_BAG_m3h","SOM_TOT_DRINKWATER_m3h")-("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h"),2),\r\n\r\nif("SOM_TOT_DRINKWATER_m3h" = 0 AND "SOM_VE_m3h" > 0,\r\nround("Pompcapaciteit"-min("SOM_DWA_BAG_m3h","SOM_VE_m3h")-("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h"),2),\r\n\r\nif("SOM_TOT_DRINKWATER_m3h" > 0 AND "SOM_VE_m3h" > 0,\r\nround("Pompcapaciteit"-min("SOM_DWA_BAG_m3h","SOM_TOT_DRINKWATER_m3h","SOM_VE_m3h")-("POC_GEM_onderbemalingen_m3h"+"POC_VGS_onderbemalingen_m3h"),2),0))))',
-            'INPUT': outputs['FieldCalculatorMin_poc_praktijk_m3h']['OUTPUT'],
+            'FORMULA': 'round("DWA_VEs_m3h"+"DWA_VEs_Onderbemalingen_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_drinkwater_totaal_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMax_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_dwa_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(53)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MIN_POC_PRAKTIJK_mmh
+        # Field calculator Sommatie_Aantal_VEs
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MIN_POC_PRAKTIJK_mmh',
-            'FIELD_PRECISION': 2,
+            'FIELD_NAME': 'Sommatie_Aantal_VEs',
+            'FIELD_PRECISION': 0,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(("MIN_POC_PRAKTIJK_m3h"/(("GEM_ha"+"VGS_ha")*10000))*1000,2)',
-            'INPUT': outputs['FieldCalculatorMax_poc_praktijk_m3h']['OUTPUT'],
+            'FORMULA': 'round("Aantal_VEs_Eigen_Rioleringsgebied"+"Aantal_VEs_Onderbemalingen",0)',
+            'INPUT': outputs['FieldCalculatorSommatie_dwa_ves_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMin_poc_praktijk_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorSommatie_aantal_ves'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(54)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator MAX_POC_PRAKTIJK_mmh
+        # Field calculator Sommatie_Extra_DWA_Periode_2124_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'MAX_POC_PRAKTIJK_mmh',
+            'FIELD_NAME': 'Sommatie_Extra_DWA_Periode_2124_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(("MAX_POC_PRAKTIJK_m3h"/(("GEM_ha"+"VGS_ha")*10000))*1000,2)',
-            'INPUT': outputs['FieldCalculatorMin_poc_praktijk_mmh']['OUTPUT'],
-            'OUTPUT': parameters['Resultaat_stap_3_rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd']
+            'FORMULA': 'round("Extra_DWA_Periode_2124_m3h"+"Extra_DWA_Periode_Onderbem_2124_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_aantal_ves']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorMax_poc_praktijk_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap_3_rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd'] = outputs['FieldCalculatorMax_poc_praktijk_mmh']['OUTPUT']
+        outputs['FieldCalculatorSommatie_extra_dwa_periode_2124_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(55)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Sommatie_Extra_DWA_Periode_2529_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Sommatie_Extra_DWA_Periode_2529_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Extra_DWA_Periode_2529_m3h"+"Extra_DWA_Periode_Onderbem_2529_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_extra_dwa_periode_2124_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorSommatie_extra_dwa_periode_2529_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(56)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Sommatie_Extra_DWA_Periode_3039_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Sommatie_Extra_DWA_Periode_3039_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Extra_DWA_Periode_3039_m3h"+"Extra_DWA_Periode_Onderbem_3039_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_extra_dwa_periode_2529_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorSommatie_extra_dwa_periode_3039_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(57)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Sommatie_Extra_DWA_Periode_4050_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Sommatie_Extra_DWA_Periode_4050_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Extra_DWA_Periode_4050_m3h"+"Extra_DWA_Periode_Onderbem_4050_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_extra_dwa_periode_3039_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorSommatie_extra_dwa_periode_4050_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(58)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("Sommatie_DWA_BAG_m3h">0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_DWA_BAG_m3h",2),0)',
+            'INPUT': outputs['FieldCalculatorSommatie_extra_dwa_periode_4050_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_poc_theorie_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(59)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("Sommatie_Drinkwater_Totaal_m3h">0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_Drinkwater_Totaal_m3h",2),0)',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_poc_theorie_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_en_poc_theorie_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(60)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("Sommatie_DWA_VEs_m3h">0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_DWA_VEs_m3h",2),0)',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_en_poc_theorie_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_theorie_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(61)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h
+        # ipv Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("POC_Theorie_Totaal_m3h">0,"Afvoercapaciteit_m3h","POC_Praktijk_Onderbem_DWA_obv_BAG_m3h"+"Sommatie_DWA_BAG_m3h")',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_theorie_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_afvoercapaciteit_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(62)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("POC_Theorie_Totaal_m3h">0,"Afvoercapaciteit_m3h","POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h"+"Sommatie_Drinkwater_Totaal_m3h")',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_afvoercapaciteit_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(63)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("POC_Theorie_Totaal_m3h">0,"Afvoercapaciteit_m3h","POC_Praktijk_Onderbem_DWA_obv_VEs_m3h"+"Sommatie_DWA_VEs_m3h")',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_en_poc_praktijk_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(64)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Leidingberging_mm
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Leidingberging_mm',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"Leidingberging_m3"/("Aangesloten_Oppervlak_Stelsel_ha"*10000)\r\n,2)',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_praktijk_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorLeidingberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(65)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit
+        alg_params = {
+            'EXPRESSION': '(("Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" OR "Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" OR "Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h") > "Afvoercapaciteit_m3h") OR "Afvoercapaciteit_m3h" IS NULL',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_praktijk_m3h']['OUTPUT'],
+            'OUTPUT': parameters['Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit']
+        }
+        outputs['ExtractByExpressionGebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit'] = outputs['ExtractByExpressionGebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit']['OUTPUT']
+
+        feedback.setCurrentStep(66)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Knooppuntberging_mm
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Knooppuntberging_mm',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"Knooppuntberging_m3"/\r\n("Aangesloten_Oppervlak_Stelsel_ha"*10000)\r\n,2)',
+            'INPUT': outputs['FieldCalculatorLeidingberging_mm']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorKnooppuntberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(67)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Stelselberging_mm
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Stelselberging_mm',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"Stelselberging_m3"/\r\n("Aangesloten_Oppervlak_Stelsel_ha"*10000)\r\n,2)',
+            'INPUT': outputs['FieldCalculatorKnooppuntberging_mm']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorStelselberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(68)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Maximale_Vultijd_Droogweer_h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Maximale_Vultijd_Droogweer_h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("Sommatie_Drinkwater_Totaal_m3h" = 0 AND "Sommatie_DWA_VEs_m3h" = 0,\r\nround("Stelselberging_m3"/"Sommatie_DWA_BAG_m3h",2),\r\nif("Sommatie_Drinkwater_Totaal_m3h" > 0 AND "Sommatie_DWA_VEs_m3h" = 0,\r\nround("Stelselberging_m3"/min("Sommatie_DWA_BAG_m3h","Sommatie_Drinkwater_Totaal_m3h"),2),\r\nif("Sommatie_Drinkwater_Totaal_m3h" = 0 AND "Sommatie_DWA_VEs_m3h" > 0,\r\nround("Stelselberging_m3"/min("Sommatie_DWA_BAG_m3h","Sommatie_DWA_VEs_m3h"),2),\r\nif("Sommatie_Drinkwater_Totaal_m3h" > 0 AND "Sommatie_DWA_VEs_m3h" > 0,\r\nround("Stelselberging_m3"/min("Sommatie_DWA_BAG_m3h","Sommatie_Drinkwater_Totaal_m3h","Sommatie_DWA_VEs_m3h"),2),0))))',
+            'INPUT': outputs['FieldCalculatorStelselberging_mm']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorMaximale_vultijd_droogweer_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(69)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Minimale_Vultijd_Droogweer_h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Minimale_Vultijd_Droogweer_h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Stelselberging_m3"/max("Sommatie_DWA_BAG_m3h","Sommatie_Drinkwater_Totaal_m3h","Sommatie_DWA_VEs_m3h"),2)',
+            'INPUT': outputs['FieldCalculatorMaximale_vultijd_droogweer_h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorMinimale_vultijd_droogweer_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(70)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Maximale_Ledigingstijd_h
+        # formule nog reviewen na werkzaamheden Bart
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Maximale_Ledigingstijd_h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" = 0 AND "Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" = 0,\r\nround("Stelselberging_m3"/"Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h",2),\r\nif("Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" > 0 AND "Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" = 0,\r\nround("Stelselberging_m3"/min("Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h","Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h"),2),\r\nif("Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" = 0 AND "Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" > 0,\r\nround("Stelselberging_m3"/min("Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h","Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h"),2),\r\nif("Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" > 0 AND "Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" > 0,\r\nround("Stelselberging_m3"/min("Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h","Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h","Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h"),2),0))))',
+            'INPUT': outputs['FieldCalculatorMinimale_vultijd_droogweer_h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorMaximale_ledigingstijd_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(71)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Minimale_Ledigingstijd_h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Minimale_Ledigingstijd_h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Stelselberging_m3"/\r\nmax("Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h",\r\n"Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h",\r\n"Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h",\r\n"Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h",\r\n"Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h",\r\n"Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h",\r\n"Afvoercapaciteit_m3h"\r\n),2)',
+            'INPUT': outputs['FieldCalculatorMaximale_ledigingstijd_h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorMinimale_ledigingstijd_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(72)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Afvoercapaciteit_m3h"-"POC_Theorie_Totaal_Onderbem_m3h"-"DWA_BAG_Onderbemalingen_m3h"-"DWA_BAG_m3h",2)',
+            'INPUT': outputs['FieldCalculatorMinimale_ledigingstijd_h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(73)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Afvoercapaciteit_m3h"-"POC_Theorie_Totaal_Onderbem_m3h"-"Drinkwater_Totaal_Onderbem_m3h"-"Drinkwater_Totaal_m3h",2)',
+            'INPUT': outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_bag_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(74)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("Afvoercapaciteit_m3h"-"POC_Theorie_Totaal_Onderbem_m3h"-"DWA_VEs_Onderbemalingen_m3h"-"DWA_VEs_m3h",2)',
+            'INPUT': outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_drinkwater_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(75)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(if("POC_Theorie_Totaal_m3h"=0,0,\r\n"Afvoercapaciteit_m3h" - \r\n"POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" -\r\n"Sommatie_DWA_BAG_m3h")\r\n,2)\r\n',
+            'INPUT': outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_ves_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(76)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(if("POC_Theorie_Totaal_m3h"=0,0,\r\n"Afvoercapaciteit_m3h" - \r\n"POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" -\r\n"Sommatie_Drinkwater_Totaal_m3h")\r\n,2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_bag_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(77)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(if("POC_Theorie_Totaal_m3h"=0,0,\r\n"Afvoercapaciteit_m3h" - \r\n"POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" -\r\n"Sommatie_DWA_VEs_m3h")\r\n,2)\r\n',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_drinkwater_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(78)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h"/\r\n"Aangesloten_Oppervlak_Stelsel_ha",2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_bag_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(79)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h"/\r\n"Aangesloten_Oppervlak_Stelsel_ha",2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_bag_mmh']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_drinkwater_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(80)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h"/\r\n"Aangesloten_Oppervlak_Stelsel_ha",2)',
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_drinkwater_mmh']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(81)
         if feedback.isCanceled():
             return {}
 
         # Join attributes by field value
         alg_params = {
             'DISCARD_NONMATCHING': False,
-            'FIELD': 'US_BEM_ID',
+            'FIELD': 'Bemalingsgebied_ID_Afvoerpunt',
             'FIELDS_TO_COPY': [''],
-            'FIELD_2': 'BEM_ID',
-            'INPUT': outputs['RetainFieldsUs_bem_id']['OUTPUT'],
-            'INPUT_2': outputs['FieldCalculatorMax_poc_praktijk_mmh']['OUTPUT'],
+            'FIELD_2': 'Bemalingsgebied_ID',
+            'INPUT': outputs['RetainFieldsBemalingsgebied_id_afvoerpunt']['OUTPUT'],
+            'INPUT_2': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh']['OUTPUT'],
             'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinAttributesByFieldValue'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(56)
+        feedback.setCurrentStep(82)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvalwateraanbod_obv_BAG+PC_m3h
+        # Drop field(s) overbodige velden
         alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_obv_BAG+PC_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_DWA_BAG_m3h">0,round("SOM_POC_GEM_m3h"+"SOM_POC_VGS_m3h"+"SOM_DWA_BAG_m3h"+"SOM_ExAFW_2124"+"SOM_ExAFW_2529"+"SOM_ExAFW_3039"+"SOM_ExAFW_4050",2),0)',
-            'INPUT': outputs['FieldCalculatorMax_poc_praktijk_mmh']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'COLUMN': ['Bemalingsgebied_ID_2','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h'],
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh']['OUTPUT'],
+            'OUTPUT': parameters['Resultaat_stap3_rioleringsgebieden_kengetallen']
         }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_bagpc_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['DropFieldsOverbodigeVelden'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_kengetallen'] = outputs['DropFieldsOverbodigeVelden']['OUTPUT']
 
-        feedback.setCurrentStep(57)
+        feedback.setCurrentStep(83)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvalwateraanbod_obv_drinkwater+PC_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_obv_drinkwater+PC_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_TOT_DRINKWATER_m3h">0,round("SOM_POC_GEM_m3h"+"SOM_POC_VGS_m3h"+"SOM_TOT_DRINKWATER_m3h"+"SOM_ExAFW_2124"+"SOM_ExAFW_2529"+"SOM_ExAFW_3039"+"SOM_ExAFW_4050",2),0)',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_bagpc_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwaterpc_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(58)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Afvalwateraanbod_obv_VE+PC_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_obv_VE+PC_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("SOM_VE_m3h">0,round("SOM_POC_GEM_m3h"+"SOM_POC_VGS_m3h"+"SOM_VE_m3h"+"SOM_ExAFW_2124"+"SOM_ExAFW_2529"+"SOM_ExAFW_3039"+"SOM_ExAFW_4050",2),0)',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwaterpc_m3h']['OUTPUT'],
-            'OUTPUT': parameters['Resultaat_stap_3_rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050']
-        }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_vepc_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap_3_rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050'] = outputs['FieldCalculatorAfvalwateraanbod_obv_vepc_m3h']['OUTPUT']
-
-        feedback.setCurrentStep(59)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) US_BEM_ID_2
+        # Drop field(s) Bemalingsgebied_ID_2
         # Data aan afvoerpunten plakken, omdat GWSW-kengetallen de kengetallen aan afvoerpunten hangt.
         alg_params = {
-            'COLUMN': ['US_BEM_ID_2'],
+            'COLUMN': ['Bemalingsgebied_ID_2'],
             'INPUT': outputs['JoinAttributesByFieldValue']['OUTPUT'],
-            'OUTPUT': parameters['Resultaat_stap_3_afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd']
+            'OUTPUT': parameters['Resultaat_stap3_afvoerpunten_kengetallen']
         }
-        outputs['DropFieldsUs_bem_id_2'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap_3_afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd'] = outputs['DropFieldsUs_bem_id_2']['OUTPUT']
+        outputs['DropFieldsBemalingsgebied_id_2'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_afvoerpunten_kengetallen'] = outputs['DropFieldsBemalingsgebied_id_2']['OUTPUT']
+
         
         # --- this is needed to rename layers. looks funky, but works!
         if parameters.get('keepName', False): # skip Rename if parameter 'keepName' = True.
