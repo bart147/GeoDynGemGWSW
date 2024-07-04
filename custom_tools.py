@@ -314,6 +314,10 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
     """
     CustomToolBasicAlgortim with all custom funtions added
     """
+    def get_name(self,f):
+        """name function for sorting features in bereken_onderbemaling_POC_with_iteration"""
+        return f['name']  # Define a custom key function for sorting
+    
     def sort_fields(self, fields_to_sort_by, layer, feedback):
         """sort by multiple fields and add a new field order"""
 
@@ -568,6 +572,16 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         # sum values op basis van selectie [ONTV_VAN]
         # model-input: POC_GEM_m3h;POC_GEM_onderbemalingen_m3h,POC_VGS_m3h;POC_VGS_onderbemalingen_m3h,DWA_BAG_m3h;DWA_BAG_onderbemalingen_m3h,PAR_DRINKWATER_m3h;PAR_DRINKWATER_onderbemalingen_m3h,ZAK_DRINKWATER_m3h;ZAK_DRINKWATER_onderbemalingen_m3h,TOT_DRINKWATER_m3h;TOT_DRINKWATER_onderbemalingen_m3h,VE_m3h;VE_onderbemalingen_m3h,ExAFW_2124;ExAFW_2124_onderbemalingen,ExAFW_3039;ExAFW_3039_onderbemalingen,ExAFW_4050;ExAFW_4050_onderbemalingen
         fields_to_calc = parameters.get('veldenlijst', "").split(",") # "field1;us_field1,field2;us_field2"
+        # test if fields exist
+        try:
+            for field_name in [field_name for fields in fields_to_calc for field_name in fields.split(';')]:
+                if layer.fields().indexFromName(field_name) == -1:
+                    feedback.pushWarning("The field {} does not exist in layer {}!".format(field_name, layer.name()))
+        except Exception as e:
+            feedback.pushWarning('Field string not valid')
+            feedback.pushWarning(f'{e}')
+            return layer
+        
         us_fields = set()
         layer.startEditing()
         for feature in layer.getFeatures():
@@ -602,6 +616,117 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                         feedback.pushWarning(str(e))
 
         layer.commitChanges()
+        layer.selectByIds([])
+        feedback.pushInfo(f"Onderbemalingen succesvol berekend voor {str(us_fields)}")
+        
+        return layer
+    
+    def bereken_onderbemaling_POC_with_iteration(self, layer, parameters, feedback):
+        """bereken onderbemalingen voor SUM_WAARDE.
+        Maakt selectie op basis van veld [ONTV_VAN] -> VAN_KNOOPN IN ('ZRE-123424', 'ZRE-234')"""
+        # sum values op basis van selectie [ONTV_VAN]
+        # model-input: POC_GEM_m3h;POC_GEM_onderbemalingen_m3h,POC_VGS_m3h;POC_VGS_onderbemalingen_m3h,DWA_BAG_m3h;DWA_BAG_onderbemalingen_m3h,PAR_DRINKWATER_m3h;PAR_DRINKWATER_onderbemalingen_m3h,ZAK_DRINKWATER_m3h;ZAK_DRINKWATER_onderbemalingen_m3h,TOT_DRINKWATER_m3h;TOT_DRINKWATER_onderbemalingen_m3h,VE_m3h;VE_onderbemalingen_m3h,ExAFW_2124;ExAFW_2124_onderbemalingen,ExAFW_3039;ExAFW_3039_onderbemalingen,ExAFW_4050;ExAFW_4050_onderbemalingen
+        
+        begin_fld = parameters.get('id_veld', "")
+        ont_van_fld = parameters.get('ontvangt_van', "")
+        X_OPPOMP = "Aantal_Keer_Oppompen_Tot_Afleverpunt"
+        Afvoercapaciteit_m3h = "Afvoercapaciteit_m3h"
+        POC_geb = "POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h"
+        POC_obm = "POC_Praktijk_Onderbem_DWA_obv_BAG_m3h"
+        POC_tot = "Sommatie_POC_Praktijk_DWA_obv_BAG_m3h"
+        POC_theorie = "POC_Theorie_Totaal_m3h"
+        DWA_tot = "Sommatie_DWA_BAG_m3h" # "Sommatie_Droogweerafvoer_BAG_m3h"
+        Afv_tot = "Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h"
+
+        fields_to_calc = [begin_fld, ont_van_fld, X_OPPOMP, Afvoercapaciteit_m3h, POC_geb, POC_obm, POC_tot, POC_theorie, DWA_tot, Afv_tot]
+
+        # test if fields exist
+        fields_missing = 0
+        for field_name in fields_to_calc:
+            if layer.fields().indexFromName(field_name) == -1:
+                feedback.pushWarning("The field {} does not exist in layer {}!".format(field_name, layer.name()))
+                fields_missing += 1
+        if fields_missing > 0:
+            feedback.pushWarning(f"{fields_missing} fields missing. script terminated")
+        
+        us_fields = set()
+        layer.startEditing()
+
+        sorted_features = sorted(layer.getFeatures(), key=lambda f: f[X_OPPOMP], reverse=True)
+        for feature in sorted_features: #layer.getFeatures(): 
+            VAN_KNOOPN = feature[begin_fld]
+            ONTV_VAN = feature[ont_van_fld]
+            feedback.pushDebugInfo(f"\ncalculate {VAN_KNOOPN}, niveau {feature[X_OPPOMP]}...")
+            if not str(ONTV_VAN) in ["NULL", ""," "]: # check of sprake is van onderbemaling
+                feedback.pushDebugInfo("{} {} ontvangt van {}".format(begin_fld,VAN_KNOOPN,ONTV_VAN))
+                where_clause = '"{}" IN ({})'.format(begin_fld, ONTV_VAN)
+                where_clause_1N = '"{}" IN ({})'.format(begin_fld, ONTV_VAN)
+                ##where_clause = '"VAN_KNOOPN" = '+"'MERG10'"
+                ##feedback.pushDebugInfo("where_clause = {}".format(where_clause))
+                expr = QgsExpression(where_clause_1N)
+                ##feedback.pushDebugInfo(str(expr))
+                if expr.hasParserError():
+                    feedback.pushWarning("expression has parserError!")
+                if expr.hasEvalError():
+                    feedback.pushWarning("expression has Evaluation Error!")
+                # TODO apparently using iterator object this is the old way
+                # it = layer.getFeatures(QgsFeatureRequest(expr))  # iterator object
+                # layer.selectByIds([i.id() for i in it])
+                layer.selectByExpression(where_clause_1N)
+                feedback.pushDebugInfo("{} features selected".format(layer.selectedFeatureCount()))
+                feedback.pushDebugInfo("selected id's: {}".format(layer.selectedFeatureIds()))
+
+                # 1.) first update POC_Praktijk_Onderbem_DWA_obv_BAG_m3h with Sommatie_POC_Praktijk_DWA_obv_BAG_m3h based on id's in Onderbemalingsgeb_IDs_1_Niveau_Diep
+                us_fields.add(POC_obm)
+                sum_values = sum([float(f[POC_tot]) for f in layer.selectedFeatures() if str(f[POC_tot]) not in ["NULL","nan",""," "]])
+                POC_obm_sum = round(sum_values,2)
+            else: # geen onderbemaling
+                POC_obm_sum = 0
+
+            feedback.pushDebugInfo(f"{POC_obm} = {POC_obm_sum} (sum {POC_tot} van {ONTV_VAN})")
+            ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(POC_obm), POC_obm_sum)
+            feature[POC_obm] = POC_obm_sum
+
+            # 2.) calculate Afvalwater totaal
+            DWA_tot_sum = feature[DWA_tot]
+            Afv_tot_sum = round(feature[DWA_tot] + POC_obm_sum, 2)
+            feedback.pushDebugInfo(f"{Afv_tot_sum} = {DWA_tot_sum} + {POC_obm_sum}, {Afv_tot} = {DWA_tot} + {POC_obm}")
+            ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Afv_tot), Afv_tot_sum)
+            feature[Afv_tot] = Afv_tot_sum
+            # 3.) now calculate POC praktijk (POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h)
+            if feature[POC_theorie] == None:
+                gemengd_stelsel = False
+            elif feature[POC_theorie] > 0:
+                gemengd_stelsel = True
+            else:
+                gemengd_stelsel = False
+            if gemengd_stelsel:
+                if feature[Afvoercapaciteit_m3h] == None:
+                    feedback.pushWarning(f"Geen afvoercapaciteit bekend voor {VAN_KNOOPN}. POC praktijk berekening overgeslagen.")
+                    POC_geb_sum = 0
+                elif feature[Afvoercapaciteit_m3h] == 0:
+                    feedback.pushWarning(f"Afvoercapaciteit is {feature[Afvoercapaciteit_m3h]} voor {VAN_KNOOPN}. POC praktijk berekening overgeslagen.")
+                    POC_geb_sum = 0
+                else:
+                    POC_geb_sum = round(feature[Afvoercapaciteit_m3h] - Afv_tot_sum, 2) # Afvoercapaciteit_m3h - Afvalwater praktijk uit onderbemaling + DWA gebied)
+                    #feedback.pushDebugInfo(f"POC praktijk {POC_geb_sum} = max.cap {feature[Afvoercapaciteit_m3h]} - Afvalwater praktijk totaal {Afv_tot_sum} {VAN_KNOOPN}")
+                    feedback.pushDebugInfo(f"{POC_geb_sum} = {feature[Afvoercapaciteit_m3h]} - {Afv_tot_sum}, {POC_geb} = {Afvoercapaciteit_m3h} + {Afv_tot}")
+                    ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(POC_geb), POC_geb_sum)
+            else:
+                POC_geb_sum = 0 # default
+            feature[POC_geb] = POC_geb_sum
+            # 4.) calculate POC totaal
+            POC_tot_sum = round(POC_geb_sum + POC_obm_sum, 2) # POC totaal = POC gebied + POC onderbemaling
+            ##feedback.pushDebugInfo(f"POC praktijk totaal {POC_tot_sum} = POC praktijk gebied {POC_geb_sum} + POC praktijk onderbemaling {POC_obm_sum} {VAN_KNOOPN}")
+            feedback.pushDebugInfo(f"{POC_tot_sum} = {POC_geb_sum} + {POC_obm_sum}, {POC_tot} = {POC_geb} + {POC_obm}")
+            ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(POC_tot), POC_tot_sum)
+            feature[POC_tot] = POC_tot_sum
+            layer.updateFeature(feature)
+            # test value
+            ##feedback.pushDebugInfo(f'{POC_tot} = {feature[POC_tot]}')
+                
+
+        layer.commitChanges() # double?
         layer.selectByIds([])
         feedback.pushInfo(f"Onderbemalingen succesvol berekend voor {str(us_fields)}")
         
@@ -739,11 +864,16 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         d_K_ONTV_VAN = {}    # alle onderliggende gemalen
         d_K_ONTV_VAN_n1 = {} # alle onderliggende gemalen op 1 niveau diep ivm optellen overcapaciteit
         feedback.pushInfo ("netwerk opslaan als graph...")
-        VAN_FLD = "BEM_ID"      # unieke id
-        NAAR_FLD = "DS_BEM_ID"  # loost op 
-        AFVOERPUNT = "begin"    # afvoerpuntcode. meenemen als Afvoerpunten_onderbemalingen, N1_afvoerpunten_onderbemalingen, Naam_afleveringspunt
-        PC_ID = "PC_IDs"        # plancap gebieden meenemen als PC_IDs_onderbemalingen
-        BM_NM = "BM_NM"         # alternatief id field 3
+        # VAN_FLD = "BEM_ID"      # unieke id
+        # NAAR_FLD = "DS_BEM_ID"  # loost op 
+        # AFVOERPUNT = "begin"    # afvoerpuntcode. meenemen als Afvoerpunten_onderbemalingen, N1_afvoerpunten_onderbemalingen, Naam_afleveringspunt
+        # PC_ID = "PC_IDs"        # plancap gebieden meenemen als PC_IDs_onderbemalingen
+        # BM_NM = "BM_NM"         # alternatief id field 3
+        VAN_FLD = "Bemalingsgebied_ID"                  # unieke id
+        NAAR_FLD = "Bemalingsgebied_ID_Lozingspunt"     # loost op 
+        AFVOERPUNT = "Beginpunt_Afvoerrelatie"          # afvoerpuntcode. meenemen als Afvoerpunten_onderbemalingen, N1_afvoerpunten_onderbemalingen, Naam_afleveringspunt
+        PC_ID = "Bouwprojecten_Eigen_Rioleringsgeb_IDs" # plancap gebieden meenemen als PC_IDs_onderbemalingen
+        BM_NM = "BM_NM"                                 # alternatief id field 3
         d_AFVOERPUNT = { }
         d_PC_ID = { }
         d_BM_NM = { }
@@ -762,6 +892,25 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         feedback.pushInfo("onderbemaling bepalen voor rioolgemalen en zuiveringen...")
         where_clause = "Join_Count > 0"
         layer.startEditing()
+        # fields to fill
+        Onderbemalingsgebied_IDs = "Onderbemalingsgebied_IDs" # Onderbemalingen
+        Onderbemalingsgebied_IDs_1_NiveauDiep = "Onderbemalingsgeb_IDs_1_Niveau_Diep" # N1_onderbemalingen
+        Aantal_Onderbemalingen = "Aantal_Onderbemalingen" # Aantal_onderbemalingen
+        Aantal_Onderbemalingen_1_Niveau_Diep = "Aantal_Onderbemalingen_1_Niveau_Diep" # "N1_aantal_onderbemalingen"
+        Aantal_Keer_Oppompen_Tot_Afleverpunt = "Aantal_Keer_Oppompen_Tot_Afleverpunt"	# "X_OPPOMP"
+        Rioleringsgebied_ID_Overnamepunt = "Rioleringsgebied_ID_Overnamepunt" # "BEM_ID_afleveringspunt"
+        Afvoerpunten_Van_Onderbemalingen = "Afvoerpunten_Van_Onderbemalingen" # "Afvoerpunten_onderbemalingen"
+        Afvoerpunten_1_Niveau_Diep = "Afvoerpunten_1_Niveau_Diep" # "N1_afvoerpunten_onderbemalingen"
+        Naam_Overnamepunt = "Naam_Overnamepunt" # "Naam_afleveringspunt" 
+        Bouwprojecten_IDs_Onderbemalingen = "Bouwprojecten_IDs_Onderbemalingen" # "PC_IDs_onderbemalingen"
+        # test if fields exist
+        l_fields_to_fill = [Onderbemalingsgebied_IDs, Onderbemalingsgebied_IDs_1_NiveauDiep, Aantal_Onderbemalingen, Aantal_Onderbemalingen_1_Niveau_Diep,
+                            Aantal_Keer_Oppompen_Tot_Afleverpunt, Rioleringsgebied_ID_Overnamepunt, Afvoerpunten_Van_Onderbemalingen, Afvoerpunten_1_Niveau_Diep,
+                            Naam_Overnamepunt, Bouwprojecten_IDs_Onderbemalingen]
+        for field_name in l_fields_to_fill:
+            if layer.fields().indexFromName(field_name) == -1:
+                feedback.pushWarning("The field {} does not exist in layer {}!".format(field_name, layer.name()))
+
         for i, feature in enumerate(layer.getFeatures()):  # .getFeatures()
             ##if not feature["count"] >= 1: continue
             VAN_KNOOPN = feature[VAN_FLD]
@@ -776,28 +925,28 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             # onderbemalingen 1 niveau diep
             l_onderliggende_gemalen_n1 = [start for start, end in edges_as_tuple if end == VAN_KNOOPN and start != VAN_KNOOPN]  # dus start['A', 'C'] uit tuples[('A', 'B'),('C', 'B')] als end == 'B'
             s_onderliggende_gemalen_n1 =  str(l_onderliggende_gemalen_n1).replace("u'", "'").replace("[", "").replace("]", "") # naar str() en verwijder u'tjes en haken
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Onderbemalingen"), l_onderliggende_gemalen) # 'BEM001','BEM002','BEM003'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("N1_onderbemalingen"), s_onderliggende_gemalen_n1) # 'BEM002','BEM003'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Aantal_onderbemalingen"), len(list(d_edges)))  # 3 onderbemalingen
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Onderbemalingsgebied_IDs), l_onderliggende_gemalen) # 'BEM001','BEM002','BEM003'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Onderbemalingsgebied_IDs_1_NiveauDiep), s_onderliggende_gemalen_n1) # 'BEM002','BEM003'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Aantal_Onderbemalingen), len(list(d_edges)))  # 3 onderbemalingen
             # feedback.pushInfo(f"{VAN_KNOOPN}")
             # feedback.pushInfo(f"{len(list(d_edges))}")
             # feedback.pushInfo(f"{len(list(l_onderliggende_gemalen_n1))}")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("N1_aantal_onderbemalingen"), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("X_OPPOMP"),  X_OPPOMP + 1)              # aantal keer oppompen tot rwzi
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("BEM_ID_afleveringspunt"), K_KNP_EIND)              # eindbemalingsgebied: BEM009
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Aantal_Onderbemalingen_1_Niveau_Diep), len(list(l_onderliggende_gemalen_n1)))  # aantal onderbemalingen 1 niveau
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Aantal_Keer_Oppompen_Tot_Afleverpunt),  X_OPPOMP + 1)              # aantal keer oppompen tot rwzi
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Rioleringsgebied_ID_Overnamepunt), K_KNP_EIND)              # eindbemalingsgebied: BEM009
             d_K_ONTV_VAN[VAN_KNOOPN] = l_onderliggende_gemalen
             d_K_ONTV_VAN_n1[VAN_KNOOPN] =  l_onderliggende_gemalen_n1
             # convert bemid's to description field
             l_onderliggende_desc = str([d_AFVOERPUNT[key] for key in list(d_edges)]) # [u'ZRE-123',u'ZRE-234']
             l_onderliggende_desc = l_onderliggende_desc.replace("u'", "'").replace("[", "").replace("]", "")
             l_onderliggende_desc_n1 = str([d_AFVOERPUNT[key] for key in l_onderliggende_gemalen_n1]).replace("u'", "'").replace("[", "").replace("]", "")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Afvoerpunten_onderbemalingen"), l_onderliggende_desc) # '38_9','345_23','52_1'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("N1_afvoerpunten_onderbemalingen"), l_onderliggende_desc_n1) # '345_23','52_1'
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("Naam_afleveringspunt"), d_BM_NM[K_KNP_EIND])  # laatste afvoerpunt code
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Afvoerpunten_Van_Onderbemalingen), l_onderliggende_desc) # '38_9','345_23','52_1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Afvoerpunten_1_Niveau_Diep), l_onderliggende_desc_n1) # '345_23','52_1'
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Naam_Overnamepunt), d_BM_NM[K_KNP_EIND])  # laatste afvoerpunt code
             # add PC_IDs 
             l_onderliggende_PC_ID = str([d_PC_ID[key] for key in list(d_edges) if str(d_PC_ID[key]) != "NULL"]) # [u'ZRE-123',u'ZRE-234']
             l_onderliggende_PC_ID = l_onderliggende_PC_ID.replace("u'", "'").replace("[", "").replace("]", "")
-            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName("PC_IDs_onderbemalingen"), l_onderliggende_PC_ID) # lijst met onderliggende plancap id's
+            layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Bouwprojecten_IDs_Onderbemalingen), l_onderliggende_PC_ID) # lijst met onderliggende plancap id's
 
         layer.commitChanges()
         return [layer, d_K_ONTV_VAN, d_K_ONTV_VAN_n1]
@@ -1116,9 +1265,9 @@ class CustomToolsBerekenOnderbemalingFldsAlgorithm(CustomToolAllFunctionsAlgorit
         """
         self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))      
-        self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='BEM_ID'))
-        self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='Onderbemalingen'))
-        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_GEM_m3h;POC_GEM_onderbemalingen_m3h,POC_VGS_m3h;POC_VGS_onderbemalingen_m3h'))
+        self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='Bemalingsgebied_ID'))
+        self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='Onderbemalingsgebied_IDs'))
+        self.addParameter(QgsProcessingParameterString('veldenlijst', 'veldenlijst voor te berekenen onderbemaling (us): "field1;us_field1,field2;us_field2"', multiLine=False, defaultValue='POC_Theorie_Gemengd_m3h;POC_Theorie_Gemengd_Onderbem_m3h,POC_Theorie_VGS_m3h;POC_Theorie_VGS_Onderbem_m3h,DWA_BAG_m3h;DWA_BAG_Onderbemalingen_m3h,Drinkwater_Particulier_m3h;Drinkwater_Part_Onderbem_m3h,Drinkwater_Zakelijk_m3h;Drinkwater_Zak_Onderbem_m3h,Drinkwater_Totaal_m3h;Drinkwater_Totaal_Onderbem_m3h,DWA_VEs_m3h;DWA_VEs_Onderbemalingen_m3h,Extra_DWA_Periode_2124_m3h;Extra_DWA_Periode_Onderbem_2124_m3h,Extra_DWA_Periode_2529_m3h;Extra_DWA_Periode_Onderbem_2529_m3h,Extra_DWA_Periode_3039_m3h;Extra_DWA_Periode_Onderbem_3039_m3h,Extra_DWA_Periode_4050_m3h;Extra_DWA_Periode_Onderbem_4050_m3h'))
             
     def customAlgorithm(self, layer, parameters, feedback):
         """
@@ -1127,6 +1276,55 @@ class CustomToolsBerekenOnderbemalingFldsAlgorithm(CustomToolAllFunctionsAlgorit
         layer = self.bereken_onderbemaling_flds(layer, parameters, feedback)
         return layer
     
+
+class CustomToolsBerekenOnderbemalingFldsPOCAlgorithm(CustomToolAllFunctionsAlgorithm):
+    """
+    This is an example algorithm that takes a vector layer and
+    creates a new identical one.
+    """
+
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+
+
+    def createInstance(self):
+        return CustomToolsBerekenOnderbemalingFldsPOCAlgorithm()
+
+    def name(self):
+        """
+        Returns the algorithm name, used for identifying the algorithm. This
+        string should be fixed for the algorithm, and must not be localised.
+        The name should be unique within each provider. Names should contain
+        lowercase alphanumeric characters only and no spaces or other
+        formatting characters.
+        """
+        return 'calc fields upstream POC with iteration'
+
+    def displayName(self):
+        """
+        Returns the translated algorithm name, which should be used for any
+        user-visible display of the algorithm name.
+        """
+        return self.tr('calc fields upstream POC with iteration')
+
+    def initAlgorithm(self, config=None):
+        """
+        Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.addParameter(QgsProcessingParameterVectorLayer('inputlayer', 'input_layer', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Output_layer', 'output_layer', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))      
+        self.addParameter(QgsProcessingParameterString('id_veld', 'veld met unieke code', multiLine=False, defaultValue='Bemalingsgebied_ID'))
+        self.addParameter(QgsProcessingParameterString('ontvangt_van', 'veld met opsomming onderbemaling id_velden', multiLine=False, defaultValue='Onderbemalingsgeb_IDs_1_Niveau_Diep'))
+                    
+    def customAlgorithm(self, layer, parameters, feedback):
+        """
+        Here we define our own custom algorithm.
+        """
+        layer = self.bereken_onderbemaling_POC_with_iteration(layer, parameters, feedback)
+        return layer
+
 
 class CustomToolsVervangNoneDoor0Algorithm(CustomToolAllFunctionsAlgorithm):
     """

@@ -41,7 +41,7 @@
             <Option value="MM" name="dash_pattern_offset_unit" type="QString"/>
             <Option value="0" name="draw_inside_polygon" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
-            <Option value="183,72,75,255" name="line_color" type="QString"/>
+            <Option value="243,166,178,255" name="line_color" type="QString"/>
             <Option value="solid" name="line_style" type="QString"/>
             <Option value="0.6" name="line_width" type="QString"/>
             <Option value="MM" name="line_width_unit" type="QString"/>
@@ -81,12 +81,12 @@
         <layer enabled="1" pass="0" locked="0" class="SimpleFill">
           <Option type="Map">
             <Option value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale" type="QString"/>
-            <Option value="183,72,75,255" name="color" type="QString"/>
+            <Option value="243,166,178,255" name="color" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
             <Option value="0,0" name="offset" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
             <Option value="MM" name="offset_unit" type="QString"/>
-            <Option value="131,51,54,255" name="outline_color" type="QString"/>
+            <Option value="174,119,127,255" name="outline_color" type="QString"/>
             <Option value="solid" name="outline_style" type="QString"/>
             <Option value="0.2" name="outline_width" type="QString"/>
             <Option value="MM" name="outline_width_unit" type="QString"/>
@@ -115,14 +115,14 @@
           <Option type="Map">
             <Option value="0" name="angle" type="QString"/>
             <Option value="square" name="cap_style" type="QString"/>
-            <Option value="183,72,75,255" name="color" type="QString"/>
+            <Option value="243,166,178,255" name="color" type="QString"/>
             <Option value="1" name="horizontal_anchor_point" type="QString"/>
             <Option value="bevel" name="joinstyle" type="QString"/>
             <Option value="diamond" name="name" type="QString"/>
             <Option value="0,0" name="offset" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
             <Option value="MM" name="offset_unit" type="QString"/>
-            <Option value="131,51,54,255" name="outline_color" type="QString"/>
+            <Option value="174,119,127,255" name="outline_color" type="QString"/>
             <Option value="solid" name="outline_style" type="QString"/>
             <Option value="0.2" name="outline_width" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale" type="QString"/>
@@ -154,76 +154,10 @@
             <Option value="collection" name="type" type="QString"/>
           </Option>
         </data_defined_properties>
-        <layer enabled="1" pass="0" locked="0" class="MarkerLine">
-          <Option type="Map">
-            <Option value="4" name="average_angle_length" type="QString"/>
-            <Option value="3x:0,0,0,0,0,0" name="average_angle_map_unit_scale" type="QString"/>
-            <Option value="MM" name="average_angle_unit" type="QString"/>
-            <Option value="3" name="interval" type="QString"/>
-            <Option value="3x:0,0,0,0,0,0" name="interval_map_unit_scale" type="QString"/>
-            <Option value="MM" name="interval_unit" type="QString"/>
-            <Option value="0" name="offset" type="QString"/>
-            <Option value="0" name="offset_along_line" type="QString"/>
-            <Option value="3x:0,0,0,0,0,0" name="offset_along_line_map_unit_scale" type="QString"/>
-            <Option value="MM" name="offset_along_line_unit" type="QString"/>
-            <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
-            <Option value="MM" name="offset_unit" type="QString"/>
-            <Option value="true" name="place_on_every_part" type="bool"/>
-            <Option value="CentralPoint" name="placements" type="QString"/>
-            <Option value="0" name="ring_filter" type="QString"/>
-            <Option value="1" name="rotate" type="QString"/>
-          </Option>
-          <data_defined_properties>
-            <Option type="Map">
-              <Option value="" name="name" type="QString"/>
-              <Option name="properties"/>
-              <Option value="collection" name="type" type="QString"/>
-            </Option>
-          </data_defined_properties>
-          <symbol frame_rate="10" name="@0@0" force_rhr="0" type="marker" alpha="1" clip_to_extent="1" is_animated="0">
-            <data_defined_properties>
-              <Option type="Map">
-                <Option value="" name="name" type="QString"/>
-                <Option name="properties"/>
-                <Option value="collection" name="type" type="QString"/>
-              </Option>
-            </data_defined_properties>
-            <layer enabled="1" pass="0" locked="0" class="SimpleMarker">
-              <Option type="Map">
-                <Option value="0" name="angle" type="QString"/>
-                <Option value="square" name="cap_style" type="QString"/>
-                <Option value="255,2,184,255" name="color" type="QString"/>
-                <Option value="1" name="horizontal_anchor_point" type="QString"/>
-                <Option value="bevel" name="joinstyle" type="QString"/>
-                <Option value="filled_arrowhead" name="name" type="QString"/>
-                <Option value="0,0" name="offset" type="QString"/>
-                <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
-                <Option value="MM" name="offset_unit" type="QString"/>
-                <Option value="255,2,184,255" name="outline_color" type="QString"/>
-                <Option value="solid" name="outline_style" type="QString"/>
-                <Option value="0" name="outline_width" type="QString"/>
-                <Option value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale" type="QString"/>
-                <Option value="MM" name="outline_width_unit" type="QString"/>
-                <Option value="diameter" name="scale_method" type="QString"/>
-                <Option value="3" name="size" type="QString"/>
-                <Option value="3x:0,0,0,0,0,0" name="size_map_unit_scale" type="QString"/>
-                <Option value="MM" name="size_unit" type="QString"/>
-                <Option value="1" name="vertical_anchor_point" type="QString"/>
-              </Option>
-              <data_defined_properties>
-                <Option type="Map">
-                  <Option value="" name="name" type="QString"/>
-                  <Option name="properties"/>
-                  <Option value="collection" name="type" type="QString"/>
-                </Option>
-              </data_defined_properties>
-            </layer>
-          </symbol>
-        </layer>
         <layer enabled="1" pass="0" locked="0" class="SimpleLine">
           <Option type="Map">
             <Option value="0" name="align_dash_pattern" type="QString"/>
-            <Option value="square" name="capstyle" type="QString"/>
+            <Option value="round" name="capstyle" type="QString"/>
             <Option value="5;2" name="customdash" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="customdash_map_unit_scale" type="QString"/>
             <Option value="MM" name="customdash_unit" type="QString"/>
@@ -231,10 +165,10 @@
             <Option value="3x:0,0,0,0,0,0" name="dash_pattern_offset_map_unit_scale" type="QString"/>
             <Option value="MM" name="dash_pattern_offset_unit" type="QString"/>
             <Option value="0" name="draw_inside_polygon" type="QString"/>
-            <Option value="bevel" name="joinstyle" type="QString"/>
-            <Option value="255,2,184,255" name="line_color" type="QString"/>
+            <Option value="round" name="joinstyle" type="QString"/>
+            <Option value="227,26,28,255" name="line_color" type="QString"/>
             <Option value="solid" name="line_style" type="QString"/>
-            <Option value="0.26" name="line_width" type="QString"/>
+            <Option value="1.86" name="line_width" type="QString"/>
             <Option value="MM" name="line_width_unit" type="QString"/>
             <Option value="0" name="offset" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="offset_map_unit_scale" type="QString"/>
@@ -250,6 +184,92 @@
             <Option value="0" name="use_custom_dash" type="QString"/>
             <Option value="3x:0,0,0,0,0,0" name="width_map_unit_scale" type="QString"/>
           </Option>
+          <effect enabled="1" type="effectStack">
+            <effect type="dropShadow">
+              <Option type="Map">
+                <Option value="13" name="blend_mode" type="QString"/>
+                <Option value="2.645" name="blur_level" type="QString"/>
+                <Option value="MM" name="blur_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="blur_unit_scale" type="QString"/>
+                <Option value="0,0,0,255" name="color" type="QString"/>
+                <Option value="2" name="draw_mode" type="QString"/>
+                <Option value="0" name="enabled" type="QString"/>
+                <Option value="135" name="offset_angle" type="QString"/>
+                <Option value="2" name="offset_distance" type="QString"/>
+                <Option value="MM" name="offset_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="offset_unit_scale" type="QString"/>
+                <Option value="1" name="opacity" type="QString"/>
+              </Option>
+            </effect>
+            <effect type="outerGlow">
+              <Option type="Map">
+                <Option value="0" name="blend_mode" type="QString"/>
+                <Option value="0.7935" name="blur_level" type="QString"/>
+                <Option value="MM" name="blur_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="blur_unit_scale" type="QString"/>
+                <Option value="0,0,255,255" name="color1" type="QString"/>
+                <Option value="0,255,0,255" name="color2" type="QString"/>
+                <Option value="0" name="color_type" type="QString"/>
+                <Option value="ccw" name="direction" type="QString"/>
+                <Option value="0" name="discrete" type="QString"/>
+                <Option value="2" name="draw_mode" type="QString"/>
+                <Option value="1" name="enabled" type="QString"/>
+                <Option value="0.5" name="opacity" type="QString"/>
+                <Option value="gradient" name="rampType" type="QString"/>
+                <Option value="239,41,41,255" name="single_color" type="QString"/>
+                <Option value="rgb" name="spec" type="QString"/>
+                <Option value="2" name="spread" type="QString"/>
+                <Option value="MM" name="spread_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="spread_unit_scale" type="QString"/>
+              </Option>
+            </effect>
+            <effect type="drawSource">
+              <Option type="Map">
+                <Option value="0" name="blend_mode" type="QString"/>
+                <Option value="2" name="draw_mode" type="QString"/>
+                <Option value="1" name="enabled" type="QString"/>
+                <Option value="1" name="opacity" type="QString"/>
+              </Option>
+            </effect>
+            <effect type="innerShadow">
+              <Option type="Map">
+                <Option value="13" name="blend_mode" type="QString"/>
+                <Option value="2.645" name="blur_level" type="QString"/>
+                <Option value="MM" name="blur_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="blur_unit_scale" type="QString"/>
+                <Option value="0,0,0,255" name="color" type="QString"/>
+                <Option value="2" name="draw_mode" type="QString"/>
+                <Option value="1" name="enabled" type="QString"/>
+                <Option value="135" name="offset_angle" type="QString"/>
+                <Option value="2" name="offset_distance" type="QString"/>
+                <Option value="MM" name="offset_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="offset_unit_scale" type="QString"/>
+                <Option value="0.146" name="opacity" type="QString"/>
+              </Option>
+            </effect>
+            <effect type="innerGlow">
+              <Option type="Map">
+                <Option value="0" name="blend_mode" type="QString"/>
+                <Option value="0.7935" name="blur_level" type="QString"/>
+                <Option value="MM" name="blur_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="blur_unit_scale" type="QString"/>
+                <Option value="0,0,255,255" name="color1" type="QString"/>
+                <Option value="0,255,0,255" name="color2" type="QString"/>
+                <Option value="0" name="color_type" type="QString"/>
+                <Option value="ccw" name="direction" type="QString"/>
+                <Option value="0" name="discrete" type="QString"/>
+                <Option value="2" name="draw_mode" type="QString"/>
+                <Option value="0" name="enabled" type="QString"/>
+                <Option value="0.386" name="opacity" type="QString"/>
+                <Option value="gradient" name="rampType" type="QString"/>
+                <Option value="255,255,255,255" name="single_color" type="QString"/>
+                <Option value="rgb" name="spec" type="QString"/>
+                <Option value="2" name="spread" type="QString"/>
+                <Option value="MM" name="spread_unit" type="QString"/>
+                <Option value="3x:0,0,0,0,0,0" name="spread_unit_scale" type="QString"/>
+              </Option>
+            </effect>
+          </effect>
           <data_defined_properties>
             <Option type="Map">
               <Option value="" name="name" type="QString"/>
@@ -276,8 +296,7 @@
   <layerOpacity>1</layerOpacity>
   <SingleCategoryDiagramRenderer attributeLegend="1" diagramType="Histogram">
     <DiagramCategory sizeType="MM" spacing="5" showAxis="1" sizeScale="3x:0,0,0,0,0,0" penColor="#000000" spacingUnit="MM" scaleBasedVisibility="0" maxScaleDenominator="1e+08" barWidth="5" scaleDependency="Area" lineSizeType="MM" width="15" enabled="0" minimumSize="0" backgroundColor="#ffffff" minScaleDenominator="0" penWidth="0" opacity="1" backgroundAlpha="255" labelPlacementMethod="XHeight" diagramOrientation="Up" direction="0" spacingUnitScale="3x:0,0,0,0,0,0" height="15" lineSizeScale="3x:0,0,0,0,0,0" penAlpha="255" rotationOffset="270">
-      <fontProperties strikethrough="0" style="" italic="0" underline="0" bold="0" description="MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0"/>
-      <attribute field="" colorOpacity="1" color="#000000" label=""/>
+      <fontProperties strikethrough="0" style="" italic="0" underline="0" bold="0" description="MS Shell Dlg 2,9.75,-1,5,50,0,0,0,0,0"/>
       <axisSymbol>
         <symbol frame_rate="10" name="" force_rhr="0" type="line" alpha="1" clip_to_extent="1" is_animated="0">
           <data_defined_properties>
@@ -345,79 +364,79 @@
   <legend type="default-vector" showLabelLegend="0"/>
   <referencedLayers/>
   <fieldConfiguration>
-    <field configurationFlags="None" name="Rioolgemaal"/>
+    <field configurationFlags="None" name="geo_id"/>
+    <field configurationFlags="None" name="Stelsel"/>
+    <field configurationFlags="None" name="naam"/>
+    <field configurationFlags="None" name="type"/>
+    <field configurationFlags="None" name="beginpunt"/>
+    <field configurationFlags="None" name="eindpunt"/>
+    <field configurationFlags="None" name="VormLeiding"/>
+    <field configurationFlags="None" name="BreedteLeiding"/>
+    <field configurationFlags="None" name="HoogteLeiding"/>
+    <field configurationFlags="None" name="LengteLeiding"/>
+    <field configurationFlags="None" name="BobBeginpuntLeiding"/>
+    <field configurationFlags="None" name="BobEindpuntLeiding"/>
     <field configurationFlags="None" name="Bemalingsgebied_ID"/>
-    <field configurationFlags="None" name="Type"/>
-    <field configurationFlags="None" name="Beginpunt_Afvoerrelatie"/>
-    <field configurationFlags="None" name="Eindpunt_Afvoerrelatie"/>
-    <field configurationFlags="None" name="Afvoercapaciteit_m3h"/>
-    <field configurationFlags="None" name="Inslagpeil_mNAP"/>
-    <field configurationFlags="None" name="Uitslagpeil_mNAP"/>
-    <field configurationFlags="None" name="Aantal_Pompen"/>
-    <field configurationFlags="None" name="Bemalingsgebied_ID_Afvoerpunt"/>
-    <field configurationFlags="None" name="Stelsel_ID_Afvoerpunt"/>
-    <field configurationFlags="None" name="Bemalingsgebied_ID_Lozingspunt"/>
-    <field configurationFlags="None" name="Stelsel_ID_lozingspunt"/>
   </fieldConfiguration>
   <aliases>
-    <alias field="Rioolgemaal" name="" index="0"/>
-    <alias field="Bemalingsgebied_ID" name="" index="1"/>
-    <alias field="Type" name="" index="2"/>
-    <alias field="Beginpunt_Afvoerrelatie" name="" index="3"/>
-    <alias field="Eindpunt_Afvoerrelatie" name="" index="4"/>
-    <alias field="Afvoercapaciteit_m3h" name="" index="5"/>
-    <alias field="Inslagpeil_mNAP" name="" index="6"/>
-    <alias field="Uitslagpeil_mNAP" name="" index="7"/>
-    <alias field="Aantal_Pompen" name="" index="8"/>
-    <alias field="Bemalingsgebied_ID_Afvoerpunt" name="" index="9"/>
-    <alias field="Stelsel_ID_Afvoerpunt" name="" index="10"/>
-    <alias field="Bemalingsgebied_ID_Lozingspunt" name="" index="11"/>
-    <alias field="Stelsel_ID_lozingspunt" name="" index="12"/>
+    <alias field="geo_id" name="" index="0"/>
+    <alias field="Stelsel" name="" index="1"/>
+    <alias field="naam" name="" index="2"/>
+    <alias field="type" name="" index="3"/>
+    <alias field="beginpunt" name="" index="4"/>
+    <alias field="eindpunt" name="" index="5"/>
+    <alias field="VormLeiding" name="" index="6"/>
+    <alias field="BreedteLeiding" name="" index="7"/>
+    <alias field="HoogteLeiding" name="" index="8"/>
+    <alias field="LengteLeiding" name="" index="9"/>
+    <alias field="BobBeginpuntLeiding" name="" index="10"/>
+    <alias field="BobEindpuntLeiding" name="" index="11"/>
+    <alias field="Bemalingsgebied_ID" name="" index="12"/>
   </aliases>
   <defaults>
-    <default field="Rioolgemaal" applyOnUpdate="0" expression=""/>
+    <default field="geo_id" applyOnUpdate="0" expression=""/>
+    <default field="Stelsel" applyOnUpdate="0" expression=""/>
+    <default field="naam" applyOnUpdate="0" expression=""/>
+    <default field="type" applyOnUpdate="0" expression=""/>
+    <default field="beginpunt" applyOnUpdate="0" expression=""/>
+    <default field="eindpunt" applyOnUpdate="0" expression=""/>
+    <default field="VormLeiding" applyOnUpdate="0" expression=""/>
+    <default field="BreedteLeiding" applyOnUpdate="0" expression=""/>
+    <default field="HoogteLeiding" applyOnUpdate="0" expression=""/>
+    <default field="LengteLeiding" applyOnUpdate="0" expression=""/>
+    <default field="BobBeginpuntLeiding" applyOnUpdate="0" expression=""/>
+    <default field="BobEindpuntLeiding" applyOnUpdate="0" expression=""/>
     <default field="Bemalingsgebied_ID" applyOnUpdate="0" expression=""/>
-    <default field="Type" applyOnUpdate="0" expression=""/>
-    <default field="Beginpunt_Afvoerrelatie" applyOnUpdate="0" expression=""/>
-    <default field="Eindpunt_Afvoerrelatie" applyOnUpdate="0" expression=""/>
-    <default field="Afvoercapaciteit_m3h" applyOnUpdate="0" expression=""/>
-    <default field="Inslagpeil_mNAP" applyOnUpdate="0" expression=""/>
-    <default field="Uitslagpeil_mNAP" applyOnUpdate="0" expression=""/>
-    <default field="Aantal_Pompen" applyOnUpdate="0" expression=""/>
-    <default field="Bemalingsgebied_ID_Afvoerpunt" applyOnUpdate="0" expression=""/>
-    <default field="Stelsel_ID_Afvoerpunt" applyOnUpdate="0" expression=""/>
-    <default field="Bemalingsgebied_ID_Lozingspunt" applyOnUpdate="0" expression=""/>
-    <default field="Stelsel_ID_lozingspunt" applyOnUpdate="0" expression=""/>
   </defaults>
   <constraints>
-    <constraint constraints="0" field="Rioolgemaal" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="geo_id" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="Stelsel" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="naam" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="type" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="beginpunt" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="eindpunt" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="VormLeiding" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="BreedteLeiding" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="HoogteLeiding" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="LengteLeiding" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="BobBeginpuntLeiding" notnull_strength="0" exp_strength="0" unique_strength="0"/>
+    <constraint constraints="0" field="BobEindpuntLeiding" notnull_strength="0" exp_strength="0" unique_strength="0"/>
     <constraint constraints="0" field="Bemalingsgebied_ID" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Type" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Beginpunt_Afvoerrelatie" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Eindpunt_Afvoerrelatie" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Afvoercapaciteit_m3h" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Inslagpeil_mNAP" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Uitslagpeil_mNAP" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Aantal_Pompen" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Bemalingsgebied_ID_Afvoerpunt" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Stelsel_ID_Afvoerpunt" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Bemalingsgebied_ID_Lozingspunt" notnull_strength="0" exp_strength="0" unique_strength="0"/>
-    <constraint constraints="0" field="Stelsel_ID_lozingspunt" notnull_strength="0" exp_strength="0" unique_strength="0"/>
   </constraints>
   <constraintExpressions>
-    <constraint field="Rioolgemaal" exp="" desc=""/>
+    <constraint field="geo_id" exp="" desc=""/>
+    <constraint field="Stelsel" exp="" desc=""/>
+    <constraint field="naam" exp="" desc=""/>
+    <constraint field="type" exp="" desc=""/>
+    <constraint field="beginpunt" exp="" desc=""/>
+    <constraint field="eindpunt" exp="" desc=""/>
+    <constraint field="VormLeiding" exp="" desc=""/>
+    <constraint field="BreedteLeiding" exp="" desc=""/>
+    <constraint field="HoogteLeiding" exp="" desc=""/>
+    <constraint field="LengteLeiding" exp="" desc=""/>
+    <constraint field="BobBeginpuntLeiding" exp="" desc=""/>
+    <constraint field="BobEindpuntLeiding" exp="" desc=""/>
     <constraint field="Bemalingsgebied_ID" exp="" desc=""/>
-    <constraint field="Type" exp="" desc=""/>
-    <constraint field="Beginpunt_Afvoerrelatie" exp="" desc=""/>
-    <constraint field="Eindpunt_Afvoerrelatie" exp="" desc=""/>
-    <constraint field="Afvoercapaciteit_m3h" exp="" desc=""/>
-    <constraint field="Inslagpeil_mNAP" exp="" desc=""/>
-    <constraint field="Uitslagpeil_mNAP" exp="" desc=""/>
-    <constraint field="Aantal_Pompen" exp="" desc=""/>
-    <constraint field="Bemalingsgebied_ID_Afvoerpunt" exp="" desc=""/>
-    <constraint field="Stelsel_ID_Afvoerpunt" exp="" desc=""/>
-    <constraint field="Bemalingsgebied_ID_Lozingspunt" exp="" desc=""/>
-    <constraint field="Stelsel_ID_lozingspunt" exp="" desc=""/>
   </constraintExpressions>
   <expressionfields/>
   <attributeactions>
@@ -425,19 +444,19 @@
   </attributeactions>
   <attributetableconfig sortOrder="0" sortExpression="" actionWidgetStyle="dropDown">
     <columns>
-      <column hidden="0" name="Rioolgemaal" width="-1" type="field"/>
+      <column hidden="0" name="geo_id" width="-1" type="field"/>
+      <column hidden="0" name="Stelsel" width="-1" type="field"/>
+      <column hidden="0" name="naam" width="-1" type="field"/>
+      <column hidden="0" name="type" width="-1" type="field"/>
+      <column hidden="0" name="beginpunt" width="-1" type="field"/>
+      <column hidden="0" name="eindpunt" width="-1" type="field"/>
+      <column hidden="0" name="VormLeiding" width="-1" type="field"/>
+      <column hidden="0" name="BreedteLeiding" width="-1" type="field"/>
+      <column hidden="0" name="HoogteLeiding" width="-1" type="field"/>
+      <column hidden="0" name="LengteLeiding" width="-1" type="field"/>
+      <column hidden="0" name="BobBeginpuntLeiding" width="-1" type="field"/>
+      <column hidden="0" name="BobEindpuntLeiding" width="-1" type="field"/>
       <column hidden="0" name="Bemalingsgebied_ID" width="-1" type="field"/>
-      <column hidden="0" name="Type" width="-1" type="field"/>
-      <column hidden="0" name="Beginpunt_Afvoerrelatie" width="-1" type="field"/>
-      <column hidden="0" name="Eindpunt_Afvoerrelatie" width="-1" type="field"/>
-      <column hidden="0" name="Afvoercapaciteit_m3h" width="-1" type="field"/>
-      <column hidden="0" name="Inslagpeil_mNAP" width="-1" type="field"/>
-      <column hidden="0" name="Uitslagpeil_mNAP" width="-1" type="field"/>
-      <column hidden="0" name="Aantal_Pompen" width="-1" type="field"/>
-      <column hidden="0" name="Bemalingsgebied_ID_Afvoerpunt" width="-1" type="field"/>
-      <column hidden="0" name="Stelsel_ID_Afvoerpunt" width="-1" type="field"/>
-      <column hidden="0" name="Bemalingsgebied_ID_Lozingspunt" width="-1" type="field"/>
-      <column hidden="0" name="Stelsel_ID_lozingspunt" width="-1" type="field"/>
       <column hidden="1" width="-1" type="actions"/>
     </columns>
   </attributetableconfig>
@@ -446,7 +465,7 @@
     <fieldstyles/>
   </conditionalstyles>
   <storedexpressions/>
-  <previewExpression>"begin"</previewExpression>
+  <previewExpression>"Stelsel"</previewExpression>
   <mapTip></mapTip>
   <layerGeometryType>1</layerGeometryType>
 </qgis>
