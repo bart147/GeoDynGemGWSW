@@ -32,40 +32,39 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_afvoerrelatie', 'Resultaat_Stap3_Rioleringsgebieden_Afvoerrelatie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_afvoerboom', 'Resultaat_Stap3_Rioleringsgebieden_Afvoerboom', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_afvoerpunten_kengetallen', 'Resultaat_Stap3_Afvoerpunten_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_kengetallen', 'Resultaat_Stap3_Rioleringsgebieden_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit', 'Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Bouwprojecten_ids', 'Bouwprojecten_IDs', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
+        self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_kengetallen', 'Resultaat_Stap3_Rioleringsgebieden_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('CalcFieldsUpstreamInput', 'calc fields upstream input', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Retained_fields_for_testing_poc_calculation', 'retained_fields_for_testing_poc_calculation', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
         
-        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_1_afvoerpunten', 'Resultaat stap 1: Afvoerpunten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('Resultaat_stap_1_afvoerpunten')))
-        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat stap 2: Rioleringsgebieden met afvalwateraanbod uit eigen gebied', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied')))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', 'Resultaat_stap_3_Afvoerpunten_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050', 'Resultaat_stap_3_Rioleringsgebieden_toekomstige_situatie_extra_afvalwateraanbod_tot_2050', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_3_rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', 'Resultaat_stap_3_Rioleringsgebieden_sommatie_afvalwateraanbod_berging_vultijd_ledigingstijd', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_afvoerboom', 'Resultaat_Stap1_Afvoerboom', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('resultaat_stap1_afvoerboom')))
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_afvoerpunten', 'Resultaat_Stap1_Afvoerpunten', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('resultaat_stap1_afvoerpunten')))
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_afvoerrelatie', 'Resultaat_Stap1_Afvoerrelatie', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('resultaat_stap1_afvoerrelatie')))
+        # self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied', 'Resultaat_stap_2_Rioleringsgebieden_Met_Afvalwateraanbod_Uit_Eigen_Gebied', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Resultaat_stap2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied')))
+        # self.addParameter(QgsProcessingParameterFeatureSink('CalcFieldsUpstream', 'calc fields upstream', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Lis2graph', 'lis2graph', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_afvoerrelatie', 'Resultaat_Stap3_Rioleringsgebieden_Afvoerrelatie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_afvoerboom', 'Resultaat_Stap3_Rioleringsgebieden_Afvoerboom', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_afvoerpunten_kengetallen', 'Resultaat_Stap3_Afvoerpunten_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap3_rioleringsgebieden_kengetallen', 'Resultaat_Stap3_Rioleringsgebieden_Kengetallen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit', 'Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Bouwprojecten_ids', 'Bouwprojecten_IDs', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
+        # self.addParameter(QgsProcessingParameterFeatureSink('CalcFieldsUpstreamInput', 'calc fields upstream input', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Retained_fields_for_testing_poc_calculation', 'retained_fields_for_testing_poc_calculation', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         # self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))
-         
+        
+                
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
         # overall progress through the model
         self.result_folder = parameters['result_folder']
 
-        feedback = QgsProcessingMultiStepFeedback(84, model_feedback)
+        feedback = QgsProcessingMultiStepFeedback(82, model_feedback)
         results = {}
         outputs = {}
-
-        # Retain fields Bemalingsgebied_ID_Afvoerpunt
-        alg_params = {
-            'FIELDS': ['Bemalingsgebied_ID_Afvoerpunt'],
-            'INPUT': parameters['resultaat_stap1_afvoerpunten'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['RetainFieldsBemalingsgebied_id_afvoerpunt'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(1)
-        if feedback.isCanceled():
-            return {}
 
         # Field calculator Afvoerboom Stap3_datum
         alg_params = {
@@ -78,6 +77,19 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorAfvoerboomStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(1)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields Resultaat_Stap1_Afvoerboom
+        alg_params = {
+            'inputlayer': outputs['FieldCalculatorAfvoerboomStap3_datum']['OUTPUT'],
+            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
+            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerboom']
+        }
+        outputs['RetainfieldsResultaat_stap1_afvoerboom'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_afvoerboom'] = outputs['RetainfieldsResultaat_stap1_afvoerboom']['Output_layer']
 
         feedback.setCurrentStep(2)
         if feedback.isCanceled():
@@ -109,16 +121,28 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         if feedback.isCanceled():
             return {}
 
-        # retainfields Resultaat_Stap1_Afvoerboom
+        # Retain fields Bemalingsgebied_ID_Afvoerpunt
         alg_params = {
-            'inputlayer': outputs['FieldCalculatorAfvoerboomStap3_datum']['OUTPUT'],
-            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
-            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerboom']
+            'FIELDS': ['Bemalingsgebied_ID_Afvoerpunt'],
+            'INPUT': parameters['resultaat_stap1_afvoerpunten'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['RetainfieldsResultaat_stap1_afvoerboom'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap3_rioleringsgebieden_afvoerboom'] = outputs['RetainfieldsResultaat_stap1_afvoerboom']['Output_layer']
+        outputs['RetainFieldsBemalingsgebied_id_afvoerpunt'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(5)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields Resultaat_Stap1_Afvoerrelatie
+        alg_params = {
+            'inputlayer': outputs['FieldCalculatorAfvoerrelatieStap3_datum']['OUTPUT'],
+            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
+            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerrelatie']
+        }
+        outputs['RetainfieldsResultaat_stap1_afvoerrelatie'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_afvoerrelatie'] = outputs['RetainfieldsResultaat_stap1_afvoerrelatie']['Output_layer']
+
+        feedback.setCurrentStep(6)
         if feedback.isCanceled():
             return {}
 
@@ -133,19 +157,6 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(6)
-        if feedback.isCanceled():
-            return {}
-
-        # retainfields Resultaat_Stap1_Afvoerrelatie
-        alg_params = {
-            'inputlayer': outputs['FieldCalculatorAfvoerrelatieStap3_datum']['OUTPUT'],
-            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
-            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerrelatie']
-        }
-        outputs['RetainfieldsResultaat_stap1_afvoerrelatie'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap3_rioleringsgebieden_afvoerrelatie'] = outputs['RetainfieldsResultaat_stap1_afvoerrelatie']['Output_layer']
 
         feedback.setCurrentStep(7)
         if feedback.isCanceled():
@@ -299,17 +310,17 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Aantal_Keer_Oppompen_Tot_Afleverpunt
+        # Field calculator Aantal_Keer_Oppompen_Tot_En_Met_Afleverpunt
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Aantal_Keer_Oppompen_Tot_Afleverpunt',
+            'FIELD_NAME': 'Aantal_Keer_Oppompen_Tot_En_Met_Afleverpunt',
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 1,  # Integer (32 bit)
             'FORMULA': '0',
             'INPUT': outputs['FieldCalculatorAantal_onderbemalingen']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorAantal_keer_oppompen_tot_afleverpunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorAantal_keer_oppompen_tot_en_met_afleverpunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(17)
         if feedback.isCanceled():
@@ -322,7 +333,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 2,  # Text (string)
             'FORMULA': '""',
-            'INPUT': outputs['FieldCalculatorAantal_keer_oppompen_tot_afleverpunt']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorAantal_keer_oppompen_tot_en_met_afleverpunt']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorRioleringsgebied_id_overnamepunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
@@ -670,80 +681,16 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Sommatie_DWA_BAG_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Sommatie_DWA_BAG_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round("DWA_BAG_m3h"+"DWA_BAG_Onderbemalingen_m3h",2)',
-            'INPUT': outputs['CalcFieldsUpstream']['Output_layer'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorSommatie_dwa_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(40)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorSommatie_dwa_bag_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgebied_obv_droogweerafvoer_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(41)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgebied_obv_droogweerafvoer_obv_bag_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorSommatie_afvalwateraanbod_obv_bag_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(42)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Sommatie_POC_Praktijk_DWA_obv_BAG_m3h
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Sommatie_POC_Praktijk_DWA_obv_BAG_m3h',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(0,2)',
-            'INPUT': outputs['FieldCalculatorSommatie_afvalwateraanbod_obv_bag_en_poc_praktijk_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorSommatie_poc_praktijk_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(43)
-        if feedback.isCanceled():
-            return {}
-
         # calc fields upstream POC with iteration
         alg_params = {
             'id_veld': 'Bemalingsgebied_ID',
-            'inputlayer': outputs['FieldCalculatorSommatie_poc_praktijk_dwa_obv_bag_m3h']['OUTPUT'],
+            'inputlayer': outputs['CalcFieldsUpstream']['Output_layer'],
             'ontvangt_van': 'Onderbemalingsgeb_IDs_1_Niveau_Diep',
             'Output_layer': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['CalcFieldsUpstreamPocWithIteration'] = processing.run('GeoDynTools:calc fields upstream POC with iteration', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(44)
+        feedback.setCurrentStep(40)
         if feedback.isCanceled():
             return {}
 
@@ -759,7 +706,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_poc_theorie_gemengd_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(45)
+        feedback.setCurrentStep(41)
         if feedback.isCanceled():
             return {}
 
@@ -775,20 +722,20 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_poc_theorie_vgs_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(46)
+        feedback.setCurrentStep(42)
         if feedback.isCanceled():
             return {}
 
         # Retain fields
         alg_params = {
-            'FIELDS': ['BM_NM','Bemalingsgebied_ID','Afvoercapaciteit_m3h','Bemalingsgebied_ID_Lozingspunt','POC_Theorie_Totaal_m3h','DWA_BAG_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h','Onderbemalingsgeb_IDs_1_Niveau_Diep','Onderbemalingsgebied_IDs','Aantal_Keer_Oppompen_Tot_Afleverpunt','DWA_BAG_Onderbemalingen_m3h','POC_Praktijk_Onderbem_DWA_obv_BAG_m3h','Sommatie_POC_Praktijk_DWA_obv_BAG_m3h','Sommatie_DWA_BAG_m3h'],
+            'FIELDS': ['BM_NM','Bemalingsgebied_ID','Afvoercapaciteit_m3h','Bemalingsgebied_ID_Lozingspunt','POC_Theorie_Totaal_m3h','DWA_BAG_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h','Onderbemalingsgeb_IDs_1_Niveau_Diep','Onderbemalingsgebied_IDs','Aantal_Keer_Oppompen_Tot_En_Met_Afleverpunt','DWA_BAG_Onderbemalingen_m3h','POC_Praktijk_Onderbem_DWA_obv_BAG_m3h','Sommatie_POC_Praktijk_DWA_obv_BAG_m3h','Sommatie_DWA_BAG_m3h'],
             'INPUT': outputs['CalcFieldsUpstreamPocWithIteration']['Output_layer'],
             'OUTPUT': parameters['Retained_fields_for_testing_poc_calculation']
         }
         outputs['RetainFields'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Retained_fields_for_testing_poc_calculation'] = outputs['RetainFields']['OUTPUT']
 
-        feedback.setCurrentStep(47)
+        feedback.setCurrentStep(43)
         if feedback.isCanceled():
             return {}
 
@@ -804,7 +751,24 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_poc_theorie_totaal_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(48)
+        feedback.setCurrentStep(44)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Sommatie_DWA_BAG_m3h
+        # let op! Het DWA Totaal houdt geen rekening met de maximale afvoercapaciteit en kan dus in theorie groter zijn.
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Sommatie_DWA_BAG_m3h',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round("DWA_BAG_m3h"+"DWA_BAG_Onderbemalingen_m3h",2)',
+            'INPUT': outputs['FieldCalculatorSommatie_poc_theorie_totaal_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorSommatie_dwa_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(45)
         if feedback.isCanceled():
             return {}
 
@@ -815,12 +779,12 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_PRECISION': 0,
             'FIELD_TYPE': 1,  # Integer (32 bit)
             'FORMULA': '"Aantal_Adressen_Eigen_Rioleringsgebied"+"Aantal_Adressen_In_Onderbemalingen"',
-            'INPUT': outputs['FieldCalculatorSommatie_poc_theorie_totaal_m3h']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorSommatie_dwa_bag_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorSommatie_adressen'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(49)
+        feedback.setCurrentStep(46)
         if feedback.isCanceled():
             return {}
 
@@ -836,7 +800,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_drinkwater_part_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(50)
+        feedback.setCurrentStep(47)
         if feedback.isCanceled():
             return {}
 
@@ -852,7 +816,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_drinkwater_zak_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(51)
+        feedback.setCurrentStep(48)
         if feedback.isCanceled():
             return {}
 
@@ -868,7 +832,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_drinkwater_totaal_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(52)
+        feedback.setCurrentStep(49)
         if feedback.isCanceled():
             return {}
 
@@ -884,7 +848,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_dwa_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(53)
+        feedback.setCurrentStep(50)
         if feedback.isCanceled():
             return {}
 
@@ -900,7 +864,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_aantal_ves'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(54)
+        feedback.setCurrentStep(51)
         if feedback.isCanceled():
             return {}
 
@@ -916,7 +880,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_extra_dwa_periode_2124_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(55)
+        feedback.setCurrentStep(52)
         if feedback.isCanceled():
             return {}
 
@@ -932,7 +896,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_extra_dwa_periode_2529_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(56)
+        feedback.setCurrentStep(53)
         if feedback.isCanceled():
             return {}
 
@@ -948,7 +912,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_extra_dwa_periode_3039_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(57)
+        feedback.setCurrentStep(54)
         if feedback.isCanceled():
             return {}
 
@@ -964,7 +928,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorSommatie_extra_dwa_periode_4050_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(58)
+        feedback.setCurrentStep(55)
         if feedback.isCanceled():
             return {}
 
@@ -980,7 +944,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_poc_theorie_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(59)
+        feedback.setCurrentStep(56)
         if feedback.isCanceled():
             return {}
 
@@ -996,7 +960,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_en_poc_theorie_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(60)
+        feedback.setCurrentStep(57)
         if feedback.isCanceled():
             return {}
 
@@ -1012,24 +976,23 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_theorie_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(61)
+        feedback.setCurrentStep(58)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h
-        # ipv Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h
+        # Field calculator Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h
         alg_params = {
             'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h',
+            'FIELD_NAME': 'Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("POC_Theorie_Totaal_m3h">0,"Afvoercapaciteit_m3h","POC_Praktijk_Onderbem_DWA_obv_BAG_m3h"+"Sommatie_DWA_BAG_m3h")',
             'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_theorie_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_afvoercapaciteit_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(62)
+        feedback.setCurrentStep(59)
         if feedback.isCanceled():
             return {}
 
@@ -1040,12 +1003,12 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
             'FORMULA': 'if("POC_Theorie_Totaal_m3h">0,"Afvoercapaciteit_m3h","POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h"+"Sommatie_Drinkwater_Totaal_m3h")',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_afvoercapaciteit_m3h']['OUTPUT'],
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_bag_en_poc_praktijk_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorAfvalwateraanbod_obv_drinkwater_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(63)
+        feedback.setCurrentStep(60)
         if feedback.isCanceled():
             return {}
 
@@ -1061,23 +1024,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_praktijk_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(64)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Leidingberging_mm
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Leidingberging_mm',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(\r\n"Leidingberging_m3"/("Aangesloten_Oppervlak_Stelsel_ha"*10000)\r\n,2)',
-            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_praktijk_m3h']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorLeidingberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(65)
+        feedback.setCurrentStep(61)
         if feedback.isCanceled():
             return {}
 
@@ -1090,7 +1037,23 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         outputs['ExtractByExpressionGebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Gebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit'] = outputs['ExtractByExpressionGebieden_waar_afvalwateraanbod_groter_is_dan_afvoercapaciteit']['OUTPUT']
 
-        feedback.setCurrentStep(66)
+        feedback.setCurrentStep(62)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Leidingberging_mm
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Leidingberging_mm',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round(\r\n"Leidingberging_m3"/("Aangesloten_Oppervlak_Stelsel_ha"*10000)*1000\r\n,2)',
+            'INPUT': outputs['FieldCalculatorAfvalwateraanbod_obv_ves_en_poc_praktijk_m3h']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorLeidingberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(63)
         if feedback.isCanceled():
             return {}
 
@@ -1100,13 +1063,13 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_NAME': 'Knooppuntberging_mm',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(\r\n"Knooppuntberging_m3"/\r\n("Aangesloten_Oppervlak_Stelsel_ha"*10000)\r\n,2)',
+            'FORMULA': 'round(\r\n"Knooppuntberging_m3"/\r\n("Aangesloten_Oppervlak_Stelsel_ha"*10000)*1000\r\n,2)',
             'INPUT': outputs['FieldCalculatorLeidingberging_mm']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorKnooppuntberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(67)
+        feedback.setCurrentStep(64)
         if feedback.isCanceled():
             return {}
 
@@ -1116,13 +1079,13 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_NAME': 'Stelselberging_mm',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round(\r\n"Stelselberging_m3"/\r\n("Aangesloten_Oppervlak_Stelsel_ha"*10000)\r\n,2)',
+            'FORMULA': 'round(\r\n"Stelselberging_m3"/\r\n("Aangesloten_Oppervlak_Stelsel_ha"*10000)*1000\r\n,2)',
             'INPUT': outputs['FieldCalculatorKnooppuntberging_mm']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorStelselberging_mm'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(68)
+        feedback.setCurrentStep(65)
         if feedback.isCanceled():
             return {}
 
@@ -1138,7 +1101,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorMaximale_vultijd_droogweer_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(69)
+        feedback.setCurrentStep(66)
         if feedback.isCanceled():
             return {}
 
@@ -1154,12 +1117,11 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorMinimale_vultijd_droogweer_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(70)
+        feedback.setCurrentStep(67)
         if feedback.isCanceled():
             return {}
 
         # Field calculator Maximale_Ledigingstijd_h
-        # formule nog reviewen na werkzaamheden Bart
         alg_params = {
             'FIELD_LENGTH': 0,
             'FIELD_NAME': 'Maximale_Ledigingstijd_h',
@@ -1171,7 +1133,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorMaximale_ledigingstijd_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(71)
+        feedback.setCurrentStep(68)
         if feedback.isCanceled():
             return {}
 
@@ -1187,7 +1149,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorMinimale_ledigingstijd_h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(72)
+        feedback.setCurrentStep(69)
         if feedback.isCanceled():
             return {}
 
@@ -1203,7 +1165,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(73)
+        feedback.setCurrentStep(70)
         if feedback.isCanceled():
             return {}
 
@@ -1219,7 +1181,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(74)
+        feedback.setCurrentStep(71)
         if feedback.isCanceled():
             return {}
 
@@ -1235,7 +1197,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_theorie_beschikbaar_dwa_obv_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(75)
+        feedback.setCurrentStep(72)
         if feedback.isCanceled():
             return {}
 
@@ -1251,7 +1213,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_bag_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(76)
+        feedback.setCurrentStep(73)
         if feedback.isCanceled():
             return {}
 
@@ -1267,7 +1229,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_drinkwater_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(77)
+        feedback.setCurrentStep(74)
         if feedback.isCanceled():
             return {}
 
@@ -1283,7 +1245,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_m3h'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(78)
+        feedback.setCurrentStep(75)
         if feedback.isCanceled():
             return {}
 
@@ -1299,7 +1261,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_bag_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(79)
+        feedback.setCurrentStep(76)
         if feedback.isCanceled():
             return {}
 
@@ -1315,7 +1277,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_drinkwater_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(80)
+        feedback.setCurrentStep(77)
         if feedback.isCanceled():
             return {}
 
@@ -1331,7 +1293,36 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(81)
+        feedback.setCurrentStep(78)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) overbodige velden
+        alg_params = {
+            'COLUMN': ['Bemalingsgebied_ID_2','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h'],
+            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['DropFieldsOverbodigeVelden'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(79)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Order
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Order',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 1,  # Integer (32 bit)
+            'FORMULA': '1',
+            'INPUT': outputs['DropFieldsOverbodigeVelden']['OUTPUT'],
+            'OUTPUT': parameters['Resultaat_stap3_rioleringsgebieden_kengetallen']
+        }
+        outputs['FieldCalculatorOrder'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_kengetallen'] = outputs['FieldCalculatorOrder']['OUTPUT']
+
+        feedback.setCurrentStep(80)
         if feedback.isCanceled():
             return {}
 
@@ -1342,27 +1333,14 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELDS_TO_COPY': [''],
             'FIELD_2': 'Bemalingsgebied_ID',
             'INPUT': outputs['RetainFieldsBemalingsgebied_id_afvoerpunt']['OUTPUT'],
-            'INPUT_2': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh']['OUTPUT'],
+            'INPUT_2': outputs['FieldCalculatorOrder']['OUTPUT'],
             'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinAttributesByFieldValue'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(82)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) overbodige velden
-        alg_params = {
-            'COLUMN': ['Bemalingsgebied_ID_2','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h','Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h'],
-            'INPUT': outputs['FieldCalculatorPoc_praktijk_eigen_rioleringsgeb_dwa_obv_ves_mmh']['OUTPUT'],
-            'OUTPUT': parameters['Resultaat_stap3_rioleringsgebieden_kengetallen']
-        }
-        outputs['DropFieldsOverbodigeVelden'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap3_rioleringsgebieden_kengetallen'] = outputs['DropFieldsOverbodigeVelden']['OUTPUT']
-
-        feedback.setCurrentStep(83)
+        feedback.setCurrentStep(81)
         if feedback.isCanceled():
             return {}
 

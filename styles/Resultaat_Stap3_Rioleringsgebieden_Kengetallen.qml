@@ -1,178 +1,178 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis styleCategories="LayerConfiguration|Symbology|Symbology3D|Labeling|Fields|Actions|MapTips|Diagrams|AttributeTable|Rendering|CustomProperties|GeometryOptions|Relations|Temporal|Legend|Elevation|Notes" simplifyMaxScale="1" version="3.28.4-Firenze" minScale="100000000" simplifyLocal="1" simplifyDrawingTol="1" symbologyReferenceScale="-1" labelsEnabled="1" simplifyDrawingHints="1" hasScaleBasedVisibilityFlag="0" maxScale="0" readOnly="0" simplifyAlgorithm="0">
+<qgis hasScaleBasedVisibilityFlag="0" labelsEnabled="1" simplifyDrawingHints="1" maxScale="0" symbologyReferenceScale="-1" simplifyMaxScale="1" simplifyAlgorithm="0" simplifyDrawingTol="1" styleCategories="LayerConfiguration|Symbology|Symbology3D|Labeling|Fields|Actions|MapTips|Diagrams|AttributeTable|Rendering|CustomProperties|GeometryOptions|Relations|Temporal|Legend|Elevation|Notes" minScale="100000000" version="3.28.4-Firenze" simplifyLocal="1" readOnly="0">
   <flags>
     <Identifiable>1</Identifiable>
     <Removable>1</Removable>
     <Searchable>1</Searchable>
     <Private>0</Private>
   </flags>
-  <temporal endExpression="" durationField="" endField="" fixedDuration="0" limitMode="0" startField="" mode="0" startExpression="" enabled="0" durationUnit="min" accumulate="0">
+  <temporal durationField="" durationUnit="min" fixedDuration="0" accumulate="0" limitMode="0" mode="0" startExpression="" endExpression="" startField="" endField="" enabled="0">
     <fixedRange>
       <start></start>
       <end></end>
     </fixedRange>
   </temporal>
-  <elevation symbology="Line" type="IndividualFeatures" zoffset="0" respectLayerSymbol="1" clamping="Terrain" showMarkerSymbolInSurfacePlots="0" zscale="1" extrusionEnabled="0" extrusion="0" binding="Centroid">
+  <elevation extrusionEnabled="0" zoffset="0" respectLayerSymbol="1" binding="Centroid" symbology="Line" clamping="Terrain" showMarkerSymbolInSurfacePlots="0" zscale="1" extrusion="0" type="IndividualFeatures">
     <data-defined-properties>
       <Option type="Map">
-        <Option type="QString" value="" name="name"/>
+        <Option name="name" value="" type="QString"/>
         <Option name="properties"/>
-        <Option type="QString" value="collection" name="type"/>
+        <Option name="type" value="collection" type="QString"/>
       </Option>
     </data-defined-properties>
     <profileLineSymbol>
-      <symbol type="line" force_rhr="0" is_animated="0" frame_rate="10" name="" alpha="1" clip_to_extent="1">
+      <symbol name="" clip_to_extent="1" alpha="1" is_animated="0" frame_rate="10" force_rhr="0" type="line">
         <data_defined_properties>
           <Option type="Map">
-            <Option type="QString" value="" name="name"/>
+            <Option name="name" value="" type="QString"/>
             <Option name="properties"/>
-            <Option type="QString" value="collection" name="type"/>
+            <Option name="type" value="collection" type="QString"/>
           </Option>
         </data_defined_properties>
-        <layer locked="0" class="SimpleLine" enabled="1" pass="0">
+        <layer class="SimpleLine" pass="0" enabled="1" locked="0">
           <Option type="Map">
-            <Option type="QString" value="0" name="align_dash_pattern"/>
-            <Option type="QString" value="square" name="capstyle"/>
-            <Option type="QString" value="5;2" name="customdash"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="customdash_map_unit_scale"/>
-            <Option type="QString" value="MM" name="customdash_unit"/>
-            <Option type="QString" value="0" name="dash_pattern_offset"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="dash_pattern_offset_map_unit_scale"/>
-            <Option type="QString" value="MM" name="dash_pattern_offset_unit"/>
-            <Option type="QString" value="0" name="draw_inside_polygon"/>
-            <Option type="QString" value="bevel" name="joinstyle"/>
-            <Option type="QString" value="125,139,143,255" name="line_color"/>
-            <Option type="QString" value="solid" name="line_style"/>
-            <Option type="QString" value="0.6" name="line_width"/>
-            <Option type="QString" value="MM" name="line_width_unit"/>
-            <Option type="QString" value="0" name="offset"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-            <Option type="QString" value="MM" name="offset_unit"/>
-            <Option type="QString" value="0" name="ring_filter"/>
-            <Option type="QString" value="0" name="trim_distance_end"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="trim_distance_end_map_unit_scale"/>
-            <Option type="QString" value="MM" name="trim_distance_end_unit"/>
-            <Option type="QString" value="0" name="trim_distance_start"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="trim_distance_start_map_unit_scale"/>
-            <Option type="QString" value="MM" name="trim_distance_start_unit"/>
-            <Option type="QString" value="0" name="tweak_dash_pattern_on_corners"/>
-            <Option type="QString" value="0" name="use_custom_dash"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="width_map_unit_scale"/>
+            <Option name="align_dash_pattern" value="0" type="QString"/>
+            <Option name="capstyle" value="square" type="QString"/>
+            <Option name="customdash" value="5;2" type="QString"/>
+            <Option name="customdash_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="customdash_unit" value="MM" type="QString"/>
+            <Option name="dash_pattern_offset" value="0" type="QString"/>
+            <Option name="dash_pattern_offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="dash_pattern_offset_unit" value="MM" type="QString"/>
+            <Option name="draw_inside_polygon" value="0" type="QString"/>
+            <Option name="joinstyle" value="bevel" type="QString"/>
+            <Option name="line_color" value="125,139,143,255" type="QString"/>
+            <Option name="line_style" value="solid" type="QString"/>
+            <Option name="line_width" value="0.6" type="QString"/>
+            <Option name="line_width_unit" value="MM" type="QString"/>
+            <Option name="offset" value="0" type="QString"/>
+            <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="offset_unit" value="MM" type="QString"/>
+            <Option name="ring_filter" value="0" type="QString"/>
+            <Option name="trim_distance_end" value="0" type="QString"/>
+            <Option name="trim_distance_end_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="trim_distance_end_unit" value="MM" type="QString"/>
+            <Option name="trim_distance_start" value="0" type="QString"/>
+            <Option name="trim_distance_start_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="trim_distance_start_unit" value="MM" type="QString"/>
+            <Option name="tweak_dash_pattern_on_corners" value="0" type="QString"/>
+            <Option name="use_custom_dash" value="0" type="QString"/>
+            <Option name="width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
           </Option>
           <data_defined_properties>
             <Option type="Map">
-              <Option type="QString" value="" name="name"/>
+              <Option name="name" value="" type="QString"/>
               <Option name="properties"/>
-              <Option type="QString" value="collection" name="type"/>
+              <Option name="type" value="collection" type="QString"/>
             </Option>
           </data_defined_properties>
         </layer>
       </symbol>
     </profileLineSymbol>
     <profileFillSymbol>
-      <symbol type="fill" force_rhr="0" is_animated="0" frame_rate="10" name="" alpha="1" clip_to_extent="1">
+      <symbol name="" clip_to_extent="1" alpha="1" is_animated="0" frame_rate="10" force_rhr="0" type="fill">
         <data_defined_properties>
           <Option type="Map">
-            <Option type="QString" value="" name="name"/>
+            <Option name="name" value="" type="QString"/>
             <Option name="properties"/>
-            <Option type="QString" value="collection" name="type"/>
+            <Option name="type" value="collection" type="QString"/>
           </Option>
         </data_defined_properties>
-        <layer locked="0" class="SimpleFill" enabled="1" pass="0">
+        <layer class="SimpleFill" pass="0" enabled="1" locked="0">
           <Option type="Map">
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale"/>
-            <Option type="QString" value="125,139,143,255" name="color"/>
-            <Option type="QString" value="bevel" name="joinstyle"/>
-            <Option type="QString" value="0,0" name="offset"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-            <Option type="QString" value="MM" name="offset_unit"/>
-            <Option type="QString" value="89,99,102,255" name="outline_color"/>
-            <Option type="QString" value="solid" name="outline_style"/>
-            <Option type="QString" value="0.2" name="outline_width"/>
-            <Option type="QString" value="MM" name="outline_width_unit"/>
-            <Option type="QString" value="solid" name="style"/>
+            <Option name="border_width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="color" value="125,139,143,255" type="QString"/>
+            <Option name="joinstyle" value="bevel" type="QString"/>
+            <Option name="offset" value="0,0" type="QString"/>
+            <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="offset_unit" value="MM" type="QString"/>
+            <Option name="outline_color" value="89,99,102,255" type="QString"/>
+            <Option name="outline_style" value="solid" type="QString"/>
+            <Option name="outline_width" value="0.2" type="QString"/>
+            <Option name="outline_width_unit" value="MM" type="QString"/>
+            <Option name="style" value="solid" type="QString"/>
           </Option>
           <data_defined_properties>
             <Option type="Map">
-              <Option type="QString" value="" name="name"/>
+              <Option name="name" value="" type="QString"/>
               <Option name="properties"/>
-              <Option type="QString" value="collection" name="type"/>
+              <Option name="type" value="collection" type="QString"/>
             </Option>
           </data_defined_properties>
         </layer>
       </symbol>
     </profileFillSymbol>
     <profileMarkerSymbol>
-      <symbol type="marker" force_rhr="0" is_animated="0" frame_rate="10" name="" alpha="1" clip_to_extent="1">
+      <symbol name="" clip_to_extent="1" alpha="1" is_animated="0" frame_rate="10" force_rhr="0" type="marker">
         <data_defined_properties>
           <Option type="Map">
-            <Option type="QString" value="" name="name"/>
+            <Option name="name" value="" type="QString"/>
             <Option name="properties"/>
-            <Option type="QString" value="collection" name="type"/>
+            <Option name="type" value="collection" type="QString"/>
           </Option>
         </data_defined_properties>
-        <layer locked="0" class="SimpleMarker" enabled="1" pass="0">
+        <layer class="SimpleMarker" pass="0" enabled="1" locked="0">
           <Option type="Map">
-            <Option type="QString" value="0" name="angle"/>
-            <Option type="QString" value="square" name="cap_style"/>
-            <Option type="QString" value="125,139,143,255" name="color"/>
-            <Option type="QString" value="1" name="horizontal_anchor_point"/>
-            <Option type="QString" value="bevel" name="joinstyle"/>
-            <Option type="QString" value="diamond" name="name"/>
-            <Option type="QString" value="0,0" name="offset"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-            <Option type="QString" value="MM" name="offset_unit"/>
-            <Option type="QString" value="89,99,102,255" name="outline_color"/>
-            <Option type="QString" value="solid" name="outline_style"/>
-            <Option type="QString" value="0.2" name="outline_width"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale"/>
-            <Option type="QString" value="MM" name="outline_width_unit"/>
-            <Option type="QString" value="diameter" name="scale_method"/>
-            <Option type="QString" value="3" name="size"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="size_map_unit_scale"/>
-            <Option type="QString" value="MM" name="size_unit"/>
-            <Option type="QString" value="1" name="vertical_anchor_point"/>
+            <Option name="angle" value="0" type="QString"/>
+            <Option name="cap_style" value="square" type="QString"/>
+            <Option name="color" value="125,139,143,255" type="QString"/>
+            <Option name="horizontal_anchor_point" value="1" type="QString"/>
+            <Option name="joinstyle" value="bevel" type="QString"/>
+            <Option name="name" value="diamond" type="QString"/>
+            <Option name="offset" value="0,0" type="QString"/>
+            <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="offset_unit" value="MM" type="QString"/>
+            <Option name="outline_color" value="89,99,102,255" type="QString"/>
+            <Option name="outline_style" value="solid" type="QString"/>
+            <Option name="outline_width" value="0.2" type="QString"/>
+            <Option name="outline_width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="outline_width_unit" value="MM" type="QString"/>
+            <Option name="scale_method" value="diameter" type="QString"/>
+            <Option name="size" value="3" type="QString"/>
+            <Option name="size_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="size_unit" value="MM" type="QString"/>
+            <Option name="vertical_anchor_point" value="1" type="QString"/>
           </Option>
           <data_defined_properties>
             <Option type="Map">
-              <Option type="QString" value="" name="name"/>
+              <Option name="name" value="" type="QString"/>
               <Option name="properties"/>
-              <Option type="QString" value="collection" name="type"/>
+              <Option name="type" value="collection" type="QString"/>
             </Option>
           </data_defined_properties>
         </layer>
       </symbol>
     </profileMarkerSymbol>
   </elevation>
-  <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0" referencescale="-1">
+  <renderer-v2 symbollevels="0" forceraster="0" referencescale="-1" enableorderby="0" type="singleSymbol">
     <symbols>
-      <symbol type="fill" force_rhr="0" is_animated="0" frame_rate="10" name="0" alpha="1" clip_to_extent="1">
+      <symbol name="0" clip_to_extent="1" alpha="0.5" is_animated="0" frame_rate="10" force_rhr="0" type="fill">
         <data_defined_properties>
           <Option type="Map">
-            <Option type="QString" value="" name="name"/>
+            <Option name="name" value="" type="QString"/>
             <Option name="properties"/>
-            <Option type="QString" value="collection" name="type"/>
+            <Option name="type" value="collection" type="QString"/>
           </Option>
         </data_defined_properties>
-        <layer locked="0" class="SimpleFill" enabled="1" pass="0">
+        <layer class="SimpleFill" pass="0" enabled="1" locked="0">
           <Option type="Map">
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale"/>
-            <Option type="QString" value="178,223,138,255" name="color"/>
-            <Option type="QString" value="bevel" name="joinstyle"/>
-            <Option type="QString" value="0,0" name="offset"/>
-            <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-            <Option type="QString" value="MM" name="offset_unit"/>
-            <Option type="QString" value="51,160,44,255" name="outline_color"/>
-            <Option type="QString" value="solid" name="outline_style"/>
-            <Option type="QString" value="1" name="outline_width"/>
-            <Option type="QString" value="MM" name="outline_width_unit"/>
-            <Option type="QString" value="solid" name="style"/>
+            <Option name="border_width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="color" value="178,223,138,255" type="QString"/>
+            <Option name="joinstyle" value="bevel" type="QString"/>
+            <Option name="offset" value="0,0" type="QString"/>
+            <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+            <Option name="offset_unit" value="MM" type="QString"/>
+            <Option name="outline_color" value="51,160,44,255" type="QString"/>
+            <Option name="outline_style" value="solid" type="QString"/>
+            <Option name="outline_width" value="1" type="QString"/>
+            <Option name="outline_width_unit" value="MM" type="QString"/>
+            <Option name="style" value="solid" type="QString"/>
           </Option>
           <data_defined_properties>
             <Option type="Map">
-              <Option type="QString" value="" name="name"/>
+              <Option name="name" value="" type="QString"/>
               <Option name="properties"/>
-              <Option type="QString" value="collection" name="type"/>
+              <Option name="type" value="collection" type="QString"/>
             </Option>
           </data_defined_properties>
         </layer>
@@ -183,135 +183,135 @@
   </renderer-v2>
   <labeling type="simple">
     <settings calloutType="simple">
-      <text-style fontSizeMapUnitScale="3x:0,0,0,0,0,0" multilineHeightUnit="Percentage" fontFamily="Arial" fieldName="'Afvoerpunt: ' ||   &quot;Beginpunt_Afvoerrelatie&quot;  || '*' || &#xd;&#xa;if(&quot;Stelselnamen&quot; IS NULL,'Stelselnaam: ' || '', 'Stelselnaam: ' ||  &quot;Stelselnamen&quot; )|| '*' || &#xd;&#xa;if(&quot;Afvoercapaciteit_m3h&quot;  IS NULL, 'Afvoercapaciteit (m3/h): '  || 'onbekend','Afvoercapaciteit (m3/h): '  ||  &quot;Afvoercapaciteit_m3h&quot;  )|| '*' || &#xd;&#xa;if(&quot;Stelselberging_m3&quot;  IS NULL,'Stelselberging (m3): '  ||  0,'Stelselberging (m3): '  ||   &quot;Stelselberging_m3&quot; ) || '*' || &#xd;&#xa;if(&quot;Laagste_Drempelniveau_mNAP&quot;  IS NULL,'Laagste drempelniveau (m NAP): '  || 'niet aanwezig', 'Laagste drempelniveau (m NAP): '  ||   &quot;Laagste_Drempelniveau_mNAP&quot;  )|| '*' || &#xd;&#xa;if(&quot;Aangesloten_Oppervlak_Stelsel_ha&quot;  IS NULL,'Aangesloten oppervlak (ha): 0', 'Aangesloten oppervlak (ha): '   ||   &quot;Aangesloten_Oppervlak_Stelsel_ha&quot;   )|| '*' || &#xd;&#xa;if(&quot;DWA_BAG_m3h&quot;   IS NULL,'Droogweerafvoer (BAG) (m3/h): 0', 'Droogweerafvoer eigen gebied (BAG) (m3/h): '   ||   &quot;DWA_BAG_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;POC_Theorie_Totaal_m3h&quot;   IS NULL,'POC theorie eigen gebied (m3/h): 0', 'POC theorie eigen gebied (m3/h): '   ||   &quot;POC_Theorie_Totaal_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;Aantal_Onderbemalingen&quot;   IS NULL,'Aantal Onderbemalingen: 0', 'Aantal Onderbemalingen: '   ||   &quot;Aantal_Onderbemalingen&quot;  )|| '*' || &#xd;&#xa;if(&quot;DWA_BAG_Onderbemalingen_m3h&quot;   IS NULL,'Droogweerafvoer onderbemalingen (BAG) (m3/h): 0', 'Droogweerafvoer onderbemalingen (BAG) (m3/h): '   ||   &quot;DWA_BAG_Onderbemalingen_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;POC_Theorie_Totaal_Onderbem_m3h&quot;   IS NULL,'POC theorie eigen gebied (m3/h): 0', 'POC theorie eigen gebied (m3/h): '   ||   &quot;POC_Theorie_Totaal_Onderbem_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h&quot;   IS NULL,'Afvalwateraanbod obv BAG en POC theorie (m3/h): 0', 'Afvalwateraanbod obv BAG en POC theorie (m3/h): '   ||   &quot;Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h&quot;   )|| '*' ||&#xd;&#xa;if(&quot;Stelselberging_mm&quot;   IS NULL,'Stelselberging (mm): niet berekend', 'Stelselberging (mm): '   ||   &quot;Stelselberging_mm&quot;   )|| '*' || &#xd;&#xa;if(&quot;Aantal_Keer_Oppompen_Tot_Afleverpunt&quot;   IS NULL,'Aantal keer oppompen tot afleverpunt: niet bepaald', 'Aantal keer oppompen tot afleverpunt: '   ||   &quot;Aantal_Keer_Oppompen_Tot_Afleverpunt&quot;   )" fontKerning="1" fontUnderline="0" capitalization="0" fontSize="10" multilineHeight="1" legendString="Aa" textOpacity="1" fontItalic="0" forcedItalic="0" fontStrikeout="0" forcedBold="0" textOrientation="horizontal" allowHtml="0" previewBkgrdColor="255,255,255,255" namedStyle="Standaard" blendMode="0" isExpression="1" fontWeight="50" fontSizeUnit="Point" textColor="50,50,50,255" fontLetterSpacing="0" fontWordSpacing="0" useSubstitutions="0">
+      <text-style multilineHeightUnit="Percentage" legendString="Aa" multilineHeight="1" fontSize="10" textColor="50,50,50,255" forcedBold="0" previewBkgrdColor="255,255,255,255" capitalization="0" fontSizeUnit="Point" forcedItalic="0" fontItalic="0" allowHtml="0" fontLetterSpacing="0" namedStyle="Standaard" fontFamily="Arial" fontKerning="1" textOrientation="horizontal" fontUnderline="0" useSubstitutions="0" blendMode="0" fieldName="'Afvoerpunt: ' ||   &quot;Beginpunt_Afvoerrelatie&quot;  || '*' || &#xd;&#xa;if(&quot;Stelselnamen&quot; IS NULL,'Stelselnaam: ' || '', 'Stelselnaam: ' ||  &quot;Stelselnamen&quot; )|| '*' || &#xd;&#xa;if(&quot;Afvoercapaciteit_m3h&quot;  IS NULL, 'Afvoercapaciteit (m3/h): '  || 'onbekend','Afvoercapaciteit (m3/h): '  ||  &quot;Afvoercapaciteit_m3h&quot;  )|| '*' || &#xd;&#xa;if(&quot;Stelselberging_m3&quot;  IS NULL,'Stelselberging (m3): '  ||  0,'Stelselberging (m3): '  ||   &quot;Stelselberging_m3&quot; ) || '*' || &#xd;&#xa;if(&quot;Stelselberging_mm&quot;   IS NULL,'Stelselberging (mm): niet berekend', 'Stelselberging (mm): '   ||   &quot;Stelselberging_mm&quot;   )|| '*' || &#xd;&#xa;if(&quot;Laagste_Drempelniveau_mNAP&quot;  IS NULL,'Laagste drempelniveau (m NAP): '  || 'niet aanwezig', 'Laagste drempelniveau (m NAP): '  ||   &quot;Laagste_Drempelniveau_mNAP&quot;  )|| '*' || &#xd;&#xa;if(&quot;Aangesloten_Oppervlak_Stelsel_ha&quot;  IS NULL,'Aangesloten oppervlak (ha): 0', 'Aangesloten oppervlak (ha): '   ||   &quot;Aangesloten_Oppervlak_Stelsel_ha&quot;   )|| '*' || &#xd;&#xa;if(&quot;DWA_BAG_m3h&quot;   IS NULL,'Droogweerafvoer (BAG) (m3/h): 0', 'Droogweerafvoer eigen gebied (BAG) (m3/h): '   ||   &quot;DWA_BAG_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;DWA_BAG_Onderbemalingen_m3h&quot;   IS NULL,'Droogweerafvoer onderbemalingen (BAG) (m3/h): 0', 'Droogweerafvoer onderbemalingen (BAG) (m3/h): '   ||   &quot;DWA_BAG_Onderbemalingen_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;POC_Theorie_Totaal_m3h&quot;   IS NULL,'POC theorie eigen gebied (m3/h): 0', 'POC theorie eigen gebied (m3/h): '   ||   &quot;POC_Theorie_Totaal_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;POC_Theorie_Totaal_Onderbem_m3h&quot;   IS NULL,'POC theorie onderbemalingen(m3/h): 0', 'POC theorie onderbemalingen(m3/h): '   ||   &quot;POC_Theorie_Totaal_Onderbem_m3h&quot;   )|| '*' ||&#xd;&#xa;if(&quot;Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h&quot;   IS NULL,'Afvalwateraanbod obv BAG en POC theorie (m3/h): 0', 'Afvalwateraanbod obv BAG en POC theorie (m3/h): '   ||   &quot;Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h&quot;   )|| '*' || &#xd;&#xa;if(&quot;Aantal_Onderbemalingen&quot;   IS NULL,'Aantal Onderbemalingen: 0', 'Aantal Onderbemalingen: '   ||   &quot;Aantal_Onderbemalingen&quot;  )|| '*' || &#xd;&#xa;if(&quot;Aantal_Keer_Oppompen_Tot_Afleverpunt&quot;   IS NULL,'Aantal keer oppompen tot afleverpunt: niet bepaald', 'Aantal keer oppompen tot afleverpunt: '   ||   &quot;Aantal_Keer_Oppompen_Tot_Afleverpunt&quot;   )" textOpacity="1" fontSizeMapUnitScale="3x:0,0,0,0,0,0" isExpression="1" fontWordSpacing="0" fontStrikeout="0" fontWeight="50">
         <families/>
-        <text-buffer bufferSizeMapUnitScale="3x:0,0,0,0,0,0" bufferBlendMode="0" bufferJoinStyle="128" bufferSizeUnits="MM" bufferNoFill="1" bufferSize="1" bufferOpacity="1" bufferDraw="1" bufferColor="250,250,250,255"/>
-        <text-mask maskType="0" maskSize="0" maskedSymbolLayers="" maskSizeMapUnitScale="3x:0,0,0,0,0,0" maskSizeUnits="MM" maskOpacity="1" maskEnabled="0" maskJoinStyle="128"/>
-        <background shapeOffsetMapUnitScale="3x:0,0,0,0,0,0" shapeRadiiUnit="Point" shapeBorderColor="128,128,128,255" shapeDraw="0" shapeOpacity="1" shapeRotation="0" shapeJoinStyle="64" shapeType="0" shapeOffsetY="0" shapeRadiiY="0" shapeOffsetUnit="Point" shapeRadiiX="0" shapeSVGFile="" shapeBorderWidth="0" shapeSizeY="0" shapeBorderWidthUnit="Point" shapeBlendMode="0" shapeRadiiMapUnitScale="3x:0,0,0,0,0,0" shapeSizeType="0" shapeSizeUnit="Point" shapeRotationType="0" shapeSizeMapUnitScale="3x:0,0,0,0,0,0" shapeOffsetX="0" shapeSizeX="0" shapeBorderWidthMapUnitScale="3x:0,0,0,0,0,0" shapeFillColor="255,255,255,255">
-          <symbol type="marker" force_rhr="0" is_animated="0" frame_rate="10" name="markerSymbol" alpha="1" clip_to_extent="1">
+        <text-buffer bufferColor="250,250,250,255" bufferSizeUnits="MM" bufferNoFill="1" bufferDraw="1" bufferSizeMapUnitScale="3x:0,0,0,0,0,0" bufferJoinStyle="128" bufferBlendMode="0" bufferSize="1" bufferOpacity="1"/>
+        <text-mask maskedSymbolLayers="" maskEnabled="0" maskJoinStyle="128" maskSizeUnits="MM" maskSizeMapUnitScale="3x:0,0,0,0,0,0" maskType="0" maskOpacity="1" maskSize="0"/>
+        <background shapeRadiiY="0" shapeRadiiX="0" shapeOffsetX="0" shapeSizeY="0" shapeRadiiUnit="Point" shapeRotation="0" shapeFillColor="255,255,255,255" shapeSizeMapUnitScale="3x:0,0,0,0,0,0" shapeType="0" shapeSizeX="0" shapeSizeUnit="Point" shapeRadiiMapUnitScale="3x:0,0,0,0,0,0" shapeBorderColor="128,128,128,255" shapeBlendMode="0" shapeJoinStyle="64" shapeDraw="0" shapeBorderWidth="0" shapeBorderWidthMapUnitScale="3x:0,0,0,0,0,0" shapeOpacity="1" shapeBorderWidthUnit="Point" shapeOffsetY="0" shapeRotationType="0" shapeOffsetMapUnitScale="3x:0,0,0,0,0,0" shapeOffsetUnit="Point" shapeSVGFile="" shapeSizeType="0">
+          <symbol name="markerSymbol" clip_to_extent="1" alpha="1" is_animated="0" frame_rate="10" force_rhr="0" type="marker">
             <data_defined_properties>
               <Option type="Map">
-                <Option type="QString" value="" name="name"/>
+                <Option name="name" value="" type="QString"/>
                 <Option name="properties"/>
-                <Option type="QString" value="collection" name="type"/>
+                <Option name="type" value="collection" type="QString"/>
               </Option>
             </data_defined_properties>
-            <layer locked="0" class="SimpleMarker" enabled="1" pass="0">
+            <layer class="SimpleMarker" pass="0" enabled="1" locked="0">
               <Option type="Map">
-                <Option type="QString" value="0" name="angle"/>
-                <Option type="QString" value="square" name="cap_style"/>
-                <Option type="QString" value="190,207,80,255" name="color"/>
-                <Option type="QString" value="1" name="horizontal_anchor_point"/>
-                <Option type="QString" value="bevel" name="joinstyle"/>
-                <Option type="QString" value="circle" name="name"/>
-                <Option type="QString" value="0,0" name="offset"/>
-                <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-                <Option type="QString" value="MM" name="offset_unit"/>
-                <Option type="QString" value="35,35,35,255" name="outline_color"/>
-                <Option type="QString" value="solid" name="outline_style"/>
-                <Option type="QString" value="0" name="outline_width"/>
-                <Option type="QString" value="3x:0,0,0,0,0,0" name="outline_width_map_unit_scale"/>
-                <Option type="QString" value="MM" name="outline_width_unit"/>
-                <Option type="QString" value="diameter" name="scale_method"/>
-                <Option type="QString" value="2" name="size"/>
-                <Option type="QString" value="3x:0,0,0,0,0,0" name="size_map_unit_scale"/>
-                <Option type="QString" value="MM" name="size_unit"/>
-                <Option type="QString" value="1" name="vertical_anchor_point"/>
+                <Option name="angle" value="0" type="QString"/>
+                <Option name="cap_style" value="square" type="QString"/>
+                <Option name="color" value="190,207,80,255" type="QString"/>
+                <Option name="horizontal_anchor_point" value="1" type="QString"/>
+                <Option name="joinstyle" value="bevel" type="QString"/>
+                <Option name="name" value="circle" type="QString"/>
+                <Option name="offset" value="0,0" type="QString"/>
+                <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+                <Option name="offset_unit" value="MM" type="QString"/>
+                <Option name="outline_color" value="35,35,35,255" type="QString"/>
+                <Option name="outline_style" value="solid" type="QString"/>
+                <Option name="outline_width" value="0" type="QString"/>
+                <Option name="outline_width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+                <Option name="outline_width_unit" value="MM" type="QString"/>
+                <Option name="scale_method" value="diameter" type="QString"/>
+                <Option name="size" value="2" type="QString"/>
+                <Option name="size_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+                <Option name="size_unit" value="MM" type="QString"/>
+                <Option name="vertical_anchor_point" value="1" type="QString"/>
               </Option>
               <data_defined_properties>
                 <Option type="Map">
-                  <Option type="QString" value="" name="name"/>
+                  <Option name="name" value="" type="QString"/>
                   <Option name="properties"/>
-                  <Option type="QString" value="collection" name="type"/>
+                  <Option name="type" value="collection" type="QString"/>
                 </Option>
               </data_defined_properties>
             </layer>
           </symbol>
-          <symbol type="fill" force_rhr="0" is_animated="0" frame_rate="10" name="fillSymbol" alpha="1" clip_to_extent="1">
+          <symbol name="fillSymbol" clip_to_extent="1" alpha="1" is_animated="0" frame_rate="10" force_rhr="0" type="fill">
             <data_defined_properties>
               <Option type="Map">
-                <Option type="QString" value="" name="name"/>
+                <Option name="name" value="" type="QString"/>
                 <Option name="properties"/>
-                <Option type="QString" value="collection" name="type"/>
+                <Option name="type" value="collection" type="QString"/>
               </Option>
             </data_defined_properties>
-            <layer locked="0" class="SimpleFill" enabled="1" pass="0">
+            <layer class="SimpleFill" pass="0" enabled="1" locked="0">
               <Option type="Map">
-                <Option type="QString" value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale"/>
-                <Option type="QString" value="255,255,255,255" name="color"/>
-                <Option type="QString" value="bevel" name="joinstyle"/>
-                <Option type="QString" value="0,0" name="offset"/>
-                <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-                <Option type="QString" value="MM" name="offset_unit"/>
-                <Option type="QString" value="128,128,128,255" name="outline_color"/>
-                <Option type="QString" value="no" name="outline_style"/>
-                <Option type="QString" value="0" name="outline_width"/>
-                <Option type="QString" value="Point" name="outline_width_unit"/>
-                <Option type="QString" value="solid" name="style"/>
+                <Option name="border_width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+                <Option name="color" value="255,255,255,255" type="QString"/>
+                <Option name="joinstyle" value="bevel" type="QString"/>
+                <Option name="offset" value="0,0" type="QString"/>
+                <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+                <Option name="offset_unit" value="MM" type="QString"/>
+                <Option name="outline_color" value="128,128,128,255" type="QString"/>
+                <Option name="outline_style" value="no" type="QString"/>
+                <Option name="outline_width" value="0" type="QString"/>
+                <Option name="outline_width_unit" value="Point" type="QString"/>
+                <Option name="style" value="solid" type="QString"/>
               </Option>
               <data_defined_properties>
                 <Option type="Map">
-                  <Option type="QString" value="" name="name"/>
+                  <Option name="name" value="" type="QString"/>
                   <Option name="properties"/>
-                  <Option type="QString" value="collection" name="type"/>
+                  <Option name="type" value="collection" type="QString"/>
                 </Option>
               </data_defined_properties>
             </layer>
           </symbol>
         </background>
-        <shadow shadowDraw="0" shadowOffsetUnit="MM" shadowRadiusUnit="MM" shadowOffsetDist="1" shadowUnder="0" shadowRadiusMapUnitScale="3x:0,0,0,0,0,0" shadowBlendMode="6" shadowRadius="1.5" shadowOffsetAngle="135" shadowRadiusAlphaOnly="0" shadowOffsetMapUnitScale="3x:0,0,0,0,0,0" shadowOffsetGlobal="1" shadowOpacity="0.69999999999999996" shadowScale="100" shadowColor="0,0,0,255"/>
+        <shadow shadowOffsetDist="1" shadowDraw="0" shadowUnder="0" shadowColor="0,0,0,255" shadowBlendMode="6" shadowScale="100" shadowRadiusMapUnitScale="3x:0,0,0,0,0,0" shadowOffsetMapUnitScale="3x:0,0,0,0,0,0" shadowRadius="1.5" shadowRadiusAlphaOnly="0" shadowOpacity="0.69999999999999996" shadowOffsetGlobal="1" shadowRadiusUnit="MM" shadowOffsetAngle="135" shadowOffsetUnit="MM"/>
         <dd_properties>
           <Option type="Map">
-            <Option type="QString" value="" name="name"/>
+            <Option name="name" value="" type="QString"/>
             <Option name="properties"/>
-            <Option type="QString" value="collection" name="type"/>
+            <Option name="type" value="collection" type="QString"/>
           </Option>
         </dd_properties>
         <substitutions/>
       </text-style>
-      <text-format placeDirectionSymbol="0" decimals="3" autoWrapLength="0" useMaxLineLengthForAutoWrap="1" rightDirectionSymbol=">" addDirectionSymbol="0" multilineAlign="0" plussign="0" formatNumbers="0" wrapChar="*" leftDirectionSymbol="&lt;" reverseDirectionSymbol="0"/>
-      <placement lineAnchorPercent="0.5" repeatDistanceUnits="MM" yOffset="0" distUnits="MM" maxCurvedCharAngleIn="25" placementFlags="10" repeatDistance="0" geometryGeneratorType="PointGeometry" rotationAngle="0" lineAnchorTextPoint="FollowPlacement" distMapUnitScale="3x:0,0,0,0,0,0" lineAnchorClipping="0" layerType="PolygonGeometry" rotationUnit="AngleDegrees" quadOffset="4" overrunDistance="0" overrunDistanceMapUnitScale="3x:0,0,0,0,0,0" maxCurvedCharAngleOut="-25" offsetUnits="MM" fitInPolygonOnly="0" dist="0" centroidWhole="0" overlapHandling="PreventOverlap" centroidInside="0" placement="0" offsetType="0" repeatDistanceMapUnitScale="3x:0,0,0,0,0,0" allowDegraded="0" lineAnchorType="0" polygonPlacementFlags="2" labelOffsetMapUnitScale="3x:0,0,0,0,0,0" overrunDistanceUnit="MM" xOffset="0" preserveRotation="1" predefinedPositionOrder="TR,TL,BR,BL,R,L,TSR,BSR" geometryGenerator="" priority="10" geometryGeneratorEnabled="0"/>
-      <rendering scaleMax="10000" unplacedVisibility="0" labelPerPart="0" obstacleFactor="1" maxNumLabels="2000" obstacleType="1" upsidedownLabels="0" scaleMin="0" limitNumLabels="0" fontMaxPixelSize="10000" fontMinPixelSize="3" obstacle="0" drawLabels="1" fontLimitPixelSize="0" zIndex="0" scaleVisibility="1" mergeLines="0" minFeatureSize="0"/>
+      <text-format placeDirectionSymbol="0" decimals="3" autoWrapLength="0" reverseDirectionSymbol="0" formatNumbers="0" plussign="0" addDirectionSymbol="0" wrapChar="*" rightDirectionSymbol=">" useMaxLineLengthForAutoWrap="1" multilineAlign="0" leftDirectionSymbol="&lt;"/>
+      <placement maxCurvedCharAngleOut="-25" rotationUnit="AngleDegrees" priority="10" dist="0" lineAnchorClipping="0" placement="0" polygonPlacementFlags="2" repeatDistanceMapUnitScale="3x:0,0,0,0,0,0" xOffset="0" distMapUnitScale="3x:0,0,0,0,0,0" rotationAngle="0" labelOffsetMapUnitScale="3x:0,0,0,0,0,0" fitInPolygonOnly="0" lineAnchorPercent="0.5" distUnits="MM" centroidInside="0" overlapHandling="PreventOverlap" lineAnchorType="0" repeatDistanceUnits="MM" offsetType="0" placementFlags="10" centroidWhole="0" yOffset="0" geometryGeneratorEnabled="0" predefinedPositionOrder="TR,TL,BR,BL,R,L,TSR,BSR" geometryGeneratorType="PointGeometry" allowDegraded="0" overrunDistanceMapUnitScale="3x:0,0,0,0,0,0" overrunDistanceUnit="MM" quadOffset="4" repeatDistance="0" preserveRotation="1" lineAnchorTextPoint="FollowPlacement" maxCurvedCharAngleIn="25" layerType="PolygonGeometry" geometryGenerator="" offsetUnits="MM" overrunDistance="0"/>
+      <rendering scaleVisibility="1" fontLimitPixelSize="0" limitNumLabels="0" scaleMax="7500" zIndex="0" fontMaxPixelSize="10000" minFeatureSize="0" drawLabels="1" mergeLines="0" upsidedownLabels="0" scaleMin="0" labelPerPart="0" unplacedVisibility="0" obstacleFactor="1" maxNumLabels="2000" obstacle="0" obstacleType="1" fontMinPixelSize="3"/>
       <dd_properties>
         <Option type="Map">
-          <Option type="QString" value="" name="name"/>
+          <Option name="name" value="" type="QString"/>
           <Option name="properties"/>
-          <Option type="QString" value="collection" name="type"/>
+          <Option name="type" value="collection" type="QString"/>
         </Option>
       </dd_properties>
       <callout type="simple">
         <Option type="Map">
-          <Option type="QString" value="pole_of_inaccessibility" name="anchorPoint"/>
-          <Option type="int" value="0" name="blendMode"/>
-          <Option type="Map" name="ddProperties">
-            <Option type="QString" value="" name="name"/>
+          <Option name="anchorPoint" value="pole_of_inaccessibility" type="QString"/>
+          <Option name="blendMode" value="0" type="int"/>
+          <Option name="ddProperties" type="Map">
+            <Option name="name" value="" type="QString"/>
             <Option name="properties"/>
-            <Option type="QString" value="collection" name="type"/>
+            <Option name="type" value="collection" type="QString"/>
           </Option>
-          <Option type="bool" value="false" name="drawToAllParts"/>
-          <Option type="QString" value="0" name="enabled"/>
-          <Option type="QString" value="point_on_exterior" name="labelAnchorPoint"/>
-          <Option type="QString" value="&lt;symbol type=&quot;line&quot; force_rhr=&quot;0&quot; is_animated=&quot;0&quot; frame_rate=&quot;10&quot; name=&quot;symbol&quot; alpha=&quot;1&quot; clip_to_extent=&quot;1&quot;>&lt;data_defined_properties>&lt;Option type=&quot;Map&quot;>&lt;Option type=&quot;QString&quot; value=&quot;&quot; name=&quot;name&quot;/>&lt;Option name=&quot;properties&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;collection&quot; name=&quot;type&quot;/>&lt;/Option>&lt;/data_defined_properties>&lt;layer locked=&quot;0&quot; class=&quot;SimpleLine&quot; enabled=&quot;1&quot; pass=&quot;0&quot;>&lt;Option type=&quot;Map&quot;>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;align_dash_pattern&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;square&quot; name=&quot;capstyle&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;5;2&quot; name=&quot;customdash&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;3x:0,0,0,0,0,0&quot; name=&quot;customdash_map_unit_scale&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;MM&quot; name=&quot;customdash_unit&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;dash_pattern_offset&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;3x:0,0,0,0,0,0&quot; name=&quot;dash_pattern_offset_map_unit_scale&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;MM&quot; name=&quot;dash_pattern_offset_unit&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;draw_inside_polygon&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;bevel&quot; name=&quot;joinstyle&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;60,60,60,255&quot; name=&quot;line_color&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;solid&quot; name=&quot;line_style&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0.3&quot; name=&quot;line_width&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;MM&quot; name=&quot;line_width_unit&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;offset&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;3x:0,0,0,0,0,0&quot; name=&quot;offset_map_unit_scale&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;MM&quot; name=&quot;offset_unit&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;ring_filter&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;trim_distance_end&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;3x:0,0,0,0,0,0&quot; name=&quot;trim_distance_end_map_unit_scale&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;MM&quot; name=&quot;trim_distance_end_unit&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;trim_distance_start&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;3x:0,0,0,0,0,0&quot; name=&quot;trim_distance_start_map_unit_scale&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;MM&quot; name=&quot;trim_distance_start_unit&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;tweak_dash_pattern_on_corners&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;0&quot; name=&quot;use_custom_dash&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;3x:0,0,0,0,0,0&quot; name=&quot;width_map_unit_scale&quot;/>&lt;/Option>&lt;data_defined_properties>&lt;Option type=&quot;Map&quot;>&lt;Option type=&quot;QString&quot; value=&quot;&quot; name=&quot;name&quot;/>&lt;Option name=&quot;properties&quot;/>&lt;Option type=&quot;QString&quot; value=&quot;collection&quot; name=&quot;type&quot;/>&lt;/Option>&lt;/data_defined_properties>&lt;/layer>&lt;/symbol>" name="lineSymbol"/>
-          <Option type="double" value="0" name="minLength"/>
-          <Option type="QString" value="3x:0,0,0,0,0,0" name="minLengthMapUnitScale"/>
-          <Option type="QString" value="MM" name="minLengthUnit"/>
-          <Option type="double" value="0" name="offsetFromAnchor"/>
-          <Option type="QString" value="3x:0,0,0,0,0,0" name="offsetFromAnchorMapUnitScale"/>
-          <Option type="QString" value="MM" name="offsetFromAnchorUnit"/>
-          <Option type="double" value="0" name="offsetFromLabel"/>
-          <Option type="QString" value="3x:0,0,0,0,0,0" name="offsetFromLabelMapUnitScale"/>
-          <Option type="QString" value="MM" name="offsetFromLabelUnit"/>
+          <Option name="drawToAllParts" value="false" type="bool"/>
+          <Option name="enabled" value="0" type="QString"/>
+          <Option name="labelAnchorPoint" value="point_on_exterior" type="QString"/>
+          <Option name="lineSymbol" value="&lt;symbol name=&quot;symbol&quot; clip_to_extent=&quot;1&quot; alpha=&quot;1&quot; is_animated=&quot;0&quot; frame_rate=&quot;10&quot; force_rhr=&quot;0&quot; type=&quot;line&quot;>&lt;data_defined_properties>&lt;Option type=&quot;Map&quot;>&lt;Option name=&quot;name&quot; value=&quot;&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;properties&quot;/>&lt;Option name=&quot;type&quot; value=&quot;collection&quot; type=&quot;QString&quot;/>&lt;/Option>&lt;/data_defined_properties>&lt;layer class=&quot;SimpleLine&quot; pass=&quot;0&quot; enabled=&quot;1&quot; locked=&quot;0&quot;>&lt;Option type=&quot;Map&quot;>&lt;Option name=&quot;align_dash_pattern&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;capstyle&quot; value=&quot;square&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;customdash&quot; value=&quot;5;2&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;customdash_map_unit_scale&quot; value=&quot;3x:0,0,0,0,0,0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;customdash_unit&quot; value=&quot;MM&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;dash_pattern_offset&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;dash_pattern_offset_map_unit_scale&quot; value=&quot;3x:0,0,0,0,0,0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;dash_pattern_offset_unit&quot; value=&quot;MM&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;draw_inside_polygon&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;joinstyle&quot; value=&quot;bevel&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;line_color&quot; value=&quot;60,60,60,255&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;line_style&quot; value=&quot;solid&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;line_width&quot; value=&quot;0.3&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;line_width_unit&quot; value=&quot;MM&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;offset&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;offset_map_unit_scale&quot; value=&quot;3x:0,0,0,0,0,0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;offset_unit&quot; value=&quot;MM&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;ring_filter&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;trim_distance_end&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;trim_distance_end_map_unit_scale&quot; value=&quot;3x:0,0,0,0,0,0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;trim_distance_end_unit&quot; value=&quot;MM&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;trim_distance_start&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;trim_distance_start_map_unit_scale&quot; value=&quot;3x:0,0,0,0,0,0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;trim_distance_start_unit&quot; value=&quot;MM&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;tweak_dash_pattern_on_corners&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;use_custom_dash&quot; value=&quot;0&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;width_map_unit_scale&quot; value=&quot;3x:0,0,0,0,0,0&quot; type=&quot;QString&quot;/>&lt;/Option>&lt;data_defined_properties>&lt;Option type=&quot;Map&quot;>&lt;Option name=&quot;name&quot; value=&quot;&quot; type=&quot;QString&quot;/>&lt;Option name=&quot;properties&quot;/>&lt;Option name=&quot;type&quot; value=&quot;collection&quot; type=&quot;QString&quot;/>&lt;/Option>&lt;/data_defined_properties>&lt;/layer>&lt;/symbol>" type="QString"/>
+          <Option name="minLength" value="0" type="double"/>
+          <Option name="minLengthMapUnitScale" value="3x:0,0,0,0,0,0" type="QString"/>
+          <Option name="minLengthUnit" value="MM" type="QString"/>
+          <Option name="offsetFromAnchor" value="0" type="double"/>
+          <Option name="offsetFromAnchorMapUnitScale" value="3x:0,0,0,0,0,0" type="QString"/>
+          <Option name="offsetFromAnchorUnit" value="MM" type="QString"/>
+          <Option name="offsetFromLabel" value="0" type="double"/>
+          <Option name="offsetFromLabelMapUnitScale" value="3x:0,0,0,0,0,0" type="QString"/>
+          <Option name="offsetFromLabelUnit" value="MM" type="QString"/>
         </Option>
       </callout>
     </settings>
   </labeling>
   <customproperties>
     <Option type="Map">
-      <Option type="bool" value="false" name="OnConvertFormatRegeneratePrimaryKey"/>
-      <Option type="List" name="dualview/previewExpressions">
-        <Option type="QString" value="&quot;Stelselnamen&quot;"/>
+      <Option name="OnConvertFormatRegeneratePrimaryKey" value="false" type="bool"/>
+      <Option name="dualview/previewExpressions" type="List">
+        <Option value="&quot;Stelselnamen&quot;" type="QString"/>
       </Option>
-      <Option type="int" value="0" name="embeddedWidgets/count"/>
+      <Option name="embeddedWidgets/count" value="0" type="int"/>
       <Option name="variableNames"/>
       <Option name="variableValues"/>
     </Option>
@@ -320,53 +320,53 @@
   <featureBlendMode>0</featureBlendMode>
   <layerOpacity>1</layerOpacity>
   <SingleCategoryDiagramRenderer diagramType="Histogram" attributeLegend="1">
-    <DiagramCategory labelPlacementMethod="XHeight" scaleBasedVisibility="0" lineSizeType="MM" penWidth="0" enabled="0" showAxis="1" spacing="5" minScaleDenominator="0" sizeScale="3x:0,0,0,0,0,0" opacity="1" diagramOrientation="Up" rotationOffset="270" width="15" lineSizeScale="3x:0,0,0,0,0,0" penColor="#000000" sizeType="MM" height="15" backgroundColor="#ffffff" minimumSize="0" maxScaleDenominator="1e+08" penAlpha="255" spacingUnit="MM" scaleDependency="Area" barWidth="5" backgroundAlpha="255" spacingUnitScale="3x:0,0,0,0,0,0" direction="0">
-      <fontProperties style="" bold="0" underline="0" strikethrough="0" italic="0" description="MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0"/>
-      <attribute colorOpacity="1" color="#000000" label="" field=""/>
+    <DiagramCategory minimumSize="0" diagramOrientation="Up" width="15" backgroundAlpha="255" enabled="0" scaleDependency="Area" penAlpha="255" barWidth="5" rotationOffset="270" maxScaleDenominator="1e+08" penWidth="0" scaleBasedVisibility="0" direction="0" spacingUnitScale="3x:0,0,0,0,0,0" height="15" spacingUnit="MM" spacing="5" labelPlacementMethod="XHeight" opacity="1" sizeScale="3x:0,0,0,0,0,0" lineSizeScale="3x:0,0,0,0,0,0" sizeType="MM" backgroundColor="#ffffff" lineSizeType="MM" penColor="#000000" showAxis="1" minScaleDenominator="0">
+      <fontProperties strikethrough="0" description="MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0" style="" italic="0" underline="0" bold="0"/>
+      <attribute color="#000000" colorOpacity="1" field="" label=""/>
       <axisSymbol>
-        <symbol type="line" force_rhr="0" is_animated="0" frame_rate="10" name="" alpha="1" clip_to_extent="1">
+        <symbol name="" clip_to_extent="1" alpha="1" is_animated="0" frame_rate="10" force_rhr="0" type="line">
           <data_defined_properties>
             <Option type="Map">
-              <Option type="QString" value="" name="name"/>
+              <Option name="name" value="" type="QString"/>
               <Option name="properties"/>
-              <Option type="QString" value="collection" name="type"/>
+              <Option name="type" value="collection" type="QString"/>
             </Option>
           </data_defined_properties>
-          <layer locked="0" class="SimpleLine" enabled="1" pass="0">
+          <layer class="SimpleLine" pass="0" enabled="1" locked="0">
             <Option type="Map">
-              <Option type="QString" value="0" name="align_dash_pattern"/>
-              <Option type="QString" value="square" name="capstyle"/>
-              <Option type="QString" value="5;2" name="customdash"/>
-              <Option type="QString" value="3x:0,0,0,0,0,0" name="customdash_map_unit_scale"/>
-              <Option type="QString" value="MM" name="customdash_unit"/>
-              <Option type="QString" value="0" name="dash_pattern_offset"/>
-              <Option type="QString" value="3x:0,0,0,0,0,0" name="dash_pattern_offset_map_unit_scale"/>
-              <Option type="QString" value="MM" name="dash_pattern_offset_unit"/>
-              <Option type="QString" value="0" name="draw_inside_polygon"/>
-              <Option type="QString" value="bevel" name="joinstyle"/>
-              <Option type="QString" value="35,35,35,255" name="line_color"/>
-              <Option type="QString" value="solid" name="line_style"/>
-              <Option type="QString" value="0.26" name="line_width"/>
-              <Option type="QString" value="MM" name="line_width_unit"/>
-              <Option type="QString" value="0" name="offset"/>
-              <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
-              <Option type="QString" value="MM" name="offset_unit"/>
-              <Option type="QString" value="0" name="ring_filter"/>
-              <Option type="QString" value="0" name="trim_distance_end"/>
-              <Option type="QString" value="3x:0,0,0,0,0,0" name="trim_distance_end_map_unit_scale"/>
-              <Option type="QString" value="MM" name="trim_distance_end_unit"/>
-              <Option type="QString" value="0" name="trim_distance_start"/>
-              <Option type="QString" value="3x:0,0,0,0,0,0" name="trim_distance_start_map_unit_scale"/>
-              <Option type="QString" value="MM" name="trim_distance_start_unit"/>
-              <Option type="QString" value="0" name="tweak_dash_pattern_on_corners"/>
-              <Option type="QString" value="0" name="use_custom_dash"/>
-              <Option type="QString" value="3x:0,0,0,0,0,0" name="width_map_unit_scale"/>
+              <Option name="align_dash_pattern" value="0" type="QString"/>
+              <Option name="capstyle" value="square" type="QString"/>
+              <Option name="customdash" value="5;2" type="QString"/>
+              <Option name="customdash_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+              <Option name="customdash_unit" value="MM" type="QString"/>
+              <Option name="dash_pattern_offset" value="0" type="QString"/>
+              <Option name="dash_pattern_offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+              <Option name="dash_pattern_offset_unit" value="MM" type="QString"/>
+              <Option name="draw_inside_polygon" value="0" type="QString"/>
+              <Option name="joinstyle" value="bevel" type="QString"/>
+              <Option name="line_color" value="35,35,35,255" type="QString"/>
+              <Option name="line_style" value="solid" type="QString"/>
+              <Option name="line_width" value="0.26" type="QString"/>
+              <Option name="line_width_unit" value="MM" type="QString"/>
+              <Option name="offset" value="0" type="QString"/>
+              <Option name="offset_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+              <Option name="offset_unit" value="MM" type="QString"/>
+              <Option name="ring_filter" value="0" type="QString"/>
+              <Option name="trim_distance_end" value="0" type="QString"/>
+              <Option name="trim_distance_end_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+              <Option name="trim_distance_end_unit" value="MM" type="QString"/>
+              <Option name="trim_distance_start" value="0" type="QString"/>
+              <Option name="trim_distance_start_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
+              <Option name="trim_distance_start_unit" value="MM" type="QString"/>
+              <Option name="tweak_dash_pattern_on_corners" value="0" type="QString"/>
+              <Option name="use_custom_dash" value="0" type="QString"/>
+              <Option name="width_map_unit_scale" value="3x:0,0,0,0,0,0" type="QString"/>
             </Option>
             <data_defined_properties>
               <Option type="Map">
-                <Option type="QString" value="" name="name"/>
+                <Option name="name" value="" type="QString"/>
                 <Option name="properties"/>
-                <Option type="QString" value="collection" name="type"/>
+                <Option name="type" value="collection" type="QString"/>
               </Option>
             </data_defined_properties>
           </layer>
@@ -374,26 +374,26 @@
       </axisSymbol>
     </DiagramCategory>
   </SingleCategoryDiagramRenderer>
-  <DiagramLayerSettings zIndex="0" dist="0" placement="1" showAll="1" priority="0" obstacle="0" linePlacementFlags="18">
+  <DiagramLayerSettings dist="0" placement="1" obstacle="0" showAll="1" priority="0" linePlacementFlags="18" zIndex="0">
     <properties>
       <Option type="Map">
-        <Option type="QString" value="" name="name"/>
+        <Option name="name" value="" type="QString"/>
         <Option name="properties"/>
-        <Option type="QString" value="collection" name="type"/>
+        <Option name="type" value="collection" type="QString"/>
       </Option>
     </properties>
   </DiagramLayerSettings>
   <geometryOptions removeDuplicateNodes="0" geometryPrecision="0">
     <activeChecks/>
     <checkConfiguration type="Map">
-      <Option type="Map" name="QgsGeometryGapCheck">
-        <Option type="double" value="0" name="allowedGapsBuffer"/>
-        <Option type="bool" value="false" name="allowedGapsEnabled"/>
-        <Option type="QString" value="" name="allowedGapsLayer"/>
+      <Option name="QgsGeometryGapCheck" type="Map">
+        <Option name="allowedGapsBuffer" value="0" type="double"/>
+        <Option name="allowedGapsEnabled" value="false" type="bool"/>
+        <Option name="allowedGapsLayer" value="" type="QString"/>
       </Option>
     </checkConfiguration>
   </geometryOptions>
-  <legend type="default-vector" showLabelLegend="0"/>
+  <legend showLabelLegend="0" type="default-vector"/>
   <referencedLayers/>
   <fieldConfiguration>
     <field name="fid" configurationFlags="None"/>
@@ -402,7 +402,6 @@
     <field name="Bemalingsgebied_ID" configurationFlags="None"/>
     <field name="Stap1_Datum" configurationFlags="None"/>
     <field name="Rioolgemaal" configurationFlags="None"/>
-    <field name="Bemalingsgebied_ID_2" configurationFlags="None"/>
     <field name="Type" configurationFlags="None"/>
     <field name="Beginpunt_Afvoerrelatie" configurationFlags="None"/>
     <field name="Eindpunt_Afvoerrelatie" configurationFlags="None"/>
@@ -435,7 +434,6 @@
     <field name="POC_Theorie_Gemengd_m3h" configurationFlags="None"/>
     <field name="POC_Theorie_VGS_m3h" configurationFlags="None"/>
     <field name="POC_Theorie_Totaal_m3h" configurationFlags="None"/>
-    <field name="BAG_count" configurationFlags="None"/>
     <field name="Aantal_Adressen_Eigen_Rioleringsgebied" configurationFlags="None"/>
     <field name="Aangesloten_Oppervlak_Per_Woning_m2" configurationFlags="None"/>
     <field name="DWA_BAG_m3h" configurationFlags="None"/>
@@ -450,15 +448,12 @@
     <field name="Extra_DWA_Periode_4050_m3h" configurationFlags="None"/>
     <field name="Bouwprojecten_Eigen_Rioleringsgeb_IDs" configurationFlags="None"/>
     <field name="Stap3_datum" configurationFlags="None"/>
-    <field name="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h" configurationFlags="None"/>
-    <field name="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h" configurationFlags="None"/>
-    <field name="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h" configurationFlags="None"/>
     <field name="Onderbemalingsgeb_IDs_1_Niveau_Diep" configurationFlags="None"/>
     <field name="Onderbemalingsgebied_IDs" configurationFlags="None"/>
     <field name="Afvoerpunten_1_Niveau_Diep" configurationFlags="None"/>
     <field name="Afvoerpunten_Van_Onderbemalingen" configurationFlags="None"/>
-    <field name="Aantal_Onderbemalingen_ 1_Niveau_Diep" configurationFlags="None"/>
-    <field name="Aantal_Onderbemalingen " configurationFlags="None"/>
+    <field name="Aantal_Onderbemalingen_1_Niveau_Diep" configurationFlags="None"/>
+    <field name="Aantal_Onderbemalingen" configurationFlags="None"/>
     <field name="Aantal_Keer_Oppompen_Tot_Afleverpunt" configurationFlags="None"/>
     <field name="Rioleringsgebied_ID_Overnamepunt" configurationFlags="None"/>
     <field name="Naam_Overnamepunt" configurationFlags="None"/>
@@ -480,11 +475,14 @@
     <field name="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" configurationFlags="None"/>
     <field name="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" configurationFlags="None"/>
     <field name="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" configurationFlags="None"/>
+    <field name="Sommatie_DWA_BAG_m3h" configurationFlags="None"/>
+    <field name="POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h" configurationFlags="None"/>
+    <field name="Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" configurationFlags="None"/>
+    <field name="Sommatie_POC_Praktijk_DWA_obv_BAG_m3h" configurationFlags="None"/>
     <field name="Sommatie_POC_Theorie_Gemengd_m3h" configurationFlags="None"/>
     <field name="Sommatie_POC_Theorie_VGS_m3h" configurationFlags="None"/>
     <field name="Sommatie_POC_Theorie_Totaal_m3h" configurationFlags="None"/>
-    <field name="Sommatie_DWA_BAG_m3h" configurationFlags="None"/>
-    <field name="SOM_BAG_count" configurationFlags="None"/>
+    <field name="Sommatie_Adressen" configurationFlags="None"/>
     <field name="Sommatie_Drinkwater_Part_m3h" configurationFlags="None"/>
     <field name="Sommatie_Drinkwater_Zak_m3h" configurationFlags="None"/>
     <field name="Sommatie_Drinkwater_Totaal_m3h" configurationFlags="None"/>
@@ -497,7 +495,7 @@
     <field name="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" configurationFlags="None"/>
     <field name="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" configurationFlags="None"/>
     <field name="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" configurationFlags="None"/>
-    <field name="Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" configurationFlags="None"/>
+    <field name="Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h" configurationFlags="None"/>
     <field name="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" configurationFlags="None"/>
     <field name="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" configurationFlags="None"/>
     <field name="Leidingberging_mm" configurationFlags="None"/>
@@ -518,620 +516,610 @@
     <field name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" configurationFlags="None"/>
   </fieldConfiguration>
   <aliases>
-    <alias index="0" field="fid" name=""/>
-    <alias index="1" field="gemeente" name=""/>
-    <alias index="2" field="naam" name=""/>
-    <alias index="3" field="Bemalingsgebied_ID" name=""/>
-    <alias index="4" field="Stap1_Datum" name=""/>
-    <alias index="5" field="Rioolgemaal" name=""/>
-    <alias index="6" field="Bemalingsgebied_ID_2" name=""/>
-    <alias index="7" field="Type" name=""/>
-    <alias index="8" field="Beginpunt_Afvoerrelatie" name=""/>
-    <alias index="9" field="Eindpunt_Afvoerrelatie" name=""/>
-    <alias index="10" field="Afvoercapaciteit_m3h" name=""/>
-    <alias index="11" field="Inslagpeil_mNAP" name=""/>
-    <alias index="12" field="Uitslagpeil_mNAP" name=""/>
-    <alias index="13" field="Aantal_Pompen" name=""/>
-    <alias index="14" field="Bemalingsgebied_ID_Afvoerpunt" name=""/>
-    <alias index="15" field="Stelsel_ID_Afvoerpunt" name=""/>
-    <alias index="16" field="Bemalingsgebied_ID_Lozingspunt" name=""/>
-    <alias index="17" field="Stelsel_ID_lozingspunt" name=""/>
-    <alias index="18" field="Leidingtypen_In_Stelsel" name=""/>
-    <alias index="19" field="Stelselnamen" name=""/>
-    <alias index="20" field="Leidingberging_m3" name=""/>
-    <alias index="21" field="Knooppuntberging_m3" name=""/>
-    <alias index="22" field="Stelselberging_m3" name=""/>
-    <alias index="23" field="Laagste_Doorlaatniveau_mNAP" name=""/>
-    <alias index="24" field="Laagste_Drempelniveau_mNAP" name=""/>
-    <alias index="25" field="Aantal_Doorlaten" name=""/>
-    <alias index="26" field="Aantal_Drempels" name=""/>
-    <alias index="27" field="Stap2_datum" name=""/>
-    <alias index="28" field="Gemengd_Aangesloten_ha" name=""/>
-    <alias index="29" field="Hemelwater_Aangesloten_ha" name=""/>
-    <alias index="30" field="Verbeterd_Hemelwater_Aangesloten_ha" name=""/>
-    <alias index="31" field="Vuilwater_Aangesloten_ha" name=""/>
-    <alias index="32" field="DIT_Aangesloten_ha" name=""/>
-    <alias index="33" field="Oppervlaktewater_Aangesloten_ha" name=""/>
-    <alias index="34" field="Maaiveld_Aangesloten_ha" name=""/>
-    <alias index="35" field="Aangesloten_Oppervlak_Stelsel_ha" name=""/>
-    <alias index="36" field="POC_Theorie_Gemengd_m3h" name=""/>
-    <alias index="37" field="POC_Theorie_VGS_m3h" name=""/>
-    <alias index="38" field="POC_Theorie_Totaal_m3h" name=""/>
-    <alias index="39" field="BAG_count" name=""/>
-    <alias index="40" field="Aantal_Adressen_Eigen_Rioleringsgebied" name=""/>
-    <alias index="41" field="Aangesloten_Oppervlak_Per_Woning_m2" name=""/>
-    <alias index="42" field="DWA_BAG_m3h" name=""/>
-    <alias index="43" field="Drinkwater_Particulier_m3h" name=""/>
-    <alias index="44" field="Drinkwater_Zakelijk_m3h" name=""/>
-    <alias index="45" field="Drinkwater_Totaal_m3h" name=""/>
-    <alias index="46" field="Aantal_VEs_Eigen_Rioleringsgebied" name=""/>
-    <alias index="47" field="DWA_VEs_m3h" name=""/>
-    <alias index="48" field="Extra_DWA_Periode_2124_m3h" name=""/>
-    <alias index="49" field="Extra_DWA_Periode_2529_m3h" name=""/>
-    <alias index="50" field="Extra_DWA_Periode_3039_m3h" name=""/>
-    <alias index="51" field="Extra_DWA_Periode_4050_m3h" name=""/>
-    <alias index="52" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" name=""/>
-    <alias index="53" field="Stap3_datum" name=""/>
-    <alias index="54" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h" name=""/>
-    <alias index="55" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h" name=""/>
-    <alias index="56" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h" name=""/>
-    <alias index="57" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" name=""/>
-    <alias index="58" field="Onderbemalingsgebied_IDs" name=""/>
-    <alias index="59" field="Afvoerpunten_1_Niveau_Diep" name=""/>
-    <alias index="60" field="Afvoerpunten_Van_Onderbemalingen" name=""/>
-    <alias index="61" field="Aantal_Onderbemalingen_ 1_Niveau_Diep" name=""/>
-    <alias index="62" field="Aantal_Onderbemalingen " name=""/>
-    <alias index="63" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" name=""/>
-    <alias index="64" field="Rioleringsgebied_ID_Overnamepunt" name=""/>
-    <alias index="65" field="Naam_Overnamepunt" name=""/>
-    <alias index="66" field="Bouwprojecten_IDs_Onderbemalingen" name=""/>
-    <alias index="67" field="DWA_BAG_Onderbemalingen_m3h" name=""/>
-    <alias index="68" field="Aantal_Adressen_In_Onderbemalingen" name=""/>
-    <alias index="69" field="Drinkwater_Part_Onderbem_m3h" name=""/>
-    <alias index="70" field="Drinkwater_Zak_Onderbem_m3h" name=""/>
-    <alias index="71" field="Drinkwater_Totaal_Onderbem_m3h" name=""/>
-    <alias index="72" field="DWA_VEs_Onderbemalingen_m3h" name=""/>
-    <alias index="73" field="Aantal_VEs_Onderbemalingen" name=""/>
-    <alias index="74" field="Extra_DWA_Periode_Onderbem_2124_m3h" name=""/>
-    <alias index="75" field="Extra_DWA_Periode_Onderbem_2529_m3h" name=""/>
-    <alias index="76" field="Extra_DWA_Periode_Onderbem_3039_m3h" name=""/>
-    <alias index="77" field="Extra_DWA_Periode_Onderbem_4050_m3h" name=""/>
-    <alias index="78" field="POC_Theorie_Gemengd_Onderbem_m3h" name=""/>
-    <alias index="79" field="POC_Theorie_VGS_Onderbem_m3h" name=""/>
-    <alias index="80" field="POC_Theorie_Totaal_Onderbem_m3h" name=""/>
-    <alias index="81" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" name=""/>
-    <alias index="82" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" name=""/>
-    <alias index="83" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" name=""/>
-    <alias index="84" field="Sommatie_POC_Theorie_Gemengd_m3h" name=""/>
-    <alias index="85" field="Sommatie_POC_Theorie_VGS_m3h" name=""/>
-    <alias index="86" field="Sommatie_POC_Theorie_Totaal_m3h" name=""/>
-    <alias index="87" field="Sommatie_DWA_BAG_m3h" name=""/>
-    <alias index="88" field="SOM_BAG_count" name=""/>
-    <alias index="89" field="Sommatie_Drinkwater_Part_m3h" name=""/>
-    <alias index="90" field="Sommatie_Drinkwater_Zak_m3h" name=""/>
-    <alias index="91" field="Sommatie_Drinkwater_Totaal_m3h" name=""/>
-    <alias index="92" field="Sommatie_DWA_VEs_m3h" name=""/>
-    <alias index="93" field="Sommatie_Aantal_VEs" name=""/>
-    <alias index="94" field="Sommatie_Extra_DWA_Periode_2124_m3h" name=""/>
-    <alias index="95" field="Sommatie_Extra_DWA_Periode_2529_m3h" name=""/>
-    <alias index="96" field="Sommatie_Extra_DWA_Periode_3039_m3h" name=""/>
-    <alias index="97" field="Sommatie_Extra_DWA_Periode_4050_m3h" name=""/>
-    <alias index="98" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" name=""/>
-    <alias index="99" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" name=""/>
-    <alias index="100" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" name=""/>
-    <alias index="101" field="Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" name=""/>
-    <alias index="102" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" name=""/>
-    <alias index="103" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" name=""/>
-    <alias index="104" field="Leidingberging_mm" name=""/>
-    <alias index="105" field="Knooppuntberging_mm" name=""/>
-    <alias index="106" field="Stelselberging_mm" name=""/>
-    <alias index="107" field="Maximale_Vultijd_Droogweer_h" name=""/>
-    <alias index="108" field="Minimale_Vultijd_Droogweer_h" name=""/>
-    <alias index="109" field="Maximale_Ledigingstijd_h" name=""/>
-    <alias index="110" field="Minimale_Ledigingstijd_h" name=""/>
-    <alias index="111" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" name=""/>
-    <alias index="112" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" name=""/>
-    <alias index="113" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" name=""/>
-    <alias index="114" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" name=""/>
-    <alias index="115" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" name=""/>
-    <alias index="116" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" name=""/>
-    <alias index="117" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" name=""/>
-    <alias index="118" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" name=""/>
-    <alias index="119" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" name=""/>
+    <alias name="" field="fid" index="0"/>
+    <alias name="" field="gemeente" index="1"/>
+    <alias name="" field="naam" index="2"/>
+    <alias name="" field="Bemalingsgebied_ID" index="3"/>
+    <alias name="" field="Stap1_Datum" index="4"/>
+    <alias name="" field="Rioolgemaal" index="5"/>
+    <alias name="" field="Type" index="6"/>
+    <alias name="" field="Beginpunt_Afvoerrelatie" index="7"/>
+    <alias name="" field="Eindpunt_Afvoerrelatie" index="8"/>
+    <alias name="" field="Afvoercapaciteit_m3h" index="9"/>
+    <alias name="" field="Inslagpeil_mNAP" index="10"/>
+    <alias name="" field="Uitslagpeil_mNAP" index="11"/>
+    <alias name="" field="Aantal_Pompen" index="12"/>
+    <alias name="" field="Bemalingsgebied_ID_Afvoerpunt" index="13"/>
+    <alias name="" field="Stelsel_ID_Afvoerpunt" index="14"/>
+    <alias name="" field="Bemalingsgebied_ID_Lozingspunt" index="15"/>
+    <alias name="" field="Stelsel_ID_lozingspunt" index="16"/>
+    <alias name="" field="Leidingtypen_In_Stelsel" index="17"/>
+    <alias name="" field="Stelselnamen" index="18"/>
+    <alias name="" field="Leidingberging_m3" index="19"/>
+    <alias name="" field="Knooppuntberging_m3" index="20"/>
+    <alias name="" field="Stelselberging_m3" index="21"/>
+    <alias name="" field="Laagste_Doorlaatniveau_mNAP" index="22"/>
+    <alias name="" field="Laagste_Drempelniveau_mNAP" index="23"/>
+    <alias name="" field="Aantal_Doorlaten" index="24"/>
+    <alias name="" field="Aantal_Drempels" index="25"/>
+    <alias name="" field="Stap2_datum" index="26"/>
+    <alias name="" field="Gemengd_Aangesloten_ha" index="27"/>
+    <alias name="" field="Hemelwater_Aangesloten_ha" index="28"/>
+    <alias name="" field="Verbeterd_Hemelwater_Aangesloten_ha" index="29"/>
+    <alias name="" field="Vuilwater_Aangesloten_ha" index="30"/>
+    <alias name="" field="DIT_Aangesloten_ha" index="31"/>
+    <alias name="" field="Oppervlaktewater_Aangesloten_ha" index="32"/>
+    <alias name="" field="Maaiveld_Aangesloten_ha" index="33"/>
+    <alias name="" field="Aangesloten_Oppervlak_Stelsel_ha" index="34"/>
+    <alias name="" field="POC_Theorie_Gemengd_m3h" index="35"/>
+    <alias name="" field="POC_Theorie_VGS_m3h" index="36"/>
+    <alias name="" field="POC_Theorie_Totaal_m3h" index="37"/>
+    <alias name="" field="Aantal_Adressen_Eigen_Rioleringsgebied" index="38"/>
+    <alias name="" field="Aangesloten_Oppervlak_Per_Woning_m2" index="39"/>
+    <alias name="" field="DWA_BAG_m3h" index="40"/>
+    <alias name="" field="Drinkwater_Particulier_m3h" index="41"/>
+    <alias name="" field="Drinkwater_Zakelijk_m3h" index="42"/>
+    <alias name="" field="Drinkwater_Totaal_m3h" index="43"/>
+    <alias name="" field="Aantal_VEs_Eigen_Rioleringsgebied" index="44"/>
+    <alias name="" field="DWA_VEs_m3h" index="45"/>
+    <alias name="" field="Extra_DWA_Periode_2124_m3h" index="46"/>
+    <alias name="" field="Extra_DWA_Periode_2529_m3h" index="47"/>
+    <alias name="" field="Extra_DWA_Periode_3039_m3h" index="48"/>
+    <alias name="" field="Extra_DWA_Periode_4050_m3h" index="49"/>
+    <alias name="" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" index="50"/>
+    <alias name="" field="Stap3_datum" index="51"/>
+    <alias name="" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" index="52"/>
+    <alias name="" field="Onderbemalingsgebied_IDs" index="53"/>
+    <alias name="" field="Afvoerpunten_1_Niveau_Diep" index="54"/>
+    <alias name="" field="Afvoerpunten_Van_Onderbemalingen" index="55"/>
+    <alias name="" field="Aantal_Onderbemalingen_1_Niveau_Diep" index="56"/>
+    <alias name="" field="Aantal_Onderbemalingen" index="57"/>
+    <alias name="" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" index="58"/>
+    <alias name="" field="Rioleringsgebied_ID_Overnamepunt" index="59"/>
+    <alias name="" field="Naam_Overnamepunt" index="60"/>
+    <alias name="" field="Bouwprojecten_IDs_Onderbemalingen" index="61"/>
+    <alias name="" field="DWA_BAG_Onderbemalingen_m3h" index="62"/>
+    <alias name="" field="Aantal_Adressen_In_Onderbemalingen" index="63"/>
+    <alias name="" field="Drinkwater_Part_Onderbem_m3h" index="64"/>
+    <alias name="" field="Drinkwater_Zak_Onderbem_m3h" index="65"/>
+    <alias name="" field="Drinkwater_Totaal_Onderbem_m3h" index="66"/>
+    <alias name="" field="DWA_VEs_Onderbemalingen_m3h" index="67"/>
+    <alias name="" field="Aantal_VEs_Onderbemalingen" index="68"/>
+    <alias name="" field="Extra_DWA_Periode_Onderbem_2124_m3h" index="69"/>
+    <alias name="" field="Extra_DWA_Periode_Onderbem_2529_m3h" index="70"/>
+    <alias name="" field="Extra_DWA_Periode_Onderbem_3039_m3h" index="71"/>
+    <alias name="" field="Extra_DWA_Periode_Onderbem_4050_m3h" index="72"/>
+    <alias name="" field="POC_Theorie_Gemengd_Onderbem_m3h" index="73"/>
+    <alias name="" field="POC_Theorie_VGS_Onderbem_m3h" index="74"/>
+    <alias name="" field="POC_Theorie_Totaal_Onderbem_m3h" index="75"/>
+    <alias name="" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" index="76"/>
+    <alias name="" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" index="77"/>
+    <alias name="" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" index="78"/>
+    <alias name="" field="Sommatie_DWA_BAG_m3h" index="79"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h" index="80"/>
+    <alias name="" field="Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" index="81"/>
+    <alias name="" field="Sommatie_POC_Praktijk_DWA_obv_BAG_m3h" index="82"/>
+    <alias name="" field="Sommatie_POC_Theorie_Gemengd_m3h" index="83"/>
+    <alias name="" field="Sommatie_POC_Theorie_VGS_m3h" index="84"/>
+    <alias name="" field="Sommatie_POC_Theorie_Totaal_m3h" index="85"/>
+    <alias name="" field="Sommatie_Adressen" index="86"/>
+    <alias name="" field="Sommatie_Drinkwater_Part_m3h" index="87"/>
+    <alias name="" field="Sommatie_Drinkwater_Zak_m3h" index="88"/>
+    <alias name="" field="Sommatie_Drinkwater_Totaal_m3h" index="89"/>
+    <alias name="" field="Sommatie_DWA_VEs_m3h" index="90"/>
+    <alias name="" field="Sommatie_Aantal_VEs" index="91"/>
+    <alias name="" field="Sommatie_Extra_DWA_Periode_2124_m3h" index="92"/>
+    <alias name="" field="Sommatie_Extra_DWA_Periode_2529_m3h" index="93"/>
+    <alias name="" field="Sommatie_Extra_DWA_Periode_3039_m3h" index="94"/>
+    <alias name="" field="Sommatie_Extra_DWA_Periode_4050_m3h" index="95"/>
+    <alias name="" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" index="96"/>
+    <alias name="" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" index="97"/>
+    <alias name="" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" index="98"/>
+    <alias name="" field="Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h" index="99"/>
+    <alias name="" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" index="100"/>
+    <alias name="" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" index="101"/>
+    <alias name="" field="Leidingberging_mm" index="102"/>
+    <alias name="" field="Knooppuntberging_mm" index="103"/>
+    <alias name="" field="Stelselberging_mm" index="104"/>
+    <alias name="" field="Maximale_Vultijd_Droogweer_h" index="105"/>
+    <alias name="" field="Minimale_Vultijd_Droogweer_h" index="106"/>
+    <alias name="" field="Maximale_Ledigingstijd_h" index="107"/>
+    <alias name="" field="Minimale_Ledigingstijd_h" index="108"/>
+    <alias name="" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" index="109"/>
+    <alias name="" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" index="110"/>
+    <alias name="" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" index="111"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" index="112"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" index="113"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" index="114"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" index="115"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" index="116"/>
+    <alias name="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" index="117"/>
   </aliases>
   <defaults>
-    <default expression="" field="fid" applyOnUpdate="0"/>
-    <default expression="" field="gemeente" applyOnUpdate="0"/>
-    <default expression="" field="naam" applyOnUpdate="0"/>
-    <default expression="" field="Bemalingsgebied_ID" applyOnUpdate="0"/>
-    <default expression="" field="Stap1_Datum" applyOnUpdate="0"/>
-    <default expression="" field="Rioolgemaal" applyOnUpdate="0"/>
-    <default expression="" field="Bemalingsgebied_ID_2" applyOnUpdate="0"/>
-    <default expression="" field="Type" applyOnUpdate="0"/>
-    <default expression="" field="Beginpunt_Afvoerrelatie" applyOnUpdate="0"/>
-    <default expression="" field="Eindpunt_Afvoerrelatie" applyOnUpdate="0"/>
-    <default expression="" field="Afvoercapaciteit_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Inslagpeil_mNAP" applyOnUpdate="0"/>
-    <default expression="" field="Uitslagpeil_mNAP" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Pompen" applyOnUpdate="0"/>
-    <default expression="" field="Bemalingsgebied_ID_Afvoerpunt" applyOnUpdate="0"/>
-    <default expression="" field="Stelsel_ID_Afvoerpunt" applyOnUpdate="0"/>
-    <default expression="" field="Bemalingsgebied_ID_Lozingspunt" applyOnUpdate="0"/>
-    <default expression="" field="Stelsel_ID_lozingspunt" applyOnUpdate="0"/>
-    <default expression="" field="Leidingtypen_In_Stelsel" applyOnUpdate="0"/>
-    <default expression="" field="Stelselnamen" applyOnUpdate="0"/>
-    <default expression="" field="Leidingberging_m3" applyOnUpdate="0"/>
-    <default expression="" field="Knooppuntberging_m3" applyOnUpdate="0"/>
-    <default expression="" field="Stelselberging_m3" applyOnUpdate="0"/>
-    <default expression="" field="Laagste_Doorlaatniveau_mNAP" applyOnUpdate="0"/>
-    <default expression="" field="Laagste_Drempelniveau_mNAP" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Doorlaten" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Drempels" applyOnUpdate="0"/>
-    <default expression="" field="Stap2_datum" applyOnUpdate="0"/>
-    <default expression="" field="Gemengd_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="Hemelwater_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="Verbeterd_Hemelwater_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="Vuilwater_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="DIT_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="Oppervlaktewater_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="Maaiveld_Aangesloten_ha" applyOnUpdate="0"/>
-    <default expression="" field="Aangesloten_Oppervlak_Stelsel_ha" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Gemengd_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_VGS_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Totaal_m3h" applyOnUpdate="0"/>
-    <default expression="" field="BAG_count" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Adressen_Eigen_Rioleringsgebied" applyOnUpdate="0"/>
-    <default expression="" field="Aangesloten_Oppervlak_Per_Woning_m2" applyOnUpdate="0"/>
-    <default expression="" field="DWA_BAG_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Drinkwater_Particulier_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Drinkwater_Zakelijk_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Drinkwater_Totaal_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_VEs_Eigen_Rioleringsgebied" applyOnUpdate="0"/>
-    <default expression="" field="DWA_VEs_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_2124_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_2529_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_3039_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_4050_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" applyOnUpdate="0"/>
-    <default expression="" field="Stap3_datum" applyOnUpdate="0"/>
-    <default expression="" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" applyOnUpdate="0"/>
-    <default expression="" field="Onderbemalingsgebied_IDs" applyOnUpdate="0"/>
-    <default expression="" field="Afvoerpunten_1_Niveau_Diep" applyOnUpdate="0"/>
-    <default expression="" field="Afvoerpunten_Van_Onderbemalingen" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Onderbemalingen_ 1_Niveau_Diep" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Onderbemalingen " applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" applyOnUpdate="0"/>
-    <default expression="" field="Rioleringsgebied_ID_Overnamepunt" applyOnUpdate="0"/>
-    <default expression="" field="Naam_Overnamepunt" applyOnUpdate="0"/>
-    <default expression="" field="Bouwprojecten_IDs_Onderbemalingen" applyOnUpdate="0"/>
-    <default expression="" field="DWA_BAG_Onderbemalingen_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_Adressen_In_Onderbemalingen" applyOnUpdate="0"/>
-    <default expression="" field="Drinkwater_Part_Onderbem_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Drinkwater_Zak_Onderbem_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Drinkwater_Totaal_Onderbem_m3h" applyOnUpdate="0"/>
-    <default expression="" field="DWA_VEs_Onderbemalingen_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Aantal_VEs_Onderbemalingen" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_Onderbem_2124_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_Onderbem_2529_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_Onderbem_3039_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Extra_DWA_Periode_Onderbem_4050_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Gemengd_Onderbem_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_VGS_Onderbem_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Totaal_Onderbem_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_POC_Theorie_Gemengd_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_POC_Theorie_VGS_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_POC_Theorie_Totaal_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_DWA_BAG_m3h" applyOnUpdate="0"/>
-    <default expression="" field="SOM_BAG_count" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Drinkwater_Part_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Drinkwater_Zak_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Drinkwater_Totaal_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_DWA_VEs_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Aantal_VEs" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Extra_DWA_Periode_2124_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Extra_DWA_Periode_2529_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Extra_DWA_Periode_3039_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Sommatie_Extra_DWA_Periode_4050_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" applyOnUpdate="0"/>
-    <default expression="" field="Leidingberging_mm" applyOnUpdate="0"/>
-    <default expression="" field="Knooppuntberging_mm" applyOnUpdate="0"/>
-    <default expression="" field="Stelselberging_mm" applyOnUpdate="0"/>
-    <default expression="" field="Maximale_Vultijd_Droogweer_h" applyOnUpdate="0"/>
-    <default expression="" field="Minimale_Vultijd_Droogweer_h" applyOnUpdate="0"/>
-    <default expression="" field="Maximale_Ledigingstijd_h" applyOnUpdate="0"/>
-    <default expression="" field="Minimale_Ledigingstijd_h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" applyOnUpdate="0"/>
-    <default expression="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" applyOnUpdate="0"/>
+    <default applyOnUpdate="0" field="fid" expression=""/>
+    <default applyOnUpdate="0" field="gemeente" expression=""/>
+    <default applyOnUpdate="0" field="naam" expression=""/>
+    <default applyOnUpdate="0" field="Bemalingsgebied_ID" expression=""/>
+    <default applyOnUpdate="0" field="Stap1_Datum" expression=""/>
+    <default applyOnUpdate="0" field="Rioolgemaal" expression=""/>
+    <default applyOnUpdate="0" field="Type" expression=""/>
+    <default applyOnUpdate="0" field="Beginpunt_Afvoerrelatie" expression=""/>
+    <default applyOnUpdate="0" field="Eindpunt_Afvoerrelatie" expression=""/>
+    <default applyOnUpdate="0" field="Afvoercapaciteit_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Inslagpeil_mNAP" expression=""/>
+    <default applyOnUpdate="0" field="Uitslagpeil_mNAP" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Pompen" expression=""/>
+    <default applyOnUpdate="0" field="Bemalingsgebied_ID_Afvoerpunt" expression=""/>
+    <default applyOnUpdate="0" field="Stelsel_ID_Afvoerpunt" expression=""/>
+    <default applyOnUpdate="0" field="Bemalingsgebied_ID_Lozingspunt" expression=""/>
+    <default applyOnUpdate="0" field="Stelsel_ID_lozingspunt" expression=""/>
+    <default applyOnUpdate="0" field="Leidingtypen_In_Stelsel" expression=""/>
+    <default applyOnUpdate="0" field="Stelselnamen" expression=""/>
+    <default applyOnUpdate="0" field="Leidingberging_m3" expression=""/>
+    <default applyOnUpdate="0" field="Knooppuntberging_m3" expression=""/>
+    <default applyOnUpdate="0" field="Stelselberging_m3" expression=""/>
+    <default applyOnUpdate="0" field="Laagste_Doorlaatniveau_mNAP" expression=""/>
+    <default applyOnUpdate="0" field="Laagste_Drempelniveau_mNAP" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Doorlaten" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Drempels" expression=""/>
+    <default applyOnUpdate="0" field="Stap2_datum" expression=""/>
+    <default applyOnUpdate="0" field="Gemengd_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="Hemelwater_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="Verbeterd_Hemelwater_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="Vuilwater_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="DIT_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="Oppervlaktewater_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="Maaiveld_Aangesloten_ha" expression=""/>
+    <default applyOnUpdate="0" field="Aangesloten_Oppervlak_Stelsel_ha" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Gemengd_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_VGS_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Totaal_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Adressen_Eigen_Rioleringsgebied" expression=""/>
+    <default applyOnUpdate="0" field="Aangesloten_Oppervlak_Per_Woning_m2" expression=""/>
+    <default applyOnUpdate="0" field="DWA_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Drinkwater_Particulier_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Drinkwater_Zakelijk_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Drinkwater_Totaal_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_VEs_Eigen_Rioleringsgebied" expression=""/>
+    <default applyOnUpdate="0" field="DWA_VEs_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_2124_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_2529_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_3039_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_4050_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" expression=""/>
+    <default applyOnUpdate="0" field="Stap3_datum" expression=""/>
+    <default applyOnUpdate="0" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" expression=""/>
+    <default applyOnUpdate="0" field="Onderbemalingsgebied_IDs" expression=""/>
+    <default applyOnUpdate="0" field="Afvoerpunten_1_Niveau_Diep" expression=""/>
+    <default applyOnUpdate="0" field="Afvoerpunten_Van_Onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Onderbemalingen_1_Niveau_Diep" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" expression=""/>
+    <default applyOnUpdate="0" field="Rioleringsgebied_ID_Overnamepunt" expression=""/>
+    <default applyOnUpdate="0" field="Naam_Overnamepunt" expression=""/>
+    <default applyOnUpdate="0" field="Bouwprojecten_IDs_Onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="DWA_BAG_Onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_Adressen_In_Onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Drinkwater_Part_Onderbem_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Drinkwater_Zak_Onderbem_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Drinkwater_Totaal_Onderbem_m3h" expression=""/>
+    <default applyOnUpdate="0" field="DWA_VEs_Onderbemalingen_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Aantal_VEs_Onderbemalingen" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_Onderbem_2124_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_Onderbem_2529_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_Onderbem_3039_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Extra_DWA_Periode_Onderbem_4050_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Gemengd_Onderbem_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_VGS_Onderbem_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Totaal_Onderbem_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_DWA_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_POC_Praktijk_DWA_obv_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_POC_Theorie_Gemengd_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_POC_Theorie_VGS_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_POC_Theorie_Totaal_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Adressen" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Drinkwater_Part_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Drinkwater_Zak_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Drinkwater_Totaal_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_DWA_VEs_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Aantal_VEs" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Extra_DWA_Periode_2124_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Extra_DWA_Periode_2529_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Extra_DWA_Periode_3039_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Sommatie_Extra_DWA_Periode_4050_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" expression=""/>
+    <default applyOnUpdate="0" field="Leidingberging_mm" expression=""/>
+    <default applyOnUpdate="0" field="Knooppuntberging_mm" expression=""/>
+    <default applyOnUpdate="0" field="Stelselberging_mm" expression=""/>
+    <default applyOnUpdate="0" field="Maximale_Vultijd_Droogweer_h" expression=""/>
+    <default applyOnUpdate="0" field="Minimale_Vultijd_Droogweer_h" expression=""/>
+    <default applyOnUpdate="0" field="Maximale_Ledigingstijd_h" expression=""/>
+    <default applyOnUpdate="0" field="Minimale_Ledigingstijd_h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" expression=""/>
+    <default applyOnUpdate="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" expression=""/>
   </defaults>
   <constraints>
-    <constraint exp_strength="0" field="fid" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="gemeente" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="naam" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Bemalingsgebied_ID" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stap1_Datum" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Rioolgemaal" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Bemalingsgebied_ID_2" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Type" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Beginpunt_Afvoerrelatie" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Eindpunt_Afvoerrelatie" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvoercapaciteit_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Inslagpeil_mNAP" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Uitslagpeil_mNAP" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Pompen" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Bemalingsgebied_ID_Afvoerpunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stelsel_ID_Afvoerpunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Bemalingsgebied_ID_Lozingspunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stelsel_ID_lozingspunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Leidingtypen_In_Stelsel" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stelselnamen" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Leidingberging_m3" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Knooppuntberging_m3" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stelselberging_m3" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Laagste_Doorlaatniveau_mNAP" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Laagste_Drempelniveau_mNAP" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Doorlaten" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Drempels" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stap2_datum" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Gemengd_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Hemelwater_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Verbeterd_Hemelwater_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Vuilwater_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="DIT_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Oppervlaktewater_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Maaiveld_Aangesloten_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aangesloten_Oppervlak_Stelsel_ha" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Gemengd_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_VGS_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Totaal_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="BAG_count" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Adressen_Eigen_Rioleringsgebied" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aangesloten_Oppervlak_Per_Woning_m2" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="DWA_BAG_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Drinkwater_Particulier_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Drinkwater_Zakelijk_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Drinkwater_Totaal_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_VEs_Eigen_Rioleringsgebied" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="DWA_VEs_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_2124_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_2529_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_3039_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_4050_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stap3_datum" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Onderbemalingsgebied_IDs" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvoerpunten_1_Niveau_Diep" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvoerpunten_Van_Onderbemalingen" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Onderbemalingen_ 1_Niveau_Diep" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Onderbemalingen " unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Rioleringsgebied_ID_Overnamepunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Naam_Overnamepunt" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Bouwprojecten_IDs_Onderbemalingen" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="DWA_BAG_Onderbemalingen_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_Adressen_In_Onderbemalingen" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Drinkwater_Part_Onderbem_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Drinkwater_Zak_Onderbem_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Drinkwater_Totaal_Onderbem_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="DWA_VEs_Onderbemalingen_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Aantal_VEs_Onderbemalingen" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_Onderbem_2124_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_Onderbem_2529_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_Onderbem_3039_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Extra_DWA_Periode_Onderbem_4050_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Gemengd_Onderbem_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_VGS_Onderbem_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Totaal_Onderbem_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_POC_Theorie_Gemengd_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_POC_Theorie_VGS_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_POC_Theorie_Totaal_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_DWA_BAG_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="SOM_BAG_count" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Drinkwater_Part_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Drinkwater_Zak_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Drinkwater_Totaal_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_DWA_VEs_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Aantal_VEs" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Extra_DWA_Periode_2124_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Extra_DWA_Periode_2529_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Extra_DWA_Periode_3039_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Sommatie_Extra_DWA_Periode_4050_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Leidingberging_mm" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Knooppuntberging_mm" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Stelselberging_mm" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Maximale_Vultijd_Droogweer_h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Minimale_Vultijd_Droogweer_h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Maximale_Ledigingstijd_h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="Minimale_Ledigingstijd_h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" unique_strength="0" notnull_strength="0" constraints="0"/>
-    <constraint exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" unique_strength="0" notnull_strength="0" constraints="0"/>
+    <constraint unique_strength="1" notnull_strength="1" exp_strength="0" field="fid" constraints="3"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="gemeente" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="naam" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Bemalingsgebied_ID" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stap1_Datum" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Rioolgemaal" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Type" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Beginpunt_Afvoerrelatie" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Eindpunt_Afvoerrelatie" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvoercapaciteit_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Inslagpeil_mNAP" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Uitslagpeil_mNAP" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Pompen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Bemalingsgebied_ID_Afvoerpunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stelsel_ID_Afvoerpunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Bemalingsgebied_ID_Lozingspunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stelsel_ID_lozingspunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Leidingtypen_In_Stelsel" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stelselnamen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Leidingberging_m3" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Knooppuntberging_m3" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stelselberging_m3" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Laagste_Doorlaatniveau_mNAP" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Laagste_Drempelniveau_mNAP" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Doorlaten" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Drempels" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stap2_datum" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Gemengd_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Hemelwater_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Verbeterd_Hemelwater_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Vuilwater_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="DIT_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Oppervlaktewater_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Maaiveld_Aangesloten_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aangesloten_Oppervlak_Stelsel_ha" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Gemengd_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_VGS_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Totaal_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Adressen_Eigen_Rioleringsgebied" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aangesloten_Oppervlak_Per_Woning_m2" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="DWA_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Drinkwater_Particulier_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Drinkwater_Zakelijk_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Drinkwater_Totaal_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_VEs_Eigen_Rioleringsgebied" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="DWA_VEs_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_2124_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_2529_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_3039_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_4050_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stap3_datum" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Onderbemalingsgebied_IDs" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvoerpunten_1_Niveau_Diep" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvoerpunten_Van_Onderbemalingen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Onderbemalingen_1_Niveau_Diep" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Onderbemalingen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Rioleringsgebied_ID_Overnamepunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Naam_Overnamepunt" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Bouwprojecten_IDs_Onderbemalingen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="DWA_BAG_Onderbemalingen_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_Adressen_In_Onderbemalingen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Drinkwater_Part_Onderbem_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Drinkwater_Zak_Onderbem_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Drinkwater_Totaal_Onderbem_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="DWA_VEs_Onderbemalingen_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Aantal_VEs_Onderbemalingen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_Onderbem_2124_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_Onderbem_2529_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_Onderbem_3039_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Extra_DWA_Periode_Onderbem_4050_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Gemengd_Onderbem_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_VGS_Onderbem_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Totaal_Onderbem_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_DWA_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_POC_Praktijk_DWA_obv_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_POC_Theorie_Gemengd_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_POC_Theorie_VGS_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_POC_Theorie_Totaal_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Adressen" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Drinkwater_Part_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Drinkwater_Zak_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Drinkwater_Totaal_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_DWA_VEs_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Aantal_VEs" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Extra_DWA_Periode_2124_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Extra_DWA_Periode_2529_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Extra_DWA_Periode_3039_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Sommatie_Extra_DWA_Periode_4050_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Leidingberging_mm" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Knooppuntberging_mm" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Stelselberging_mm" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Maximale_Vultijd_Droogweer_h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Minimale_Vultijd_Droogweer_h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Maximale_Ledigingstijd_h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="Minimale_Ledigingstijd_h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" constraints="0"/>
+    <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" constraints="0"/>
   </constraints>
   <constraintExpressions>
-    <constraint field="fid" desc="" exp=""/>
-    <constraint field="gemeente" desc="" exp=""/>
-    <constraint field="naam" desc="" exp=""/>
-    <constraint field="Bemalingsgebied_ID" desc="" exp=""/>
-    <constraint field="Stap1_Datum" desc="" exp=""/>
-    <constraint field="Rioolgemaal" desc="" exp=""/>
-    <constraint field="Bemalingsgebied_ID_2" desc="" exp=""/>
-    <constraint field="Type" desc="" exp=""/>
-    <constraint field="Beginpunt_Afvoerrelatie" desc="" exp=""/>
-    <constraint field="Eindpunt_Afvoerrelatie" desc="" exp=""/>
-    <constraint field="Afvoercapaciteit_m3h" desc="" exp=""/>
-    <constraint field="Inslagpeil_mNAP" desc="" exp=""/>
-    <constraint field="Uitslagpeil_mNAP" desc="" exp=""/>
-    <constraint field="Aantal_Pompen" desc="" exp=""/>
-    <constraint field="Bemalingsgebied_ID_Afvoerpunt" desc="" exp=""/>
-    <constraint field="Stelsel_ID_Afvoerpunt" desc="" exp=""/>
-    <constraint field="Bemalingsgebied_ID_Lozingspunt" desc="" exp=""/>
-    <constraint field="Stelsel_ID_lozingspunt" desc="" exp=""/>
-    <constraint field="Leidingtypen_In_Stelsel" desc="" exp=""/>
-    <constraint field="Stelselnamen" desc="" exp=""/>
-    <constraint field="Leidingberging_m3" desc="" exp=""/>
-    <constraint field="Knooppuntberging_m3" desc="" exp=""/>
-    <constraint field="Stelselberging_m3" desc="" exp=""/>
-    <constraint field="Laagste_Doorlaatniveau_mNAP" desc="" exp=""/>
-    <constraint field="Laagste_Drempelniveau_mNAP" desc="" exp=""/>
-    <constraint field="Aantal_Doorlaten" desc="" exp=""/>
-    <constraint field="Aantal_Drempels" desc="" exp=""/>
-    <constraint field="Stap2_datum" desc="" exp=""/>
-    <constraint field="Gemengd_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="Hemelwater_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="Verbeterd_Hemelwater_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="Vuilwater_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="DIT_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="Oppervlaktewater_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="Maaiveld_Aangesloten_ha" desc="" exp=""/>
-    <constraint field="Aangesloten_Oppervlak_Stelsel_ha" desc="" exp=""/>
-    <constraint field="POC_Theorie_Gemengd_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_VGS_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_Totaal_m3h" desc="" exp=""/>
-    <constraint field="BAG_count" desc="" exp=""/>
-    <constraint field="Aantal_Adressen_Eigen_Rioleringsgebied" desc="" exp=""/>
-    <constraint field="Aangesloten_Oppervlak_Per_Woning_m2" desc="" exp=""/>
-    <constraint field="DWA_BAG_m3h" desc="" exp=""/>
-    <constraint field="Drinkwater_Particulier_m3h" desc="" exp=""/>
-    <constraint field="Drinkwater_Zakelijk_m3h" desc="" exp=""/>
-    <constraint field="Drinkwater_Totaal_m3h" desc="" exp=""/>
-    <constraint field="Aantal_VEs_Eigen_Rioleringsgebied" desc="" exp=""/>
-    <constraint field="DWA_VEs_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_2124_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_2529_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_3039_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_4050_m3h" desc="" exp=""/>
-    <constraint field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" desc="" exp=""/>
-    <constraint field="Stap3_datum" desc="" exp=""/>
-    <constraint field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h" desc="" exp=""/>
-    <constraint field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h" desc="" exp=""/>
-    <constraint field="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h" desc="" exp=""/>
-    <constraint field="Onderbemalingsgeb_IDs_1_Niveau_Diep" desc="" exp=""/>
-    <constraint field="Onderbemalingsgebied_IDs" desc="" exp=""/>
-    <constraint field="Afvoerpunten_1_Niveau_Diep" desc="" exp=""/>
-    <constraint field="Afvoerpunten_Van_Onderbemalingen" desc="" exp=""/>
-    <constraint field="Aantal_Onderbemalingen_ 1_Niveau_Diep" desc="" exp=""/>
-    <constraint field="Aantal_Onderbemalingen " desc="" exp=""/>
-    <constraint field="Aantal_Keer_Oppompen_Tot_Afleverpunt" desc="" exp=""/>
-    <constraint field="Rioleringsgebied_ID_Overnamepunt" desc="" exp=""/>
-    <constraint field="Naam_Overnamepunt" desc="" exp=""/>
-    <constraint field="Bouwprojecten_IDs_Onderbemalingen" desc="" exp=""/>
-    <constraint field="DWA_BAG_Onderbemalingen_m3h" desc="" exp=""/>
-    <constraint field="Aantal_Adressen_In_Onderbemalingen" desc="" exp=""/>
-    <constraint field="Drinkwater_Part_Onderbem_m3h" desc="" exp=""/>
-    <constraint field="Drinkwater_Zak_Onderbem_m3h" desc="" exp=""/>
-    <constraint field="Drinkwater_Totaal_Onderbem_m3h" desc="" exp=""/>
-    <constraint field="DWA_VEs_Onderbemalingen_m3h" desc="" exp=""/>
-    <constraint field="Aantal_VEs_Onderbemalingen" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_Onderbem_2124_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_Onderbem_2529_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_Onderbem_3039_m3h" desc="" exp=""/>
-    <constraint field="Extra_DWA_Periode_Onderbem_4050_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_Gemengd_Onderbem_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_VGS_Onderbem_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_Totaal_Onderbem_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_POC_Theorie_Gemengd_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_POC_Theorie_VGS_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_POC_Theorie_Totaal_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_DWA_BAG_m3h" desc="" exp=""/>
-    <constraint field="SOM_BAG_count" desc="" exp=""/>
-    <constraint field="Sommatie_Drinkwater_Part_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_Drinkwater_Zak_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_Drinkwater_Totaal_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_DWA_VEs_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_Aantal_VEs" desc="" exp=""/>
-    <constraint field="Sommatie_Extra_DWA_Periode_2124_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_Extra_DWA_Periode_2529_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_Extra_DWA_Periode_3039_m3h" desc="" exp=""/>
-    <constraint field="Sommatie_Extra_DWA_Periode_4050_m3h" desc="" exp=""/>
-    <constraint field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" desc="" exp=""/>
-    <constraint field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" desc="" exp=""/>
-    <constraint field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" desc="" exp=""/>
-    <constraint field="Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" desc="" exp=""/>
-    <constraint field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" desc="" exp=""/>
-    <constraint field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" desc="" exp=""/>
-    <constraint field="Leidingberging_mm" desc="" exp=""/>
-    <constraint field="Knooppuntberging_mm" desc="" exp=""/>
-    <constraint field="Stelselberging_mm" desc="" exp=""/>
-    <constraint field="Maximale_Vultijd_Droogweer_h" desc="" exp=""/>
-    <constraint field="Minimale_Vultijd_Droogweer_h" desc="" exp=""/>
-    <constraint field="Maximale_Ledigingstijd_h" desc="" exp=""/>
-    <constraint field="Minimale_Ledigingstijd_h" desc="" exp=""/>
-    <constraint field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" desc="" exp=""/>
-    <constraint field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" desc="" exp=""/>
-    <constraint field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" desc="" exp=""/>
+    <constraint desc="" field="fid" exp=""/>
+    <constraint desc="" field="gemeente" exp=""/>
+    <constraint desc="" field="naam" exp=""/>
+    <constraint desc="" field="Bemalingsgebied_ID" exp=""/>
+    <constraint desc="" field="Stap1_Datum" exp=""/>
+    <constraint desc="" field="Rioolgemaal" exp=""/>
+    <constraint desc="" field="Type" exp=""/>
+    <constraint desc="" field="Beginpunt_Afvoerrelatie" exp=""/>
+    <constraint desc="" field="Eindpunt_Afvoerrelatie" exp=""/>
+    <constraint desc="" field="Afvoercapaciteit_m3h" exp=""/>
+    <constraint desc="" field="Inslagpeil_mNAP" exp=""/>
+    <constraint desc="" field="Uitslagpeil_mNAP" exp=""/>
+    <constraint desc="" field="Aantal_Pompen" exp=""/>
+    <constraint desc="" field="Bemalingsgebied_ID_Afvoerpunt" exp=""/>
+    <constraint desc="" field="Stelsel_ID_Afvoerpunt" exp=""/>
+    <constraint desc="" field="Bemalingsgebied_ID_Lozingspunt" exp=""/>
+    <constraint desc="" field="Stelsel_ID_lozingspunt" exp=""/>
+    <constraint desc="" field="Leidingtypen_In_Stelsel" exp=""/>
+    <constraint desc="" field="Stelselnamen" exp=""/>
+    <constraint desc="" field="Leidingberging_m3" exp=""/>
+    <constraint desc="" field="Knooppuntberging_m3" exp=""/>
+    <constraint desc="" field="Stelselberging_m3" exp=""/>
+    <constraint desc="" field="Laagste_Doorlaatniveau_mNAP" exp=""/>
+    <constraint desc="" field="Laagste_Drempelniveau_mNAP" exp=""/>
+    <constraint desc="" field="Aantal_Doorlaten" exp=""/>
+    <constraint desc="" field="Aantal_Drempels" exp=""/>
+    <constraint desc="" field="Stap2_datum" exp=""/>
+    <constraint desc="" field="Gemengd_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="Hemelwater_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="Verbeterd_Hemelwater_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="Vuilwater_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="DIT_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="Oppervlaktewater_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="Maaiveld_Aangesloten_ha" exp=""/>
+    <constraint desc="" field="Aangesloten_Oppervlak_Stelsel_ha" exp=""/>
+    <constraint desc="" field="POC_Theorie_Gemengd_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_VGS_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_Totaal_m3h" exp=""/>
+    <constraint desc="" field="Aantal_Adressen_Eigen_Rioleringsgebied" exp=""/>
+    <constraint desc="" field="Aangesloten_Oppervlak_Per_Woning_m2" exp=""/>
+    <constraint desc="" field="DWA_BAG_m3h" exp=""/>
+    <constraint desc="" field="Drinkwater_Particulier_m3h" exp=""/>
+    <constraint desc="" field="Drinkwater_Zakelijk_m3h" exp=""/>
+    <constraint desc="" field="Drinkwater_Totaal_m3h" exp=""/>
+    <constraint desc="" field="Aantal_VEs_Eigen_Rioleringsgebied" exp=""/>
+    <constraint desc="" field="DWA_VEs_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_2124_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_2529_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_3039_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_4050_m3h" exp=""/>
+    <constraint desc="" field="Bouwprojecten_Eigen_Rioleringsgeb_IDs" exp=""/>
+    <constraint desc="" field="Stap3_datum" exp=""/>
+    <constraint desc="" field="Onderbemalingsgeb_IDs_1_Niveau_Diep" exp=""/>
+    <constraint desc="" field="Onderbemalingsgebied_IDs" exp=""/>
+    <constraint desc="" field="Afvoerpunten_1_Niveau_Diep" exp=""/>
+    <constraint desc="" field="Afvoerpunten_Van_Onderbemalingen" exp=""/>
+    <constraint desc="" field="Aantal_Onderbemalingen_1_Niveau_Diep" exp=""/>
+    <constraint desc="" field="Aantal_Onderbemalingen" exp=""/>
+    <constraint desc="" field="Aantal_Keer_Oppompen_Tot_Afleverpunt" exp=""/>
+    <constraint desc="" field="Rioleringsgebied_ID_Overnamepunt" exp=""/>
+    <constraint desc="" field="Naam_Overnamepunt" exp=""/>
+    <constraint desc="" field="Bouwprojecten_IDs_Onderbemalingen" exp=""/>
+    <constraint desc="" field="DWA_BAG_Onderbemalingen_m3h" exp=""/>
+    <constraint desc="" field="Aantal_Adressen_In_Onderbemalingen" exp=""/>
+    <constraint desc="" field="Drinkwater_Part_Onderbem_m3h" exp=""/>
+    <constraint desc="" field="Drinkwater_Zak_Onderbem_m3h" exp=""/>
+    <constraint desc="" field="Drinkwater_Totaal_Onderbem_m3h" exp=""/>
+    <constraint desc="" field="DWA_VEs_Onderbemalingen_m3h" exp=""/>
+    <constraint desc="" field="Aantal_VEs_Onderbemalingen" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_Onderbem_2124_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_Onderbem_2529_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_Onderbem_3039_m3h" exp=""/>
+    <constraint desc="" field="Extra_DWA_Periode_Onderbem_4050_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_Gemengd_Onderbem_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_VGS_Onderbem_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_Totaal_Onderbem_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_DWA_BAG_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_POC_Praktijk_DWA_obv_BAG_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_POC_Theorie_Gemengd_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_POC_Theorie_VGS_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_POC_Theorie_Totaal_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Adressen" exp=""/>
+    <constraint desc="" field="Sommatie_Drinkwater_Part_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Drinkwater_Zak_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Drinkwater_Totaal_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_DWA_VEs_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Aantal_VEs" exp=""/>
+    <constraint desc="" field="Sommatie_Extra_DWA_Periode_2124_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Extra_DWA_Periode_2529_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Extra_DWA_Periode_3039_m3h" exp=""/>
+    <constraint desc="" field="Sommatie_Extra_DWA_Periode_4050_m3h" exp=""/>
+    <constraint desc="" field="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" exp=""/>
+    <constraint desc="" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" exp=""/>
+    <constraint desc="" field="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" exp=""/>
+    <constraint desc="" field="Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h" exp=""/>
+    <constraint desc="" field="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" exp=""/>
+    <constraint desc="" field="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" exp=""/>
+    <constraint desc="" field="Leidingberging_mm" exp=""/>
+    <constraint desc="" field="Knooppuntberging_mm" exp=""/>
+    <constraint desc="" field="Stelselberging_mm" exp=""/>
+    <constraint desc="" field="Maximale_Vultijd_Droogweer_h" exp=""/>
+    <constraint desc="" field="Minimale_Vultijd_Droogweer_h" exp=""/>
+    <constraint desc="" field="Maximale_Ledigingstijd_h" exp=""/>
+    <constraint desc="" field="Minimale_Ledigingstijd_h" exp=""/>
+    <constraint desc="" field="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" exp=""/>
+    <constraint desc="" field="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" exp=""/>
+    <constraint desc="" field="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" exp=""/>
   </constraintExpressions>
   <expressionfields/>
   <attributeactions>
-    <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
+    <defaultAction key="Canvas" value="{00000000-0000-0000-0000-000000000000}"/>
   </attributeactions>
-  <attributetableconfig actionWidgetStyle="dropDown" sortOrder="1" sortExpression="&quot;Extra_DWA_Periode_2529_m3h&quot;">
+  <attributetableconfig actionWidgetStyle="dropDown" sortExpression="&quot;Eindpunt_Afvoerrelatie&quot;" sortOrder="0">
     <columns>
-      <column type="field" hidden="0" width="-1" name="fid"/>
-      <column type="field" hidden="0" width="-1" name="gemeente"/>
-      <column type="field" hidden="0" width="-1" name="naam"/>
-      <column type="field" hidden="0" width="-1" name="Stelselnamen"/>
-      <column type="field" hidden="0" width="-1" name="BAG_count"/>
-      <column type="field" hidden="0" width="-1" name="DWA_BAG_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Bemalingsgebied_ID"/>
-      <column type="field" hidden="0" width="-1" name="Stap1_Datum"/>
-      <column type="field" hidden="0" width="-1" name="Rioolgemaal"/>
-      <column type="field" hidden="0" width="-1" name="Bemalingsgebied_ID_2"/>
-      <column type="field" hidden="0" width="-1" name="Type"/>
-      <column type="field" hidden="0" width="-1" name="Beginpunt_Afvoerrelatie"/>
-      <column type="field" hidden="0" width="-1" name="Eindpunt_Afvoerrelatie"/>
-      <column type="field" hidden="0" width="-1" name="Afvoercapaciteit_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Inslagpeil_mNAP"/>
-      <column type="field" hidden="0" width="-1" name="Uitslagpeil_mNAP"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Pompen"/>
-      <column type="field" hidden="0" width="-1" name="Bemalingsgebied_ID_Afvoerpunt"/>
-      <column type="field" hidden="0" width="-1" name="Stelsel_ID_Afvoerpunt"/>
-      <column type="field" hidden="0" width="-1" name="Bemalingsgebied_ID_Lozingspunt"/>
-      <column type="field" hidden="0" width="-1" name="Stelsel_ID_lozingspunt"/>
-      <column type="field" hidden="0" width="-1" name="Leidingtypen_In_Stelsel"/>
-      <column type="field" hidden="0" width="-1" name="Leidingberging_m3"/>
-      <column type="field" hidden="0" width="-1" name="Knooppuntberging_m3"/>
-      <column type="field" hidden="0" width="-1" name="Stelselberging_m3"/>
-      <column type="field" hidden="0" width="-1" name="Laagste_Doorlaatniveau_mNAP"/>
-      <column type="field" hidden="0" width="-1" name="Laagste_Drempelniveau_mNAP"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Doorlaten"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Drempels"/>
-      <column type="field" hidden="0" width="-1" name="Stap2_datum"/>
-      <column type="field" hidden="0" width="-1" name="Gemengd_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="Hemelwater_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="Verbeterd_Hemelwater_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="Vuilwater_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="DIT_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="Oppervlaktewater_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="Maaiveld_Aangesloten_ha"/>
-      <column type="field" hidden="0" width="-1" name="Aangesloten_Oppervlak_Stelsel_ha"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Gemengd_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_VGS_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Totaal_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Adressen_Eigen_Rioleringsgebied"/>
-      <column type="field" hidden="0" width="-1" name="Aangesloten_Oppervlak_Per_Woning_m2"/>
-      <column type="field" hidden="0" width="-1" name="Drinkwater_Particulier_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Drinkwater_Zakelijk_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Drinkwater_Totaal_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_VEs_Eigen_Rioleringsgebied"/>
-      <column type="field" hidden="0" width="-1" name="DWA_VEs_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_2124_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_2529_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_3039_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_4050_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Bouwprojecten_Eigen_Rioleringsgeb_IDs"/>
-      <column type="field" hidden="0" width="-1" name="Stap3_datum"/>
-      <column type="field" hidden="0" width="-1" name="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_BAG_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_Drinkwater_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Eigen_Gebied_Max_Afvalwateraanbod_praktijk_obv_VE_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Onderbemalingsgeb_IDs_1_Niveau_Diep"/>
-      <column type="field" hidden="0" width="-1" name="Onderbemalingsgebied_IDs"/>
-      <column type="field" hidden="0" width="-1" name="Afvoerpunten_1_Niveau_Diep"/>
-      <column type="field" hidden="0" width="-1" name="Afvoerpunten_Van_Onderbemalingen"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Onderbemalingen_ 1_Niveau_Diep"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Onderbemalingen "/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Keer_Oppompen_Tot_Afleverpunt"/>
-      <column type="field" hidden="0" width="-1" name="Rioleringsgebied_ID_Overnamepunt"/>
-      <column type="field" hidden="0" width="-1" name="Naam_Overnamepunt"/>
-      <column type="field" hidden="0" width="-1" name="Bouwprojecten_IDs_Onderbemalingen"/>
-      <column type="field" hidden="0" width="-1" name="DWA_BAG_Onderbemalingen_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_Adressen_In_Onderbemalingen"/>
-      <column type="field" hidden="0" width="-1" name="Drinkwater_Part_Onderbem_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Drinkwater_Zak_Onderbem_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Drinkwater_Totaal_Onderbem_m3h"/>
-      <column type="field" hidden="0" width="-1" name="DWA_VEs_Onderbemalingen_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Aantal_VEs_Onderbemalingen"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_Onderbem_2124_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_Onderbem_2529_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_Onderbem_3039_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Extra_DWA_Periode_Onderbem_4050_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Gemengd_Onderbem_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_VGS_Onderbem_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Totaal_Onderbem_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_POC_Theorie_Gemengd_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_POC_Theorie_VGS_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_POC_Theorie_Totaal_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_DWA_BAG_m3h"/>
-      <column type="field" hidden="0" width="-1" name="SOM_BAG_count"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Drinkwater_Part_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Drinkwater_Zak_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Drinkwater_Totaal_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_DWA_VEs_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Aantal_VEs"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Extra_DWA_Periode_2124_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Extra_DWA_Periode_2529_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Extra_DWA_Periode_3039_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Sommatie_Extra_DWA_Periode_4050_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h"/>
-      <column type="field" hidden="0" width="-1" name="Leidingberging_mm"/>
-      <column type="field" hidden="0" width="-1" name="Knooppuntberging_mm"/>
-      <column type="field" hidden="0" width="-1" name="Stelselberging_mm"/>
-      <column type="field" hidden="0" width="-1" name="Maximale_Vultijd_Droogweer_h"/>
-      <column type="field" hidden="0" width="-1" name="Minimale_Vultijd_Droogweer_h"/>
-      <column type="field" hidden="0" width="-1" name="Maximale_Ledigingstijd_h"/>
-      <column type="field" hidden="0" width="-1" name="Minimale_Ledigingstijd_h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh"/>
-      <column type="field" hidden="0" width="-1" name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh"/>
-      <column type="actions" hidden="1" width="-1"/>
+      <column name="fid" width="-1" hidden="0" type="field"/>
+      <column name="gemeente" width="-1" hidden="0" type="field"/>
+      <column name="naam" width="-1" hidden="0" type="field"/>
+      <column name="Stelselnamen" width="-1" hidden="0" type="field"/>
+      <column name="DWA_BAG_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Bemalingsgebied_ID" width="-1" hidden="0" type="field"/>
+      <column name="Stap1_Datum" width="-1" hidden="0" type="field"/>
+      <column name="Rioolgemaal" width="-1" hidden="0" type="field"/>
+      <column name="Type" width="-1" hidden="0" type="field"/>
+      <column name="Beginpunt_Afvoerrelatie" width="163" hidden="0" type="field"/>
+      <column name="Eindpunt_Afvoerrelatie" width="154" hidden="0" type="field"/>
+      <column name="Afvoercapaciteit_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Inslagpeil_mNAP" width="-1" hidden="0" type="field"/>
+      <column name="Uitslagpeil_mNAP" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_Pompen" width="-1" hidden="0" type="field"/>
+      <column name="Bemalingsgebied_ID_Afvoerpunt" width="-1" hidden="0" type="field"/>
+      <column name="Stelsel_ID_Afvoerpunt" width="-1" hidden="0" type="field"/>
+      <column name="Bemalingsgebied_ID_Lozingspunt" width="-1" hidden="0" type="field"/>
+      <column name="Stelsel_ID_lozingspunt" width="-1" hidden="0" type="field"/>
+      <column name="Leidingtypen_In_Stelsel" width="-1" hidden="0" type="field"/>
+      <column name="Leidingberging_m3" width="-1" hidden="0" type="field"/>
+      <column name="Knooppuntberging_m3" width="-1" hidden="0" type="field"/>
+      <column name="Stelselberging_m3" width="-1" hidden="0" type="field"/>
+      <column name="Laagste_Doorlaatniveau_mNAP" width="-1" hidden="0" type="field"/>
+      <column name="Laagste_Drempelniveau_mNAP" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_Doorlaten" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_Drempels" width="-1" hidden="0" type="field"/>
+      <column name="Stap2_datum" width="-1" hidden="0" type="field"/>
+      <column name="Gemengd_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="Hemelwater_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="Verbeterd_Hemelwater_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="Vuilwater_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="DIT_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="Oppervlaktewater_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="Maaiveld_Aangesloten_ha" width="-1" hidden="0" type="field"/>
+      <column name="Aangesloten_Oppervlak_Stelsel_ha" width="-1" hidden="0" type="field"/>
+      <column name="POC_Theorie_Gemengd_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Theorie_VGS_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Theorie_Totaal_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_Adressen_Eigen_Rioleringsgebied" width="-1" hidden="0" type="field"/>
+      <column name="Aangesloten_Oppervlak_Per_Woning_m2" width="-1" hidden="0" type="field"/>
+      <column name="Drinkwater_Particulier_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Drinkwater_Zakelijk_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Drinkwater_Totaal_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_VEs_Eigen_Rioleringsgebied" width="-1" hidden="0" type="field"/>
+      <column name="DWA_VEs_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_2124_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_2529_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_3039_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_4050_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Bouwprojecten_Eigen_Rioleringsgeb_IDs" width="-1" hidden="0" type="field"/>
+      <column name="Stap3_datum" width="-1" hidden="0" type="field"/>
+      <column name="Onderbemalingsgeb_IDs_1_Niveau_Diep" width="-1" hidden="0" type="field"/>
+      <column name="Onderbemalingsgebied_IDs" width="-1" hidden="0" type="field"/>
+      <column name="Afvoerpunten_1_Niveau_Diep" width="-1" hidden="0" type="field"/>
+      <column name="Afvoerpunten_Van_Onderbemalingen" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_Keer_Oppompen_Tot_Afleverpunt" width="-1" hidden="0" type="field"/>
+      <column name="Rioleringsgebied_ID_Overnamepunt" width="-1" hidden="0" type="field"/>
+      <column name="Naam_Overnamepunt" width="-1" hidden="0" type="field"/>
+      <column name="Bouwprojecten_IDs_Onderbemalingen" width="-1" hidden="0" type="field"/>
+      <column name="DWA_BAG_Onderbemalingen_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_Adressen_In_Onderbemalingen" width="-1" hidden="0" type="field"/>
+      <column name="Drinkwater_Part_Onderbem_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Drinkwater_Zak_Onderbem_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Drinkwater_Totaal_Onderbem_m3h" width="-1" hidden="0" type="field"/>
+      <column name="DWA_VEs_Onderbemalingen_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Aantal_VEs_Onderbemalingen" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_Onderbem_2124_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_Onderbem_2529_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_Onderbem_3039_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Extra_DWA_Periode_Onderbem_4050_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Theorie_Gemengd_Onderbem_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Theorie_VGS_Onderbem_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Theorie_Totaal_Onderbem_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Onderbem_DWA_obv_BAG_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h" width="-1" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Onderbem_DWA_obv_VEs_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_POC_Theorie_Gemengd_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_POC_Theorie_VGS_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_POC_Theorie_Totaal_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_DWA_BAG_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Drinkwater_Part_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Drinkwater_Zak_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Drinkwater_Totaal_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_DWA_VEs_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Aantal_VEs" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Extra_DWA_Periode_2124_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Extra_DWA_Periode_2529_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Extra_DWA_Periode_3039_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Sommatie_Extra_DWA_Periode_4050_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Afvalwateraanbod_obv_Drinkwater_En_POC_Theorie_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Afvalwateraanbod_obv_VEs_En_POC_Theorie_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h" width="-1" hidden="0" type="field"/>
+      <column name="Leidingberging_mm" width="135" hidden="0" type="field"/>
+      <column name="Knooppuntberging_mm" width="157" hidden="0" type="field"/>
+      <column name="Stelselberging_mm" width="132" hidden="0" type="field"/>
+      <column name="Maximale_Vultijd_Droogweer_h" width="201" hidden="0" type="field"/>
+      <column name="Minimale_Vultijd_Droogweer_h" width="198" hidden="0" type="field"/>
+      <column name="Maximale_Ledigingstijd_h" width="166" hidden="0" type="field"/>
+      <column name="Minimale_Ledigingstijd_h" width="163" hidden="0" type="field"/>
+      <column name="POC_Theorie_Beschikbaar_DWA_obv_BAG_m3h" width="288" hidden="0" type="field"/>
+      <column name="POC_Theorie_Beschikbaar_DWA_obv_Drinkwater_m3h" width="327" hidden="0" type="field"/>
+      <column name="POC_Theorie_Beschikbaar_DWA_obv_VEs_m3h" width="282" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h" width="332" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h" width="371" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h" width="326" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_mmh" width="336" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_mmh" width="375" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_mmh" width="330" hidden="0" type="field"/>
+      <column name="Aantal_Onderbemalingen_1_Niveau_Diep" width="252" hidden="0" type="field"/>
+      <column name="Aantal_Onderbemalingen" width="165" hidden="0" type="field"/>
+      <column name="POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h" width="455" hidden="0" type="field"/>
+      <column name="Sommatie_Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h" width="369" hidden="0" type="field"/>
+      <column name="Sommatie_POC_Praktijk_DWA_obv_BAG_m3h" width="278" hidden="0" type="field"/>
+      <column name="Sommatie_Adressen" width="138" hidden="0" type="field"/>
+      <column name="Afvalwateraanbod_OBV_BAG_En_Afvoercapaciteit_m3h" width="333" hidden="0" type="field"/>
+      <column width="-1" hidden="1" type="actions"/>
     </columns>
   </attributetableconfig>
   <conditionalstyles>

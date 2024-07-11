@@ -34,7 +34,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_rioolstelsels', 'Resultaat_Stap1_Rioolstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_afvoerpunten', 'Resultaat_Stap1_Afvoerpunten', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Knooppuntberging_m3', 'Knooppuntberging_m3', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        self.addParameter(QgsProcessingParameterFeatureSink('VuilwaterrioolEnGemengdRioolDieNietMeedoenInBergingsberekening', 'Vuilwaterriool en Gemengd riool die niet meedoen in bergingsberekening', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Vuilwaterriolen_en_gemengd_riolen_die_niet_meedoen_in_bergingsberekening', 'Vuilwaterriolen_en_Gemengd_riolen_die_niet_meedoen_in_bergingsberekening', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue='TEMPORARY_OUTPUT'))
         self.addParameter(QgsProcessingParameterFeatureSink('Lozingspunten_rioolgemalen', 'Lozingspunten_Rioolgemalen', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Controle_kunstwerken', 'Controle_Kunstwerken', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Leidingberging_m3', 'Leidingberging_m3', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
@@ -42,36 +42,32 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelatie_rioolgemalen', 'Afvoerrelatie_Rioolgemalen', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_afvoerboom', 'Resultaat_Stap1_Afvoerboom', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_rioleringsgebieden', 'Resultaat_Stap1_Rioleringsgebieden', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        self.addParameter(QgsProcessingParameterFeatureSink('Rioolgemalen_zonder_afvoerrelatie', 'Rioolgemalen_zonder_afvoerrelatie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))     
 
-
+        # self.addParameter(QgsProcessingParameterNumber('buffer_rioolstelsel', 'Buffer_Rioolstelsel', type=QgsProcessingParameterNumber.Double, minValue=0.1, maxValue=5, defaultValue=0.2))
         # self.addParameter(QgsProcessingParameterVectorLayer('netwerk_knooppunt', 'Netwerk_knooppunt', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('netwerk_knooppunt',geometryType=0)))
         # self.addParameter(QgsProcessingParameterVectorLayer('netwerk_kunstwerk', 'Netwerk_kunstwerk', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('netwerk_kunstwerk',geometryType=0)))
         # self.addParameter(QgsProcessingParameterVectorLayer('netwerk_verbinding', 'Netwerk_verbinding', types=[QgsProcessing.TypeVectorLine], defaultValue=default_layer('netwerk_verbinding',geometryType=1)))
         # self.addParameter(QgsProcessingParameterVectorLayer('rioleringsgebieden', 'Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Rioleringsgebieden',geometryType=2)))
-        # self.addParameter(QgsProcessingParameterFeatureSink('RetainfieldsAfvoerpuntRioleringsgebiedenZonderRioolstelsel', 'retainfields afvoerpunt rioleringsgebieden zonder rioolstelsel', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_Afvoerboom', 'Resultaat_stap1_ Afvoerboom', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('RioolstelselsVanEindgebiedenOvernamepunten', 'Rioolstelsels van eindgebieden / overnamepunten', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('AfvoerpuntenEindgebiedenMetRioolstelsels', 'Afvoerpunten eindgebieden met rioolstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Rioolgemalen_met_kenmerken', 'rioolgemalen_met_kenmerken', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('ResultaatStap1Rioolstelsels', 'Resultaat stap 1: Rioolstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Dwa_en_gemengde_riolen_die_niet_meedoen_in_bergingsberekening', 'DWA_en_Gemengde_riolen_die_niet_meedoen_in_bergingsberekening', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('RioleringsgebiedenBem_id', 'Rioleringsgebieden BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_1_afvoerrelatie', 'Resultaat_stap_1_Afvoerrelatie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_1_afvoerpunten', 'Resultaat_stap_1_Afvoerpunten', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap_1_rioleringsgebieden', 'Resultaat_stap_1_Rioleringsgebieden', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Bem_idEnStelsel_id', 'BEM_ID en STELSEL_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('StelselsKunstwerkEnMaaiveldstats', 'STELSELS kunstwerk en maaiveldstats', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Diameters_en_leidingberging', 'diameters_en_leidingberging', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue='TEMPORARY_OUTPUT'))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Knoopberging', 'knoopberging', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('M3_stelselberging', 'M3_StelselBerging', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelatie_rioolgemalen', 'afvoerrelatie_rioolgemalen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('KunstwerkBem_idEnStelsel_id', 'kunstwerk BEM_ID en STELSEL_ID', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('KnpStelselIdEnBobs', 'knp stelsel id en bobs', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
-        # self.addParameter(QgsProcessingParameterFeatureSink('RioleringsgebiedenAllData', 'rioleringsgebieden all data', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue='TEMPORARY_OUTPUT'))
-        # self.addParameter(QgsProcessingParameterFeatureSink('KnpMetKunstwerkdata', 'knp met kunstwerkdata', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Rioolgemalen', 'Rioolgemalen', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue='TEMPORARY_OUTPUT'))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Stelsel_id_kenmerken_kunstwerken', 'Stelsel_ID_kenmerken_kunstwerken', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Stelsel_id_leidingberging_m3', 'Stelsel_ID_Leidingberging_m3', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Stelsel_idKnooppuntberging_m3', 'Stelsel_ID Knooppuntberging_m3', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_afvoerrelatie', 'Resultaat_Stap1_Afvoerrelatie', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_rioolstelsels', 'Resultaat_Stap1_Rioolstelsels', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_afvoerpunten', 'Resultaat_Stap1_Afvoerpunten', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Knooppuntberging_m3', 'Knooppuntberging_m3', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('VuilwaterrioolEnGemengdRioolDieNietMeedoenInBergingsberekening', 'Vuilwaterriool en Gemengd riool die niet meedoen in bergingsberekening', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Lozingspunten_rioolgemalen', 'Lozingspunten_Rioolgemalen', type=QgsProcessing.TypeVectorPoint, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Controle_kunstwerken', 'Controle_Kunstwerken', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Leidingberging_m3', 'Leidingberging_m3', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Stelsel_id', 'Stelsel_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Afvoerrelatie_rioolgemalen', 'Afvoerrelatie_Rioolgemalen', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_afvoerboom', 'Resultaat_Stap1_Afvoerboom', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
+        # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_rioleringsgebieden', 'Resultaat_Stap1_Rioleringsgebieden', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         # self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))     
-        
+
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
@@ -169,23 +165,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by location Bemalingsgebied_ID aan knooppunten
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'INPUT': outputs['CreateSpatialIndexNetwerk_knooppunt']['OUTPUT'],
-            'JOIN': outputs['CreateSpatialIndexBemalingsgebied_id']['OUTPUT'],
-            'JOIN_FIELDS': ['Bemalingsgebied_ID'],
-            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
-            'PREDICATE': [0],  # intersect
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByLocationBemalingsgebied_idAanKnooppunten'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(8)
-        if feedback.isCanceled():
-            return {}
-
         # Join attributes by location Bemalingsgebied_ID aan leidingen
         alg_params = {
             'DISCARD_NONMATCHING': False,
@@ -199,18 +178,35 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByLocationBemalingsgebied_idAanLeidingen'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(8)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by location Bemalingsgebied_ID aan knooppunten
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'INPUT': outputs['CreateSpatialIndexNetwerk_knooppunt']['OUTPUT'],
+            'JOIN': outputs['CreateSpatialIndexBemalingsgebied_id']['OUTPUT'],
+            'JOIN_FIELDS': ['Bemalingsgebied_ID'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREDICATE': [0],  # intersect
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByLocationBemalingsgebied_idAanKnooppunten'] = processing.run('native:joinattributesbylocation', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(9)
         if feedback.isCanceled():
             return {}
 
-        # Extract by expression Vuilwaterriool en Gemengd riool die niet meedoen in bergingsberekening
+        # Extract by expression Vuilwaterriolen_en_Gemengd_riolen_die_niet_meedoen_in_bergingsberekening
         alg_params = {
             'EXPRESSION': '("type" LIKE \'%erg%\' OR\r\n"type" LIKE \'%emengd%\' OR\r\n"type" LIKE \'%uilwate%\' ) AND "Bemalingsgebied_ID" IS NULL',
             'INPUT': outputs['JoinAttributesByLocationBemalingsgebied_idAanLeidingen']['OUTPUT'],
-            'OUTPUT': parameters['VuilwaterrioolEnGemengdRioolDieNietMeedoenInBergingsberekening']
+            'OUTPUT': parameters['Vuilwaterriolen_en_gemengd_riolen_die_niet_meedoen_in_bergingsberekening']
         }
-        outputs['ExtractByExpressionVuilwaterrioolEnGemengdRioolDieNietMeedoenInBergingsberekening'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['VuilwaterrioolEnGemengdRioolDieNietMeedoenInBergingsberekening'] = outputs['ExtractByExpressionVuilwaterrioolEnGemengdRioolDieNietMeedoenInBergingsberekening']['OUTPUT']
+        outputs['ExtractByExpressionVuilwaterriolen_en_gemengd_riolen_die_niet_meedoen_in_bergingsberekening'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Vuilwaterriolen_en_gemengd_riolen_die_niet_meedoen_in_bergingsberekening'] = outputs['ExtractByExpressionVuilwaterriolen_en_gemengd_riolen_die_niet_meedoen_in_bergingsberekening']['OUTPUT']
 
         feedback.setCurrentStep(10)
         if feedback.isCanceled():
@@ -501,18 +497,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
-        # Extract by expression Kooppunten - "Stelsel_ID" IS NOT NULL 1
-        alg_params = {
-            'EXPRESSION': '"Stelsel_ID" IS NOT NULL',
-            'INPUT': outputs['DropFieldsOverbodigeVeldenKnooppunten']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull1'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(30)
-        if feedback.isCanceled():
-            return {}
-
         # Extract by expression Overstort Stuw Drempel Doorlaat
         alg_params = {
             'EXPRESSION': ' "type"  LIKE \'%overst%\' OR  "type"  LIKE \'%tuw%\'  OR  "type"  LIKE \'%rempe%\'  OR  "type"  LIKE \'%oorlaa%\' ',
@@ -521,7 +505,47 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['ExtractByExpressionOverstortStuwDrempelDoorlaat'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(30)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression Pompput Pompunit Rioolgemaal
+        alg_params = {
+            'EXPRESSION': ' "type"  LIKE \'%omp%\' OR  "type"  LIKE \'%emaal%\' ',
+            'INPUT': outputs['DropFieldsOverbodigeVeldenKnooppunten']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByExpressionPompputPompunitRioolgemaal'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(31)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator type
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'type',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': "'Pomp'",
+            'INPUT': outputs['ExtractByExpressionPompputPompunitRioolgemaal']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorType'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(32)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression Kooppunten - "Stelsel_ID" IS NOT NULL 1
+        alg_params = {
+            'EXPRESSION': '"Stelsel_ID" IS NOT NULL',
+            'INPUT': outputs['DropFieldsOverbodigeVeldenKnooppunten']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull1'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(33)
         if feedback.isCanceled():
             return {}
 
@@ -534,37 +558,25 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['AggregateKnooppuntenMaaiveldhoogte_q1_mnap'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(32)
+        feedback.setCurrentStep(34)
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value Maaiveldhoogte_Q1_mNAP aan knooppunten koppelen
+        # Join attributes by field value Maaiveldhoogte_Q1_mNAP aan leidingen koppelen
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'Stelsel_ID',
             'FIELDS_TO_COPY': ['Maaiveldhoogte_Q1_mNAP'],
             'FIELD_2': 'Stelsel_ID',
-            'INPUT': outputs['DropFieldsOverbodigeVeldenKnooppunten']['OUTPUT'],
+            'INPUT': outputs['JoinAttributesByLocationStelsel_idAanLeidingen']['OUTPUT'],
             'INPUT_2': outputs['AggregateKnooppuntenMaaiveldhoogte_q1_mnap']['OUTPUT'],
             'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['JoinAttributesByFieldValueMaaiveldhoogte_q1_mnapAanKnooppuntenKoppelen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['JoinAttributesByFieldValueMaaiveldhoogte_q1_mnapAanLeidingenKoppelen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(33)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by expression Pompput Pompunit Rioolgemaal
-        alg_params = {
-            'EXPRESSION': ' "type"  LIKE \'%omp%\' OR  "type"  LIKE \'%emaal%\' ',
-            'INPUT': outputs['DropFieldsOverbodigeVeldenKnooppunten']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionPompputPompunitRioolgemaal'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(34)
+        feedback.setCurrentStep(35)
         if feedback.isCanceled():
             return {}
 
@@ -581,22 +593,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinAttributesByFieldValueKunstwerkenAanOverstortenStuwDoorlaatDrempel'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(35)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator type
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'type',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': "'Pomp'",
-            'INPUT': outputs['ExtractByExpressionPompputPompunitRioolgemaal']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorType'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(36)
         if feedback.isCanceled():
@@ -618,21 +614,38 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
-        # Join attributes by field value Maaiveldhoogte_Q1_mNAP aan leidingen koppelen
+        # Join attributes by field value Maaiveldhoogte_Q1_mNAP aan knooppunten koppelen
         alg_params = {
             'DISCARD_NONMATCHING': False,
             'FIELD': 'Stelsel_ID',
             'FIELDS_TO_COPY': ['Maaiveldhoogte_Q1_mNAP'],
             'FIELD_2': 'Stelsel_ID',
-            'INPUT': outputs['JoinAttributesByLocationStelsel_idAanLeidingen']['OUTPUT'],
+            'INPUT': outputs['DropFieldsOverbodigeVeldenKnooppunten']['OUTPUT'],
             'INPUT_2': outputs['AggregateKnooppuntenMaaiveldhoogte_q1_mnap']['OUTPUT'],
             'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
             'PREFIX': '',
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['JoinAttributesByFieldValueMaaiveldhoogte_q1_mnapAanLeidingenKoppelen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['JoinAttributesByFieldValueMaaiveldhoogte_q1_mnapAanKnooppuntenKoppelen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(38)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Controle_Kunstwerken
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Controle_Kunstwerken',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': 'if("type" LIKE  \'%oodover%\' AND "type" NOT LIKE  \'%tuw%\'AND  "Doorlaatniveau" IS NULL AND  "Drempelniveau" IS NULL,\r\n\'Noodoverstortput zonder drempelniveau en/of zonder doorlaatniveau\',\r\nif("type" LIKE \'%tuw%\' AND  "Doorlaatniveau" IS NULL,\r\n\'Stuwput zonder doorlaatniveau\',\r\nif("type" LIKE \'%verstort%\' AND "type" LIKE \'%Extern%\' AND "type" NOT LIKE \'%nood%\'  AND "Drempelniveau" IS NULL,\r\n\'Externe overstortput zonder drempelniveau\',\r\nif("type" LIKE \'%verstort%\' AND "type" LIKE \'%Intern%\' AND "type" NOT LIKE \'%nood%\'  AND "Drempelniveau" IS NULL,\r\n\'Interne overstortput zonder drempelniveau\',\r\n\'NULL\'))))',
+            'INPUT': outputs['JoinAttributesByFieldValueKunstwerkenAanOverstortenStuwDoorlaatDrempel']['OUTPUT'],
+            'OUTPUT': parameters['Controle_kunstwerken']
+        }
+        outputs['FieldCalculatorControle_kunstwerken'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Controle_kunstwerken'] = outputs['FieldCalculatorControle_kunstwerken']['OUTPUT']
+
+        feedback.setCurrentStep(39)
         if feedback.isCanceled():
             return {}
 
@@ -647,23 +660,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorControle'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(39)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Controle_Kunstwerken
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Controle_Kunstwerken',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': 'if("type" LIKE  \'%oodover%\' AND "type" NOT LIKE  \'%tuw%\'AND  "Doorlaatniveau" IS NULL AND  "Drempelniveau" IS NULL,\r\n\'Noodoverstortput zonder drempelniveau en zonder doorlaatniveau\',\r\nif("type" LIKE \'%tuw%\' AND  "Doorlaatniveau" IS NULL,\r\n\'Stuwput zonder doorlaatniveau\',\r\nif("type" LIKE \'%verstort%\' AND "type" LIKE \'%Extern%\' AND "type" NOT LIKE \'%nood%\'  AND "Drempelniveau" IS NULL,\r\n\'Externe overstortput zonder drempelniveau\',\r\nif("type" LIKE \'%verstort%\' AND "type" LIKE \'%Intern%\' AND "type" NOT LIKE \'%nood%\'  AND "Drempelniveau" IS NULL,\r\n\'Interne overstortput zonder drempelniveau\',\r\n\'NULL\'))))',
-            'INPUT': outputs['JoinAttributesByFieldValueKunstwerkenAanOverstortenStuwDoorlaatDrempel']['OUTPUT'],
-            'OUTPUT': parameters['Controle_kunstwerken']
-        }
-        outputs['FieldCalculatorControle_kunstwerken'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Controle_kunstwerken'] = outputs['FieldCalculatorControle_kunstwerken']['OUTPUT']
 
         feedback.setCurrentStep(40)
         if feedback.isCanceled():
@@ -711,13 +707,14 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
-        # Retain fields Rioolgemaal rioolstelsels zonder afvoerrelatie
+        # Retain fields Rioolgemalen_zonder_afvoerrelatie
         alg_params = {
             'FIELDS': ['naam','type','begin'],
             'INPUT': outputs['ExtractByExpressionRioolgemaalRioolstelselsZonderAfvoerrelatie']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+            'OUTPUT': parameters['Rioolgemalen_zonder_afvoerrelatie']
         }
-        outputs['RetainFieldsRioolgemaalRioolstelselsZonderAfvoerrelatie'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['RetainFieldsRioolgemalen_zonder_afvoerrelatie'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Rioolgemalen_zonder_afvoerrelatie'] = outputs['RetainFieldsRioolgemalen_zonder_afvoerrelatie']['OUTPUT']
 
         feedback.setCurrentStep(44)
         if feedback.isCanceled():
@@ -726,7 +723,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         # Merge vector layers Kunstwerk en Rioolgemaal zonder afvoerrelatie
         alg_params = {
             'CRS': None,
-            'LAYERS': [parameters['netwerk_kunstwerk'],outputs['RetainFieldsRioolgemaalRioolstelselsZonderAfvoerrelatie']['OUTPUT']],
+            'LAYERS': [parameters['netwerk_kunstwerk'],outputs['RetainFieldsRioolgemalen_zonder_afvoerrelatie']['OUTPUT']],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['MergeVectorLayersKunstwerkEnRioolgemaalZonderAfvoerrelatie'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
@@ -830,18 +827,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
-        # Extract by expression Pompen
-        alg_params = {
-            'EXPRESSION': '"type"=\'Pomp\'',
-            'INPUT': outputs['JoinAttributesByFieldValueEindBemalingsgebied_idEnStelsel_idAanKunstwerk']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionPompen'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(52)
-        if feedback.isCanceled():
-            return {}
-
         # Aggregate kunstwerk kenmerken per Stelsel_ID
         alg_params = {
             'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'begin_Stelsel_ID','length': 0,'name': 'Stelsel_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'minimum','delimiter': ',','input': 'Doorlaatniveau','length': 0,'name': 'Laagste_Doorlaatniveau_mNAP','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'minimum','delimiter': ',','input': 'Drempelniveau','length': 0,'name': 'Laagste_Drempelniveau_mNAP','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'},{'aggregate': 'count','delimiter': ',','input': 'Doorlaatniveau','length': 0,'name': 'Aantal_Doorlaten','precision': 0,'sub_type': 0,'type': 2,'type_name': 'integer'},{'aggregate': 'count','delimiter': ',','input': 'Drempelniveau','length': 0,'name': 'Aantal_Drempels','precision': 0,'sub_type': 0,'type': 2,'type_name': 'integer'}],
@@ -852,7 +837,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         outputs['AggregateKunstwerkKenmerkenPerStelsel_id'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Stelsel_id_kenmerken_kunstwerken'] = outputs['AggregateKunstwerkKenmerkenPerStelsel_id']['OUTPUT']
 
-        feedback.setCurrentStep(53)
+        feedback.setCurrentStep(52)
         if feedback.isCanceled():
             return {}
 
@@ -869,6 +854,18 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['JoinAttributesByFieldValueLaagste_drempelniveau_mnapAanKnooppuntenKoppelen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(53)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression Pompen
+        alg_params = {
+            'EXPRESSION': '"type"=\'Pomp\'',
+            'INPUT': outputs['JoinAttributesByFieldValueEindBemalingsgebied_idEnStelsel_idAanKunstwerk']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByExpressionPompen'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(54)
         if feedback.isCanceled():
@@ -888,6 +885,18 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
+        # Extract by expression Rioolgemalen zonder afvoerrelatie
+        alg_params = {
+            'EXPRESSION': '"Beginpunt_Afvoerrelatie" = "Eindpunt_Afvoerrelatie"',
+            'INPUT': outputs['AggregateRioolgemalen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByExpressionRioolgemalenZonderAfvoerrelatie'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(56)
+        if feedback.isCanceled():
+            return {}
+
         # Join attributes by field value Laagste_Drempelniveau_mNAP aan leidingen koppelen
         alg_params = {
             'DISCARD_NONMATCHING': False,
@@ -902,86 +911,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByFieldValueLaagste_drempelniveau_mnapAanLeidingenKoppelen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(56)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by field value Stelsel_ID rioolgemaaldata
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'Stelsel_ID',
-            'FIELDS_TO_COPY': [''],
-            'FIELD_2': 'Stelsel_ID_Afvoerpunt',
-            'INPUT': outputs['FieldCalculatorStelsel_id']['OUTPUT'],
-            'INPUT_2': outputs['AggregateRioolgemalen']['OUTPUT'],
-            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByFieldValueStelsel_idRioolgemaaldata'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(57)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Leidingberging_m3
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Leidingberging_m3',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if(mean( "BobBeginpuntLeiding" , "BobEindpuntLeiding" ) +  ("HoogteLeiding"/1000) > if( "Laagste_Drempelniveau_mNAP" IS NOT NULL,  "Laagste_Drempelniveau_mNAP" , "Maaiveldhoogte_Q1_mNAP"-0.6 ), 0,\r\nif("VormLeiding" LIKE \'%Ei%\' , round((((0.25 * pi()*((("BreedteLeiding"/1000)^2))/2))+(((("BreedteLeiding"/1000)+(("HoogteLeiding"-"BreedteLeiding")/1000))/2)*(("BreedteLeiding"/1000/2)+(("HoogteLeiding"-"BreedteLeiding")/1000/2)))+((0.25*pi()*(("HoogteLeiding"-"BreedteLeiding")/1000)^2/2))) *  "LengteLeiding" ,2),\r\nif("VormLeiding" = \'Rechthoekig\' , round( ("BreedteLeiding" /1000) * ("HoogteLeiding" /1000) *  "LengteLeiding" ,2),\r\nround( ("BreedteLeiding" /1000 /2) * ("BreedteLeiding" /1000 /2) * pi() *  "LengteLeiding" ,2 ))))',
-            'INPUT': outputs['JoinAttributesByFieldValueLaagste_drempelniveau_mnapAanLeidingenKoppelen']['OUTPUT'],
-            'OUTPUT': parameters['Leidingberging_m3']
-        }
-        outputs['FieldCalculatorLeidingberging_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Leidingberging_m3'] = outputs['FieldCalculatorLeidingberging_m3']['OUTPUT']
-
-        feedback.setCurrentStep(58)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by expression Rioolgemalen zonder afvoerrelatie
-        alg_params = {
-            'EXPRESSION': '"Beginpunt_Afvoerrelatie" = "Eindpunt_Afvoerrelatie"',
-            'INPUT': outputs['AggregateRioolgemalen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionRioolgemalenZonderAfvoerrelatie'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(59)
-        if feedback.isCanceled():
-            return {}
-
-        # Aggregate Leidingberging_m3 per Stelsel_ID
-        alg_params = {
-            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'Stelsel_ID','length': 0,'name': 'Stelsel_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'concatenate_unique','delimiter': ',','input': 'type','length': 0,'name': 'Leidingtypen_In_Stelsel','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'concatenate_unique','delimiter': ',','input': 'Stelsel','length': 0,'name': 'Stelselnamen','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'sum','delimiter': ',','input': 'Leidingberging_m3','length': 0,'name': 'Leidingberging_m3','precision': 0,'sub_type': 0,'type': 2,'type_name': 'integer'}],
-            'GROUP_BY': 'Stelsel_ID',
-            'INPUT': outputs['FieldCalculatorLeidingberging_m3']['OUTPUT'],
-            'OUTPUT': parameters['Stelsel_id_leidingberging_m3']
-        }
-        outputs['AggregateLeidingberging_m3PerStelsel_id'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Stelsel_id_leidingberging_m3'] = outputs['AggregateLeidingberging_m3PerStelsel_id']['OUTPUT']
-
-        feedback.setCurrentStep(60)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by field value Stelsel_ID leidingdata
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'Stelsel_ID',
-            'FIELDS_TO_COPY': [''],
-            'FIELD_2': 'Stelsel_ID',
-            'INPUT': outputs['JoinAttributesByFieldValueStelsel_idRioolgemaaldata']['OUTPUT'],
-            'INPUT_2': outputs['AggregateLeidingberging_m3PerStelsel_id']['OUTPUT'],
-            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByFieldValueStelsel_idLeidingdata'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(61)
         if feedback.isCanceled():
             return {}
 
@@ -1001,7 +931,88 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         outputs['JoinByLinesHubLinesAfvoerrelatie_rioolgemalen'] = processing.run('native:hublines', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Afvoerrelatie_rioolgemalen'] = outputs['JoinByLinesHubLinesAfvoerrelatie_rioolgemalen']['OUTPUT']
 
+        feedback.setCurrentStep(58)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by field value Stelsel_ID rioolgemaaldata
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'Stelsel_ID',
+            'FIELDS_TO_COPY': [''],
+            'FIELD_2': 'Stelsel_ID_Afvoerpunt',
+            'INPUT': outputs['FieldCalculatorStelsel_id']['OUTPUT'],
+            'INPUT_2': outputs['AggregateRioolgemalen']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByFieldValueStelsel_idRioolgemaaldata'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(59)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Afvoerpunt_Lozingspunt
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Afvoerpunt_Lozingspunt',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 2,  # Text (string)
+            'FORMULA': '"Bemalingsgebied_ID_Afvoerpunt" || \'-\' || "Bemalingsgebied_ID_Lozingspunt" ',
+            'INPUT': outputs['JoinByLinesHubLinesAfvoerrelatie_rioolgemalen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorAfvoerpunt_lozingspunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(60)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Leidingberging_m3
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Leidingberging_m3',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if(mean( "BobBeginpuntLeiding" , "BobEindpuntLeiding" ) +  ("HoogteLeiding"/1000) > if( "Laagste_Drempelniveau_mNAP" IS NOT NULL,  "Laagste_Drempelniveau_mNAP" , "Maaiveldhoogte_Q1_mNAP"-0.6 ), 0,\r\nif("VormLeiding" LIKE \'%Ei%\' , round((((0.25 * pi()*((("BreedteLeiding"/1000)^2))/2))+(((("BreedteLeiding"/1000)+(("HoogteLeiding"-"BreedteLeiding")/1000))/2)*(("BreedteLeiding"/1000/2)+(("HoogteLeiding"-"BreedteLeiding")/1000/2)))+((0.25*pi()*(("HoogteLeiding"-"BreedteLeiding")/1000)^2/2))) *  "LengteLeiding" ,2),\r\nif("VormLeiding" = \'Rechthoekig\' , round( ("BreedteLeiding" /1000) * ("HoogteLeiding" /1000) *  "LengteLeiding" ,2),\r\nround( ("BreedteLeiding" /1000 /2) * ("BreedteLeiding" /1000 /2) * pi() *  "LengteLeiding" ,2 ))))',
+            'INPUT': outputs['JoinAttributesByFieldValueLaagste_drempelniveau_mnapAanLeidingenKoppelen']['OUTPUT'],
+            'OUTPUT': parameters['Leidingberging_m3']
+        }
+        outputs['FieldCalculatorLeidingberging_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Leidingberging_m3'] = outputs['FieldCalculatorLeidingberging_m3']['OUTPUT']
+
+        feedback.setCurrentStep(61)
+        if feedback.isCanceled():
+            return {}
+
+        # Aggregate Leidingberging_m3 per Stelsel_ID
+        alg_params = {
+            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'Stelsel_ID','length': 0,'name': 'Stelsel_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'concatenate_unique','delimiter': ',','input': 'type','length': 0,'name': 'Leidingtypen_In_Stelsel','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'concatenate_unique','delimiter': ',','input': 'Stelsel','length': 0,'name': 'Stelselnamen','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'sum','delimiter': ',','input': 'Leidingberging_m3','length': 0,'name': 'Leidingberging_m3','precision': 0,'sub_type': 0,'type': 2,'type_name': 'integer'}],
+            'GROUP_BY': 'Stelsel_ID',
+            'INPUT': outputs['FieldCalculatorLeidingberging_m3']['OUTPUT'],
+            'OUTPUT': parameters['Stelsel_id_leidingberging_m3']
+        }
+        outputs['AggregateLeidingberging_m3PerStelsel_id'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Stelsel_id_leidingberging_m3'] = outputs['AggregateLeidingberging_m3PerStelsel_id']['OUTPUT']
+
         feedback.setCurrentStep(62)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Lengte_Afvoerrelatie_m
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Lengte_Afvoerrelatie_m',
+            'FIELD_PRECISION': 0,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'round($length,2)',
+            'INPUT': outputs['FieldCalculatorAfvoerpunt_lozingspunt']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorLengte_afvoerrelatie_m'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(63)
         if feedback.isCanceled():
             return {}
 
@@ -1019,39 +1030,50 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByFieldValueBeginpuntLeidingberging_m3'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(63)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Afvoerpunt_Lozingspunt
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Afvoerpunt_Lozingspunt',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 2,  # Text (string)
-            'FORMULA': '"Bemalingsgebied_ID_Afvoerpunt" || \'-\' || "Bemalingsgebied_ID_Lozingspunt" ',
-            'INPUT': outputs['JoinByLinesHubLinesAfvoerrelatie_rioolgemalen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorAfvoerpunt_lozingspunt'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(64)
         if feedback.isCanceled():
             return {}
 
-        # Field calculator Lengte_Afvoerrelatie_m
+        # Extract by expression Rioolgemalen die naar een ander rioleringsgebied afvoeren
         alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Lengte_Afvoerrelatie_m',
-            'FIELD_PRECISION': 0,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'round($length,2)',
-            'INPUT': outputs['FieldCalculatorAfvoerpunt_lozingspunt']['OUTPUT'],
+            'EXPRESSION': '"Bemalingsgebied_ID_Afvoerpunt" <> "Bemalingsgebied_ID_Lozingspunt" ',
+            'INPUT': outputs['FieldCalculatorLengte_afvoerrelatie_m']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['FieldCalculatorLengte_afvoerrelatie_m'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        outputs['ExtractByExpressionRioolgemalenDieNaarEenAnderRioleringsgebiedAfvoeren'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(65)
+        if feedback.isCanceled():
+            return {}
+
+        # Aggregate Afvoerpunt_Lozingspunt minimale lengte
+        alg_params = {
+            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'Afvoerpunt_Lozingspunt','length': 0,'name': 'Afvoerpunt_Lozingspunt','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'minimum','delimiter': ',','input': 'Lengte_Afvoerrelatie_m','length': 0,'name': 'Minimale_Lengte_Afvoerrelatie_m','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'}],
+            'GROUP_BY': 'Afvoerpunt_Lozingspunt',
+            'INPUT': outputs['ExtractByExpressionRioolgemalenDieNaarEenAnderRioleringsgebiedAfvoeren']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['AggregateAfvoerpunt_lozingspuntMinimaleLengte'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(66)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by field value Stelsel_ID leidingdata
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'Stelsel_ID',
+            'FIELDS_TO_COPY': [''],
+            'FIELD_2': 'Stelsel_ID',
+            'INPUT': outputs['JoinAttributesByFieldValueStelsel_idRioolgemaaldata']['OUTPUT'],
+            'INPUT_2': outputs['AggregateLeidingberging_m3PerStelsel_id']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByFieldValueStelsel_idLeidingdata'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(67)
         if feedback.isCanceled():
             return {}
 
@@ -1069,106 +1091,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByFieldValueEindpuntLeidingberging_m3'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(66)
-        if feedback.isCanceled():
-            return {}
-
-        # Aggregate Max_Leidingberging_m3 aan knooppunten
-        alg_params = {
-            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'naam','length': 0,'name': 'naam','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'maximum','delimiter': ',','input': 'round("Beginpunt_Leidingberging_m3"+"Eindpunt_Leidingberging_m3",2)','length': 0,'name': 'Max_Leidingberging_m3','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'}],
-            'GROUP_BY': 'naam',
-            'INPUT': outputs['JoinAttributesByFieldValueEindpuntLeidingberging_m3']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['AggregateMax_leidingberging_m3AanKnooppunten'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(67)
-        if feedback.isCanceled():
-            return {}
-
-        # Join attributes by field value Max_Leidingberging_m3 aan knooppunten
-        alg_params = {
-            'DISCARD_NONMATCHING': False,
-            'FIELD': 'naam',
-            'FIELDS_TO_COPY': ['Max_Leidingberging_m3'],
-            'FIELD_2': 'naam',
-            'INPUT': outputs['JoinAttributesByFieldValueLaagste_drempelniveau_mnapAanKnooppuntenKoppelen']['OUTPUT'],
-            'INPUT_2': outputs['AggregateMax_leidingberging_m3AanKnooppunten']['OUTPUT'],
-            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
-            'PREFIX': '',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['JoinAttributesByFieldValueMax_leidingberging_m3AanKnooppunten'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
         feedback.setCurrentStep(68)
-        if feedback.isCanceled():
-            return {}
-
-        # Field calculator Knooppuntberging_m3
-        alg_params = {
-            'FIELD_LENGTH': 0,
-            'FIELD_NAME': 'Knooppuntberging_m3',
-            'FIELD_PRECISION': 2,
-            'FIELD_TYPE': 0,  # Decimal (double)
-            'FORMULA': 'if("Max_Leidingberging_m3"<=0 OR "Max_Leidingberging_m3" IS NULL,0,\r\nround(\r\nif( "VormPut" LIKE \'%Rond%\',  (("BreedtePut" /1000/2) * ("BreedtePut" /1000/2) * pi()) * \r\n(if( "Laagste_Drempelniveau_mNAP" IS NULL,  abs(("Maaiveldhoogte_Q1_mNAP"-0.6) - "Laagst_inkomende_bob_mNAP"),  abs("Laagste_Drempelniveau_mNAP" - "Laagst_inkomende_bob_mNAP"))),\r\n("BreedtePut" /1000) * ("Lengteput" /1000) * if( "Laagste_Drempelniveau_mNAP" IS NULL,  abs(("Maaiveldhoogte_Q1_mNAP"-0.6) - "Laagst_inkomende_bob_mNAP"),  abs("Laagste_Drempelniveau_mNAP" - "Laagst_inkomende_bob_mNAP")))\r\n, 2))',
-            'INPUT': outputs['JoinAttributesByFieldValueMax_leidingberging_m3AanKnooppunten']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['FieldCalculatorKnooppuntberging_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(69)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by expression Rioolgemalen die naar een ander rioleringsgebied afvoeren
-        alg_params = {
-            'EXPRESSION': '"Bemalingsgebied_ID_Afvoerpunt" <> "Bemalingsgebied_ID_Lozingspunt" ',
-            'INPUT': outputs['FieldCalculatorLengte_afvoerrelatie_m']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionRioolgemalenDieNaarEenAnderRioleringsgebiedAfvoeren'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(70)
-        if feedback.isCanceled():
-            return {}
-
-        # Aggregate Afvoerpunt_Lozingspunt minimale lengte
-        alg_params = {
-            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'Afvoerpunt_Lozingspunt','length': 0,'name': 'Afvoerpunt_Lozingspunt','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'minimum','delimiter': ',','input': 'Lengte_Afvoerrelatie_m','length': 0,'name': 'Minimale_Lengte_Afvoerrelatie_m','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'}],
-            'GROUP_BY': 'Afvoerpunt_Lozingspunt',
-            'INPUT': outputs['ExtractByExpressionRioolgemalenDieNaarEenAnderRioleringsgebiedAfvoeren']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['AggregateAfvoerpunt_lozingspuntMinimaleLengte'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(71)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by expression Kooppunten - "Stelsel_ID" IS NOT NULL 2
-        alg_params = {
-            'EXPRESSION': '"Stelsel_ID" IS NOT NULL',
-            'INPUT': outputs['FieldCalculatorKnooppuntberging_m3']['OUTPUT'],
-            'OUTPUT': parameters['Knooppuntberging_m3']
-        }
-        outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull2'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Knooppuntberging_m3'] = outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull2']['OUTPUT']
-
-        feedback.setCurrentStep(72)
-        if feedback.isCanceled():
-            return {}
-
-        # Aggregate Knooppuntberging_m3 per Stelsel_ID
-        alg_params = {
-            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'Stelsel_ID','length': 0,'name': 'Stelsel_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'sum','delimiter': ',','input': 'Knooppuntberging_m3','length': 0,'name': 'Knooppuntberging_m3','precision': 0,'sub_type': 0,'type': 2,'type_name': 'integer'}],
-            'GROUP_BY': 'Stelsel_ID',
-            'INPUT': outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull2']['OUTPUT'],
-            'OUTPUT': parameters['Stelsel_idKnooppuntberging_m3']
-        }
-        outputs['AggregateKnooppuntberging_m3PerStelsel_id'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Stelsel_idKnooppuntberging_m3'] = outputs['AggregateKnooppuntberging_m3PerStelsel_id']['OUTPUT']
-
-        feedback.setCurrentStep(73)
         if feedback.isCanceled():
             return {}
 
@@ -1186,7 +1109,143 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByFieldValueMinimaleLengteAfvoerrelatieAanRioolgemalen'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
+        feedback.setCurrentStep(69)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression selectie Afvoerende rioolgemalen
+        alg_params = {
+            'EXPRESSION': '"Lengte_Afvoerrelatie_m" ="Minimale_Lengte_Afvoerrelatie_m"',
+            'INPUT': outputs['JoinAttributesByFieldValueMinimaleLengteAfvoerrelatieAanRioolgemalen']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractByExpressionSelectieAfvoerendeRioolgemalen'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(70)
+        if feedback.isCanceled():
+            return {}
+
+        # Drop field(s) Rioolgemalen overbodige velden
+        alg_params = {
+            'COLUMN': ['Afvoerpunt_Lozingspunt','Lengte_Afvoerrelatie_m','Minimale_Lengte_Afvoerrelatie_m'],
+            'INPUT': outputs['ExtractByExpressionSelectieAfvoerendeRioolgemalen']['OUTPUT'],
+            'OUTPUT': parameters['Resultaat_stap1_afvoerrelatie']
+        }
+        outputs['DropFieldsRioolgemalenOverbodigeVelden'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap1_afvoerrelatie'] = outputs['DropFieldsRioolgemalenOverbodigeVelden']['OUTPUT']
+
+        feedback.setCurrentStep(71)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract specific vertices Lozingspunten van de afvoerpunten
+        alg_params = {
+            'INPUT': outputs['DropFieldsRioolgemalenOverbodigeVelden']['OUTPUT'],
+            'VERTICES': '-1',
+            'OUTPUT': parameters['Lozingspunten_rioolgemalen']
+        }
+        outputs['ExtractSpecificVerticesLozingspuntenVanDeAfvoerpunten'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Lozingspunten_rioolgemalen'] = outputs['ExtractSpecificVerticesLozingspuntenVanDeAfvoerpunten']['OUTPUT']
+
+        feedback.setCurrentStep(72)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract specific vertices extract Resultaat_Stap1_Afvoerpunten
+        alg_params = {
+            'INPUT': outputs['DropFieldsRioolgemalenOverbodigeVelden']['OUTPUT'],
+            'VERTICES': '0',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['ExtractSpecificVerticesExtractResultaat_stap1_afvoerpunten'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(73)
+        if feedback.isCanceled():
+            return {}
+
+        # Aggregate Max_Leidingberging_m3 aan knooppunten
+        alg_params = {
+            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'naam','length': 0,'name': 'naam','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'maximum','delimiter': ',','input': 'round("Beginpunt_Leidingberging_m3"+"Eindpunt_Leidingberging_m3",2)','length': 0,'name': 'Max_Leidingberging_m3','precision': 2,'sub_type': 0,'type': 6,'type_name': 'double precision'}],
+            'GROUP_BY': 'naam',
+            'INPUT': outputs['JoinAttributesByFieldValueEindpuntLeidingberging_m3']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['AggregateMax_leidingberging_m3AanKnooppunten'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
         feedback.setCurrentStep(74)
+        if feedback.isCanceled():
+            return {}
+
+        # Merge vector layers Afvoerpunten
+        alg_params = {
+            'CRS': None,
+            'LAYERS': [outputs['ExtractByExpressionRioolgemalenZonderAfvoerrelatie']['OUTPUT'],outputs['ExtractSpecificVerticesExtractResultaat_stap1_afvoerpunten']['OUTPUT']],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['MergeVectorLayersAfvoerpunten'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(75)
+        if feedback.isCanceled():
+            return {}
+
+        # Join attributes by field value Max_Leidingberging_m3 aan knooppunten
+        alg_params = {
+            'DISCARD_NONMATCHING': False,
+            'FIELD': 'naam',
+            'FIELDS_TO_COPY': ['Max_Leidingberging_m3'],
+            'FIELD_2': 'naam',
+            'INPUT': outputs['JoinAttributesByFieldValueLaagste_drempelniveau_mnapAanKnooppuntenKoppelen']['OUTPUT'],
+            'INPUT_2': outputs['AggregateMax_leidingberging_m3AanKnooppunten']['OUTPUT'],
+            'METHOD': 1,  # Take attributes of the first matching feature only (one-to-one)
+            'PREFIX': '',
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['JoinAttributesByFieldValueMax_leidingberging_m3AanKnooppunten'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(76)
+        if feedback.isCanceled():
+            return {}
+
+        # Field calculator Knooppuntberging_m3
+        alg_params = {
+            'FIELD_LENGTH': 0,
+            'FIELD_NAME': 'Knooppuntberging_m3',
+            'FIELD_PRECISION': 2,
+            'FIELD_TYPE': 0,  # Decimal (double)
+            'FORMULA': 'if("Max_Leidingberging_m3"<=0 OR "Max_Leidingberging_m3" IS NULL,0,\r\nround(\r\nif( "VormPut" LIKE \'%Rond%\',  (("BreedtePut" /1000/2) * ("BreedtePut" /1000/2) * pi()) * \r\n(if( "Laagste_Drempelniveau_mNAP" IS NULL,  abs(("Maaiveldhoogte_Q1_mNAP"-0.6) - "Laagst_inkomende_bob_mNAP"),  abs("Laagste_Drempelniveau_mNAP" - "Laagst_inkomende_bob_mNAP"))),\r\n("BreedtePut" /1000) * ("Lengteput" /1000) * if( "Laagste_Drempelniveau_mNAP" IS NULL,  abs(("Maaiveldhoogte_Q1_mNAP"-0.6) - "Laagst_inkomende_bob_mNAP"),  abs("Laagste_Drempelniveau_mNAP" - "Laagst_inkomende_bob_mNAP")))\r\n, 2))',
+            'INPUT': outputs['JoinAttributesByFieldValueMax_leidingberging_m3AanKnooppunten']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['FieldCalculatorKnooppuntberging_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(77)
+        if feedback.isCanceled():
+            return {}
+
+        # Extract by expression Kooppunten - "Stelsel_ID" IS NOT NULL 2
+        alg_params = {
+            'EXPRESSION': '"Stelsel_ID" IS NOT NULL',
+            'INPUT': outputs['FieldCalculatorKnooppuntberging_m3']['OUTPUT'],
+            'OUTPUT': parameters['Knooppuntberging_m3']
+        }
+        outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull2'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Knooppuntberging_m3'] = outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull2']['OUTPUT']
+
+        feedback.setCurrentStep(78)
+        if feedback.isCanceled():
+            return {}
+
+        # Aggregate Knooppuntberging_m3 per Stelsel_ID
+        alg_params = {
+            'AGGREGATES': [{'aggregate': 'first_value','delimiter': ',','input': 'Stelsel_ID','length': 0,'name': 'Stelsel_ID','precision': 0,'sub_type': 0,'type': 10,'type_name': 'text'},{'aggregate': 'sum','delimiter': ',','input': 'Knooppuntberging_m3','length': 0,'name': 'Knooppuntberging_m3','precision': 0,'sub_type': 0,'type': 2,'type_name': 'integer'}],
+            'GROUP_BY': 'Stelsel_ID',
+            'INPUT': outputs['ExtractByExpressionKooppuntenStelsel_idIsNotNull2']['OUTPUT'],
+            'OUTPUT': parameters['Stelsel_idKnooppuntberging_m3']
+        }
+        outputs['AggregateKnooppuntberging_m3PerStelsel_id'] = processing.run('native:aggregate', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Stelsel_idKnooppuntberging_m3'] = outputs['AggregateKnooppuntberging_m3PerStelsel_id']['OUTPUT']
+
+        feedback.setCurrentStep(79)
         if feedback.isCanceled():
             return {}
 
@@ -1204,19 +1263,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByFieldValueStelsel_idKnooppuntdata'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(75)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract by expression selectie Afvoerende rioolgemalen
-        alg_params = {
-            'EXPRESSION': '"Lengte_Afvoerrelatie_m" ="Minimale_Lengte_Afvoerrelatie_m"',
-            'INPUT': outputs['JoinAttributesByFieldValueMinimaleLengteAfvoerrelatieAanRioolgemalen']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractByExpressionSelectieAfvoerendeRioolgemalen'] = processing.run('native:extractbyexpression', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(76)
+        feedback.setCurrentStep(80)
         if feedback.isCanceled():
             return {}
 
@@ -1232,7 +1279,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['FieldCalculatorStelselberging_m3'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(77)
+        feedback.setCurrentStep(81)
         if feedback.isCanceled():
             return {}
 
@@ -1250,7 +1297,7 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['JoinAttributesByFieldValueStelsel_idKunstwerkdata'] = processing.run('native:joinattributestable', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(78)
+        feedback.setCurrentStep(82)
         if feedback.isCanceled():
             return {}
 
@@ -1262,56 +1309,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         }
         outputs['DropFieldsOverbodigeStelselkenmerken'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['Resultaat_stap1_rioolstelsels'] = outputs['DropFieldsOverbodigeStelselkenmerken']['OUTPUT']
-
-        feedback.setCurrentStep(79)
-        if feedback.isCanceled():
-            return {}
-
-        # Drop field(s) Rioolgemalen overbodige velden
-        alg_params = {
-            'COLUMN': ['Afvoerpunt_Lozingspunt','Lengte_Afvoerrelatie_m','Minimale_Lengte_Afvoerrelatie_m'],
-            'INPUT': outputs['ExtractByExpressionSelectieAfvoerendeRioolgemalen']['OUTPUT'],
-            'OUTPUT': parameters['Resultaat_stap1_afvoerrelatie']
-        }
-        outputs['DropFieldsRioolgemalenOverbodigeVelden'] = processing.run('native:deletecolumn', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap1_afvoerrelatie'] = outputs['DropFieldsRioolgemalenOverbodigeVelden']['OUTPUT']
-
-        feedback.setCurrentStep(80)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract specific vertices Lozingspunten van de afvoerpunten
-        alg_params = {
-            'INPUT': outputs['DropFieldsRioolgemalenOverbodigeVelden']['OUTPUT'],
-            'VERTICES': '-1',
-            'OUTPUT': parameters['Lozingspunten_rioolgemalen']
-        }
-        outputs['ExtractSpecificVerticesLozingspuntenVanDeAfvoerpunten'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Lozingspunten_rioolgemalen'] = outputs['ExtractSpecificVerticesLozingspuntenVanDeAfvoerpunten']['OUTPUT']
-
-        feedback.setCurrentStep(81)
-        if feedback.isCanceled():
-            return {}
-
-        # Extract specific vertices extract Resultaat_Stap1_Afvoerpunten
-        alg_params = {
-            'INPUT': outputs['DropFieldsRioolgemalenOverbodigeVelden']['OUTPUT'],
-            'VERTICES': '0',
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['ExtractSpecificVerticesExtractResultaat_stap1_afvoerpunten'] = processing.run('native:extractspecificvertices', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(82)
-        if feedback.isCanceled():
-            return {}
-
-        # Merge vector layers Afvoerpunten
-        alg_params = {
-            'CRS': None,
-            'LAYERS': [outputs['ExtractByExpressionRioolgemalenZonderAfvoerrelatie']['OUTPUT'],outputs['ExtractSpecificVerticesExtractResultaat_stap1_afvoerpunten']['OUTPUT']],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['MergeVectorLayersAfvoerpunten'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(83)
         if feedback.isCanceled():
@@ -1377,18 +1374,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         if feedback.isCanceled():
             return {}
 
-        # Point on surface Rioleringsgebieden_Lozingspunt
-        alg_params = {
-            'ALL_PARTS': False,
-            'INPUT': outputs['DropFieldsRioleringsgebiedenBemalingsgebied_id_2']['OUTPUT'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['PointOnSurfaceRioleringsgebieden_lozingspunt'] = processing.run('native:pointonsurface', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(88)
-        if feedback.isCanceled():
-            return {}
-
         # Point on surface Rioleringsgebieden_Afvoerpunt
         alg_params = {
             'ALL_PARTS': False,
@@ -1396,6 +1381,18 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['PointOnSurfaceRioleringsgebieden_afvoerpunt'] = processing.run('native:pointonsurface', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(88)
+        if feedback.isCanceled():
+            return {}
+
+        # Point on surface Rioleringsgebieden_Lozingspunt
+        alg_params = {
+            'ALL_PARTS': False,
+            'INPUT': outputs['DropFieldsRioleringsgebiedenBemalingsgebied_id_2']['OUTPUT'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['PointOnSurfaceRioleringsgebieden_lozingspunt'] = processing.run('native:pointonsurface', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(89)
         if feedback.isCanceled():
