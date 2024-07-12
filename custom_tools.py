@@ -701,7 +701,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     POC_obm_sum = 0
 
                 feedback.pushDebugInfo(f"{POC_obm} = {POC_obm_sum} (sum {POC_tot} van {ONTV_VAN})")
-
+                feature[POC_obm] = POC_obm_sum
                 # 2.) calculate Afvalwater totaal
                 DWA_tot_sum = feature[DWA_tot]
                 feedback.pushDebugInfo(f'DWA_tot_sum={DWA_tot_sum}')
@@ -741,6 +741,8 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     feedback.pushDebugInfo(f"{VAN_KNOOPN}: Afvalwater totaal ({Afv_tot_sum}) > afvoercapaciteit ({Afvoercapaciteit_m3h_sum})")
                     feedback.pushDebugInfo(f"{POC_tot} = afvoercapaciteit - DWA totaal ({POC_tot_sum} = {Afvoercapaciteit_m3h_sum} - {DWA_tot_sum})")
                     POC_tot_sum = Afvoercapaciteit_m3h_sum - DWA_tot_sum
+                    if POC_tot_sum < 0: # POC totaal mag niet negatief zijn
+                        POC_tot_sum = 0
                 ##feedback.pushDebugInfo(f"POC praktijk totaal {POC_tot_sum} = POC praktijk gebied {POC_geb_sum} + POC praktijk onderbemaling {POC_obm_sum} {VAN_KNOOPN}")
                 feedback.pushDebugInfo(f"{POC_tot_sum} = {POC_geb_sum} + {POC_obm_sum}, {POC_tot} = {POC_geb} + {POC_obm}")
                 ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(POC_tot), POC_tot_sum)
@@ -921,7 +923,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         Onderbemalingsgebied_IDs_1_NiveauDiep = "Onderbemalingsgeb_IDs_1_Niveau_Diep" # N1_onderbemalingen
         Aantal_Onderbemalingen = "Aantal_Onderbemalingen" # Aantal_onderbemalingen
         Aantal_Onderbemalingen_1_Niveau_Diep = "Aantal_Onderbemalingen_1_Niveau_Diep" # "N1_aantal_onderbemalingen"
-        Aantal_Keer_Oppompen_Tot_Afleverpunt = "Aantal_Keer_Oppompen_Tot_Afleverpunt"	# "X_OPPOMP"
+        Aantal_Keer_Oppompen_Tot_Afleverpunt = "Aantal_Keer_Oppompen_Tot_En_Met_Afleverpunt"	# "X_OPPOMP"
         Rioleringsgebied_ID_Overnamepunt = "Rioleringsgebied_ID_Overnamepunt" # "BEM_ID_afleveringspunt"
         Afvoerpunten_Van_Onderbemalingen = "Afvoerpunten_Van_Onderbemalingen" # "Afvoerpunten_onderbemalingen"
         Afvoerpunten_1_Niveau_Diep = "Afvoerpunten_1_Niveau_Diep" # "N1_afvoerpunten_onderbemalingen"
@@ -1445,7 +1447,7 @@ class CustomToolsRetainFieldsAlgorithm(CustomToolAllFunctionsAlgorithm):
                 'veldenlijst', 
                 'velden die bewaard moeten worden, gescheiden met ;', 
                 multiLine=False, 
-                defaultValue=None
+                defaultValue="Bemalingsgebied_ID;Afvoercapaciteit_m3h;Bemalingsgebied_ID_Lozingspunt;POC_Theorie_Totaal_m3h;DWA_BAG_m3h;Onderbemalingsgeb_IDs_1_Niveau_Diep;Onderbemalingsgebied_IDs;DWA_BAG_Onderbemalingen_m3h;POC_Praktijk_Onderbem_DWA_obv_BAG_m3h;POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h;POC_Praktijk_Onderbem_DWA_obv_VEs_m3h;Sommatie_DWA_BAG_m3h;Sommatie_Drinkwater_Totaal_m3h;Sommatie_DWA_VEs_m3h;POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h;POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h;Sommatie_POC_Praktijk_DWA_obv_BAG_m3h;Sommatie_POC_Praktijk_DWA_obv_Drinkwater_m3h;Sommatie_POC_Praktijk_DWA_obv_VEs_m3h;Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h;Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h;Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h;POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h"
         ))
         
     def processAlgorithm(self, parameters, context, model_feedback):
