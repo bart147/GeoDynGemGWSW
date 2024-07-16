@@ -24,12 +24,12 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer('bag_verblijfsobject', 'BAG verblijfsobject', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('bag_vbo', geometryType=0)))
-        self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGTinlooptabel', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2)))
-        self.addParameter(QgsProcessingParameterVectorLayer('drinkwater', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0)))
+        self.addParameter(QgsProcessingParameterVectorLayer('bgtinlooptabel', 'BGTinlooptabel', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('inlooptabel', geometryType=2), optional=True))
+        self.addParameter(QgsProcessingParameterVectorLayer('drinkwater', 'Drinkwater', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('drinkwater', geometryType=0), optional=True))
         self.addParameter(QgsProcessingParameterNumber('inw_per_adres', 'inw_per_adres', type=QgsProcessingParameterNumber.Double, minValue=0, maxValue=10, defaultValue=2.5))
-        self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2)))
+        self.addParameter(QgsProcessingParameterVectorLayer('plancap', 'Plancap', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('plancap', geometryType=2), optional=True))
         self.addParameter(QgsProcessingParameterVectorLayer('resultaat_stap1_rioleringsgebieden', 'Resultaat stap 1: Rioleringsgebieden', types=[QgsProcessing.TypeVectorPolygon], defaultValue=default_layer('Resultaat_stap1_rioleringsgebieden')))
-        self.addParameter(QgsProcessingParameterVectorLayer('ve', 'VE', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0)))
+        self.addParameter(QgsProcessingParameterVectorLayer('ve', 'VE', types=[QgsProcessing.TypeVectorPoint], defaultValue=default_layer('ve_', geometryType=0), optional=True))
         self.addParameter(QgsProcessingParameterFeatureSink('PlancapPerBem_id', 'Plancap per BEM_ID', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwater', 'POC BAG DRINKWATER', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
         self.addParameter(QgsProcessingParameterFeatureSink('PocBagDrinkwaterVe', 'POC BAG DRINKWATER VE', type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, supportsAppend=True, defaultValue=None))
@@ -63,14 +63,16 @@ class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):
         dummy_folder = "dummy_gpkg"
         if not parameters['ve']:
             parameters['ve'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "ve_empty.gpkg"), "ve_empty", "ogr")
+            QgsProject.instance().addMapLayer(parameters['ve'], False)
         if not parameters['bgtinlooptabel']:
-            layer = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgtinlooptabel_empty.gpkg"), "bgtinlooptabel_empty", "ogr")
-            QgsProject.instance().addMapLayer(layer, False) # addMapLayer seems to be necessary to load layer but only for bgtinlooptabel? why? 
-            parameters['bgtinlooptabel'] = layer
+            parameters['bgtinlooptabel'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "bgtinlooptabel_empty.gpkg"), "bgtinlooptabel_empty", "ogr")
+            QgsProject.instance().addMapLayer(parameters['bgtinlooptabel'], False) # addMapLayer seems to be necessary to load layer but only for bgtinlooptabel? why?
         if not parameters['plancap']:
             parameters['plancap'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "plancap_empty.gpkg"), "plancap_empty", "ogr")
+            QgsProject.instance().addMapLayer(parameters['plancap'], False)
         if not parameters['drinkwater']:
             parameters['drinkwater'] = QgsVectorLayer(os.path.join(cmd_folder, dummy_folder, "drinkwater_empty.gpkg"), "drinkwater_empty", "ogr")
+            QgsProject.instance().addMapLayer(parameters['drinkwater'], False)
         #QgsProject.instance().reloadAllLayers() # this is very important to prevent mix ups with 'in memory' layers
         self.result_folder = parameters['result_folder']
         

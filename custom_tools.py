@@ -645,9 +645,9 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         fields_VEs_input =          ["Sommatie_DWA_VEs_m3h"]
 
         # fields output per source 
-        fields_BAG_output =         ["POC_Praktijk_Onderbem_DWA_obv_BAG_m3h", "Sommatie_POC_Praktijk_DWA_obv_BAG_m3h", "POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h", "Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h"]
-        fields_Drinkwater_output =  ["POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h", "Sommatie_POC_Praktijk_DWA_obv_Drinkwater_m3h", "POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h", "Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h"]
-        fields_VEs_output =         ["POC_Praktijk_Onderbem_DWA_obv_VEs_m3h", "Sommatie_POC_Praktijk_DWA_obv_VEs_m3h", "POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h", "Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h"]
+        fields_BAG_output =         ["POC_Praktijk_Onderbem_DWA_obv_BAG_m3h", "Sommatie_POC_Praktijk_DWA_obv_BAG_m3h", "Sommatie_POC_Praktijk_DWA_obv_BAG_m3h_obv_afvoercap", "POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_BAG_m3h", "Afvalwateraanbod_obv_BAG_En_POC_Praktijk_m3h"]
+        fields_Drinkwater_output =  ["POC_Praktijk_Onderbem_DWA_obv_Drinkwater_m3h", "Sommatie_POC_Praktijk_DWA_obv_Drinkwater_m3h", "Sommatie_POC_Praktijk_DWA_obv_Drinkwater_m3h_obv_afvoercap", "POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_Drinkwater_m3h", "Afvalwateraanbod_obv_Drinkwater_En_POC_Praktijk_m3h"]
+        fields_VEs_output =         ["POC_Praktijk_Onderbem_DWA_obv_VEs_m3h", "Sommatie_POC_Praktijk_DWA_obv_VEs_m3h", "Sommatie_POC_Praktijk_DWA_obv_VEs_m3h_obv_afvoercap", "POC_Praktijk_Eigen_Rioleringsgeb_DWA_obv_VEs_m3h", "Afvalwateraanbod_obv_VEs_En_POC_Praktijk_m3h"]
 
         fields_BAG = fields_BAG_input + fields_BAG_output
         fields_Drinkwater = fields_Drinkwater_input + fields_Drinkwater_output
@@ -668,7 +668,7 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
         us_fields = set()
         layer.startEditing()
 
-        for DWA_tot, POC_obm, POC_tot, POC_geb, Afv_tot in [fields_BAG, fields_VEs, fields_Drinkwater]:
+        for DWA_tot, POC_obm, POC_tot, POC_tot_cap, POC_geb, Afv_tot in [fields_BAG, fields_VEs, fields_Drinkwater]:
             sorted_features = sorted(layer.getFeatures(), key=lambda f: f[X_OPPOMP], reverse=True)
             for feature in sorted_features: #layer.getFeatures(): 
                 VAN_KNOOPN = feature[begin_fld]
@@ -693,23 +693,18 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                     feedback.pushDebugInfo("{} features selected".format(layer.selectedFeatureCount()))
                     feedback.pushDebugInfo("selected id's: {}".format(layer.selectedFeatureIds()))
 
-                    # 1.) first update POC_Praktijk_Onderbem_DWA_obv_BAG_m3h with Sommatie_POC_Praktijk_DWA_obv_BAG_m3h based on id's in Onderbemalingsgeb_IDs_1_Niveau_Diep
+                    # 1.) first update POC_Praktijk_Onderbem_DWA_obv_BAG_m3h with Sommatie_POC_Praktijk_DWA_obv_BAG_m3h_obv_afvoercap based on id's in Onderbemalingsgeb_IDs_1_Niveau_Diep
                     us_fields.add(POC_obm)
-                    sum_values = sum([float(f[POC_tot]) for f in layer.selectedFeatures() if str(f[POC_tot]) not in ["NULL","nan",""," ","None"]])
+                    sum_values = sum([float(f[POC_tot_cap]) for f in layer.selectedFeatures() if str(f[POC_tot_cap]) not in ["NULL","nan",""," ","None"]])
                     POC_obm_sum = round(sum_values,2)
                 else: # geen onderbemaling
                     POC_obm_sum = 0
 
                 feedback.pushDebugInfo(f"{POC_obm} = {POC_obm_sum} (sum {POC_tot} van {ONTV_VAN})")
                 feature[POC_obm] = POC_obm_sum
-                # 2.) calculate Afvalwater totaal
                 DWA_tot_sum = feature[DWA_tot]
                 feedback.pushDebugInfo(f'DWA_tot_sum={DWA_tot_sum}')
-                Afv_tot_sum = round(DWA_tot_sum + POC_obm_sum, 2)
-                feedback.pushDebugInfo(f"{Afv_tot_sum} = {DWA_tot_sum} + {POC_obm_sum}, {Afv_tot} = {DWA_tot} + {POC_obm}")
-                ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(Afv_tot), Afv_tot_sum)
-                feature[Afv_tot] = Afv_tot_sum
-                # 3.) now calculate POC praktijk (POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h)
+                # 2.) now calculate POC praktijk (POC_Praktijk_Eigen_Rioleringsgebied_OBV_Droogweerafvoer_OBV_BAG_m3h)
                 Afvoercapaciteit_m3h_sum = feature[Afvoercapaciteit_m3h]
                 if feature[POC_theorie] == None:
                     gemengd_stelsel = False
@@ -725,32 +720,34 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
                         feedback.pushWarning(f"Afvoercapaciteit is {Afvoercapaciteit_m3h_sum} voor {VAN_KNOOPN}. POC praktijk berekening overgeslagen.")
                         POC_geb_sum = 0
                     else:
-                        POC_geb_sum = round(Afvoercapaciteit_m3h_sum - Afv_tot_sum, 2) # Afvoercapaciteit_m3h - Afvalwater praktijk uit onderbemaling + DWA gebied)
-                        #feedback.pushDebugInfo(f"POC praktijk {POC_geb_sum} = max.cap {Afvoercapaciteit_m3h_sum} - Afvalwater praktijk totaal {Afv_tot_sum} {VAN_KNOOPN}")
-                        feedback.pushDebugInfo(f"{POC_geb_sum} = {Afvoercapaciteit_m3h_sum} - {Afv_tot_sum}, {POC_geb} = {Afvoercapaciteit_m3h} + {Afv_tot}")
-                        ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(POC_geb), POC_geb_sum)
+                        POC_geb_sum = round(Afvoercapaciteit_m3h_sum - DWA_tot_sum - POC_obm_sum, 2) # Afvoercapaciteit_m3h - DWA totaal - POC uit onderbemaling)
+                        feedback.pushDebugInfo(f"{POC_geb_sum} = {Afvoercapaciteit_m3h_sum} - {DWA_tot_sum} - {POC_obm_sum}, {POC_geb} = {Afvoercapaciteit_m3h} - {DWA_tot} - {POC_obm}")
                 else:
                     POC_geb_sum = 0 # default
                 if POC_geb_sum < 0:
                     feedback.pushWarning(f"{VAN_KNOOPN}: {POC_geb} ({POC_geb_sum}) < 0 (Afvalwateraanbod > Gemaalcapaciteit), {POC_geb} opslaan als 0")
                     POC_geb_sum = 0
                 feature[POC_geb] = POC_geb_sum
-                # 4.) calculate POC totaal
+                # 3.) calculate POC totaal
                 POC_tot_sum = round(POC_geb_sum + POC_obm_sum, 2) # POC totaal = POC gebied + POC onderbemaling
+                feature[POC_tot] = POC_tot_sum
+                feedback.pushDebugInfo(f"{POC_tot_sum} = {POC_geb_sum} + {POC_obm_sum}, {POC_tot} = {POC_geb} + {POC_obm}")
+                # 4.) calculate Afvalwater totaal
+                Afv_tot_sum = round(DWA_tot_sum + POC_tot_sum, 2)
+                feedback.pushDebugInfo(f"{Afv_tot_sum} = {DWA_tot_sum} + {POC_tot_sum}, {Afv_tot} = {DWA_tot} + {POC_tot}")
+                feature[Afv_tot] = Afv_tot_sum
+                # 5.) calculate POC totaal obv max. afvoercapaciteit (dit is de waarde die wordt gebruikt voor onderbemaling)
                 if Afvoercapaciteit_m3h_sum and Afv_tot_sum > Afvoercapaciteit_m3h_sum:
                     feedback.pushDebugInfo(f"{VAN_KNOOPN}: Afvalwater totaal ({Afv_tot_sum}) > afvoercapaciteit ({Afvoercapaciteit_m3h_sum})")
-                    feedback.pushDebugInfo(f"{POC_tot} = afvoercapaciteit - DWA totaal ({POC_tot_sum} = {Afvoercapaciteit_m3h_sum} - {DWA_tot_sum})")
-                    POC_tot_sum = Afvoercapaciteit_m3h_sum - DWA_tot_sum
-                    if POC_tot_sum < 0: # POC totaal mag niet negatief zijn
-                        POC_tot_sum = 0
-                ##feedback.pushDebugInfo(f"POC praktijk totaal {POC_tot_sum} = POC praktijk gebied {POC_geb_sum} + POC praktijk onderbemaling {POC_obm_sum} {VAN_KNOOPN}")
-                feedback.pushDebugInfo(f"{POC_tot_sum} = {POC_geb_sum} + {POC_obm_sum}, {POC_tot} = {POC_geb} + {POC_obm}")
-                ##layer.changeAttributeValue(feature.id(), layer.fields().indexFromName(POC_tot), POC_tot_sum)
-                feature[POC_tot] = POC_tot_sum
-                layer.updateFeature(feature)
-                # test value
-                ##feedback.pushDebugInfo(f'{POC_tot} = {feature[POC_tot]}')
-                    
+                    POC_tot_cap_sum = Afvoercapaciteit_m3h_sum - DWA_tot_sum
+                    if POC_tot_cap_sum < 0: # POC totaal obv afvoercap mag niet negatief zijn
+                        POC_tot_cap_sum = 0
+                    feedback.pushDebugInfo(f"{POC_tot_cap} = Afvoercapaciteit - DWA totaal ({POC_tot_cap_sum} = {Afvoercapaciteit_m3h_sum} - {DWA_tot_sum})")
+                else:
+                    POC_tot_cap_sum = POC_tot_sum # geen correctie voor afvoercapaciteit, POC totaal gelijk.
+                feature[POC_tot_cap] = POC_tot_cap_sum
+               
+                layer.updateFeature(feature)                
 
         layer.commitChanges() # double?
         layer.selectByIds([])
