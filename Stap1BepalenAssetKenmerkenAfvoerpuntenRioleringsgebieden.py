@@ -16,7 +16,7 @@ from qgis.core import QgsProject, QgsProcessingUtils, QgsProcessingParameterFile
 from qgis.core import QgsCoordinateReferenceSystem, QgsProcessingParameterDefinition
 import processing
 import os
-from .custom_tools import rename_layers, default_layer, QgsProcessingAlgorithmPost, cmd_folder
+from .custom_tools import default_layer, QgsProcessingAlgorithmPost, cmd_folder
 
         
 class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProcessingAlgorithmPost):

@@ -15,7 +15,6 @@ from qgis.core import (QgsProcessing, QgsProcessingAlgorithm,
                        QgsProcessingParameterBoolean,
                        QgsProject)
 import processing
-from .custom_tools import rename_layers
 
 
 class KoppelOverigeBronnen(QgsProcessingAlgorithm):

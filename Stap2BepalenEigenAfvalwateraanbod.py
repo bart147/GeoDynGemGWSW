@@ -17,7 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProject,
                        QgsVectorLayer,
                        QgsProcessingParameterNumber)
-from .custom_tools import rename_layers, default_inp_fields, default_layer, QgsProcessingAlgorithmPost, cmd_folder
+from .custom_tools import default_inp_fields, default_layer, QgsProcessingAlgorithmPost, cmd_folder
 
 
 class GeodynGwswStap2BepalenEigenAfvalwateraanbod(QgsProcessingAlgorithmPost):

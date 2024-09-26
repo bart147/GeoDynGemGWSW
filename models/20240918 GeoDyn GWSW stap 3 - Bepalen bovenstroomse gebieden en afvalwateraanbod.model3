@@ -86,8 +86,8 @@
           </Option>
           <Option name="component_description" type="QString" value="calc fields upstream"/>
           <Option name="component_height" type="double" value="30"/>
-          <Option name="component_pos_x" type="double" value="1311.432706222865"/>
-          <Option name="component_pos_y" type="double" value="1336.2633863965266"/>
+          <Option name="component_pos_x" type="double" value="1303.432706222865"/>
+          <Option name="component_pos_y" type="double" value="1354.2633863965266"/>
           <Option name="component_width" type="double" value="200"/>
           <Option name="default_value" type="invalid"/>
           <Option name="mandatory" type="bool" value="false"/>
@@ -1022,8 +1022,8 @@
         </Option>
         <Option name="INPUT" type="List">
           <Option type="Map">
-            <Option name="child_id" type="QString" value="GeoDynTools:calc fields upstream_1"/>
-            <Option name="output_name" type="QString" value="Output_layer"/>
+            <Option name="child_id" type="QString" value="native:fieldcalculator_50"/>
+            <Option name="output_name" type="QString" value="OUTPUT"/>
             <Option name="source" type="int" value="1"/>
           </Option>
         </Option>
@@ -2801,7 +2801,7 @@
         </Option>
         <Option name="INPUT" type="List">
           <Option type="Map">
-            <Option name="child_id" type="QString" value="native:fieldcalculator_50"/>
+            <Option name="child_id" type="QString" value="native:fieldcalculator_3"/>
             <Option name="output_name" type="QString" value="OUTPUT"/>
             <Option name="source" type="int" value="1"/>
           </Option>
@@ -3540,8 +3540,8 @@
       </Option>
       <Option name="component_description" type="QString" value="Field calculator Aantal_Adressen_In_Onderbemalingen"/>
       <Option name="component_height" type="double" value="30"/>
-      <Option name="component_pos_x" type="double" value="446.984282399769"/>
-      <Option name="component_pos_y" type="double" value="1046.308972503618"/>
+      <Option name="component_pos_x" type="double" value="1158.984282399769"/>
+      <Option name="component_pos_y" type="double" value="1425.308972503618"/>
       <Option name="component_width" type="double" value="353.00000000000006"/>
       <Option name="dependencies"/>
       <Option name="id" type="QString" value="native:fieldcalculator_50"/>
@@ -3581,8 +3581,8 @@
         </Option>
         <Option name="INPUT" type="List">
           <Option type="Map">
-            <Option name="child_id" type="QString" value="native:fieldcalculator_3"/>
-            <Option name="output_name" type="QString" value="OUTPUT"/>
+            <Option name="child_id" type="QString" value="GeoDynTools:calc fields upstream_1"/>
+            <Option name="output_name" type="QString" value="Output_layer"/>
             <Option name="source" type="int" value="1"/>
           </Option>
         </Option>

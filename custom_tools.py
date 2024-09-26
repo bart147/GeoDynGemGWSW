@@ -75,21 +75,21 @@ default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
 #     #QgsProject.instance().reloadAllLayers() 
 #     return results, context, feedback
 
-def rename_layers(results, context, feedback):
-    #QgsProject.instance().reloadAllLayers() 
-    for key in results:
-        result = results[key]
-        if context.willLoadLayerOnCompletion(result):
-            feedback.pushInfo("rename layer to {}".format(key))
-            if context.willLoadLayerOnCompletion(result):
-                layer_details = context.layerToLoadOnCompletionDetails(result)
-                layer_details.name = "My output"
-            style = os.path.join(cmd_folder, "styles", key + ".qml")
-            if os.path.exists(style):
-                layer = context.getMapLayer(results[key])
-                layer.loadNamedStyle(style)
-    #QgsProject.instance().reloadAllLayers() 
-    return results, context, feedback
+# def rename_layers(results, context, feedback):
+#     #QgsProject.instance().reloadAllLayers() 
+#     for key in results:
+#         result = results[key]
+#         if context.willLoadLayerOnCompletion(result):
+#             feedback.pushInfo("rename layer to {}".format(key))
+#             if context.willLoadLayerOnCompletion(result):
+#                 layer_details = context.layerToLoadOnCompletionDetails(result)
+#                 layer_details.name = "My output"
+#             style = os.path.join(cmd_folder, "styles", key + ".qml")
+#             if os.path.exists(style):
+#                 layer = context.getMapLayer(results[key])
+#                 layer.loadNamedStyle(style)
+#     #QgsProject.instance().reloadAllLayers() 
+#     return results, context, feedback
 
 def default_layer(wildcard, geometryType=None):
     """
@@ -648,8 +648,12 @@ class CustomToolAllFunctionsAlgorithm(CustomToolBasicAlgorithm):
             if layer.fields().indexFromName(field_name) == -1:
                 feedback.pushWarning("The field {} does not exist in layer {}!".format(field_name, layer.name()))
                 fields_missing += 1
+                # Add the new field to the layer
+                feedback.pushWarning(f"Adding missing field {field_name}")
+                layer.dataProvider().addAttributes([QgsField(field_name, QVariant.Double)])
+
         if fields_missing > 0:
-            feedback.pushWarning(f"{fields_missing} fields missing. script terminated")
+            feedback.pushWarning(f"{fields_missing} fields missing in input.")
         
         us_fields = set()
         layer.startEditing()
