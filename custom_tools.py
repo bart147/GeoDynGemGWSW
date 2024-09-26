@@ -27,7 +27,8 @@ from qgis.core import (QgsProcessing,
                        QgsMapLayerType,
                        QgsLayerTreeGroup,
                        QgsVectorFileWriter,
-                       QgsProcessingParameterNumber)
+                       QgsProcessingParameterNumber,
+                       QgsWkbTypes)
 from qgis.core import QgsVectorLayer, QgsField, QgsProcessingParameterFile, QgsProcessingParameterString, QgsProcessingParameterVectorLayer, QgsProcessingMultiStepFeedback
 from qgis.core import QgsExpression, QgsFeatureRequest, QgsExpressionContextScope, QgsExpressionContext, QgsProcessingLayerPostProcessorInterface
 from qgis.PyQt.QtCore import QVariant
@@ -38,41 +39,41 @@ from .Dijkstra import Graph, dijkstra
 cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
 default_inp_fields = os.path.join(cmd_folder, 'inp_fields.csv')
 
-class Renamer (QgsProcessingLayerPostProcessorInterface):
-    def __init__(self, layer_name):
-        self.name = layer_name
-        super().__init__()
+# class Renamer (QgsProcessingLayerPostProcessorInterface):
+#     def __init__(self, layer_name):
+#         self.name = layer_name
+#         super().__init__()
         
-    def postProcessLayer(self, layer, context, feedback):
-        layer.setName(self.name)
+#     def postProcessLayer(self, layer, context, feedback):
+#         layer.setName(self.name)
 
-def return_result_group():
-    '''depricated...'''
-    selNodes = iface.layerTreeView().selectedNodes()
-    selNode = selNodes[0] if selNodes else None
-    if isinstance(selNode, QgsLayerTreeGroup):
-        group = selNode
-    else:
-        root = QgsProject.instance().layerTreeRoot()
-        group = root.addGroup('Results')
-    return group
+# def return_result_group():
+#     '''depricated...'''
+#     selNodes = iface.layerTreeView().selectedNodes()
+#     selNode = selNodes[0] if selNodes else None
+#     if isinstance(selNode, QgsLayerTreeGroup):
+#         group = selNode
+#     else:
+#         root = QgsProject.instance().layerTreeRoot()
+#         group = root.addGroup('Results')
+#     return group
 
-def rename_layers_old(results, context, feedback):
-    #QgsProject.instance().reloadAllLayers() 
-    for key in results:
-        if context.willLoadLayerOnCompletion(results[key]):
-            random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
-            global_key = key + "_" + random_string 
-            feedback.pushInfo("rename layer to {}".format(key))
-            globals()[global_key] = Renamer(key) #create unique global renamer instances
-            context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
-            # add style
-            style = os.path.join(cmd_folder, "styles", key + ".qml")
-            if os.path.exists(style):
-                layer = context.getMapLayer(results[key])
-                layer.loadNamedStyle(style)
-    #QgsProject.instance().reloadAllLayers() 
-    return results, context, feedback
+# def rename_layers_old(results, context, feedback):
+#     #QgsProject.instance().reloadAllLayers() 
+#     for key in results:
+#         if context.willLoadLayerOnCompletion(results[key]):
+#             random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(10))
+#             global_key = key + "_" + random_string 
+#             feedback.pushInfo("rename layer to {}".format(key))
+#             globals()[global_key] = Renamer(key) #create unique global renamer instances
+#             context.layerToLoadOnCompletionDetails(results[key]).setPostProcessor(globals()[global_key])
+#             # add style
+#             style = os.path.join(cmd_folder, "styles", key + ".qml")
+#             if os.path.exists(style):
+#                 layer = context.getMapLayer(results[key])
+#                 layer.loadNamedStyle(style)
+#     #QgsProject.instance().reloadAllLayers() 
+#     return results, context, feedback
 
 def rename_layers(results, context, feedback):
     #QgsProject.instance().reloadAllLayers() 
@@ -118,6 +119,19 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
         super().__init__(*args, **kwargs)
         self.final_layers = { }
 
+    def sort_key(self, item):
+        """sort layers on geometry"""
+        layer = item[1]
+        geom_type = layer.geometryType()
+        if geom_type == QgsWkbTypes.PointGeometry:
+            return 0
+        elif geom_type == QgsWkbTypes.LineGeometry:
+            return 1
+        elif geom_type == QgsWkbTypes.PolygonGeometry:
+            return 2
+        else:
+            return 3  # For any other geometry types
+    
     def postProcessAlgorithm(self, context, feedback):
         #QgsProject.instance().reloadAllLayers() 
         project = context.project()
@@ -134,24 +148,19 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             feedback.pushWarning(f"no result_folder was given, layers are written to default {result_folder}")
         #result_folder = r'G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\2022\JHSW\results'
         rename = {}
-        for index, item in enumerate(self.final_layers.items()):
+
+        sorted_layers = sorted(self.final_layers.items(), key=self.sort_key)
+
+        for index, item in enumerate(sorted_layers):
             
             layer = item[1]
             layername = item[0]
-            # feedback.pushInfo("layer.id = {}".format(layer.id()))
-            # feedback.pushInfo("layer.name = {}".format(layer.name()))
-            # feedback.pushInfo("layername = {}".format(layername))
-            #rename[layer.id()] = layername
-            #layer.setName(item[0])
+
             if result_folder:
                 layer_path = os.path.join (result_folder, layername+".gpkg")
                 QgsVectorFileWriter.writeAsVectorFormat(layer, layer_path, 'utf-8', layer.crs())
                 layer = QgsVectorLayer(layer_path, layername, 'ogr')
 
-            # 'tbv' in layername or \
-            #     'Eindresultaat' in layername or \
-            #     'Gebiedsgegevens_lijn' in layername or \
-            #     'Eindpunten' in layername or \
             if any(txt in layername for txt in [
                 'tbv', 'Eindresultaat', 'Gebiedsgegevens_lijn', 'Eindpunten', 'Resultaat']) or \
                 layername in ['LeidingenNietMeegenomen', 'Afvoerboom']: # promote these to hoofdresultaten
@@ -162,34 +171,11 @@ class QgsProcessingAlgorithmPost(QgsProcessingAlgorithm):
             # add style
             style = os.path.join(cmd_folder, "styles", layername + ".qml")
             if os.path.exists(style):
-                #layer = context.getMapLayer(results[key])
                 layer.loadNamedStyle(style)
             
-            project.addMapLayers([layer], False)
-            if 'Eindpunten' in layername: # Eindpunten always on top
-                index = 0
-            elif 'Bemalingsgebieden' in layername:
-                index = 99
-            else:
-                index = 1 
-            group_to_add.insertLayer(int(index), layer)
-            # if group_to_add == subgroup:
-            #     #set invisable
-            #     node = QgsProject.instance().layerTreeRoot().findLayer(layer)
-            #     if node:
-            #         node.setItemVisibilityChecked(False)
-
+            project.addMapLayers([layer], False)        
+            group_to_add.addLayer(layer)
         
-        # layers = QgsProject.instance().mapLayers()
-        # for layerid in layers:
-        #     if layerid in rename:
-        #         layer = layers[layerid]
-        #         feedback.pushInfo("layerid = {}".format(layerid))
-        #         feedback.pushInfo("layer.name = {}".format(layers[layerid].name()))
-        #         feedback.pushInfo("rename to = {}".format(rename[layerid]))
-        #         layer.setName(rename[layerid])
-
-        #QgsProject.instance().reloadAllLayers() 
         self.final_layers.clear()
         return {}
 

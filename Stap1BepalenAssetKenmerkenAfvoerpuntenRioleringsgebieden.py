@@ -13,7 +13,7 @@ from qgis.core import QgsProcessingParameterMapLayer
 from qgis.core import QgsProcessingParameterNumber
 from qgis.core import QgsProcessingParameterFeatureSink
 from qgis.core import QgsProject, QgsProcessingUtils, QgsProcessingParameterFile
-from qgis.core import QgsCoordinateReferenceSystem
+from qgis.core import QgsCoordinateReferenceSystem, QgsProcessingParameterDefinition
 import processing
 import os
 from .custom_tools import rename_layers, default_layer, QgsProcessingAlgorithmPost, cmd_folder
@@ -67,7 +67,6 @@ class GeodynGwswStap1BepalenAssetkenmerkenAfvoerpuntenRioleringsgebieden(QgsProc
         # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_afvoerboom', 'Resultaat_Stap1_Afvoerboom', type=QgsProcessing.TypeVectorLine, createByDefault=True, defaultValue=None))
         # self.addParameter(QgsProcessingParameterFeatureSink('Resultaat_stap1_rioleringsgebieden', 'Resultaat_Stap1_Rioleringsgebieden', optional=True, type=QgsProcessing.TypeVectorAnyGeometry, createByDefault=True, defaultValue=None))
         # self.addParameter(QgsProcessingParameterFile('result_folder', 'resultaatmap', behavior=QgsProcessingParameterFile.Folder, fileFilter='All files (*.*)', defaultValue=os.path.join(cmd_folder, "results")))     
-
 
     def processAlgorithm(self, parameters, context, model_feedback):
         # Use a multi-step feedback, so that individual child algorithm progress reports are adjusted for the
