@@ -742,8 +742,8 @@
       </Option>
       <Option value="Aggregate Leidingberging_m3 per Stelsel_ID" name="component_description" type="QString"/>
       <Option value="46.7663198896978" name="component_height" type="double"/>
-      <Option value="1737.9943823098931" name="component_pos_x" type="double"/>
-      <Option value="1139.2194741462463" name="component_pos_y" type="double"/>
+      <Option value="1633.9943823098931" name="component_pos_x" type="double"/>
+      <Option value="1200.2194741462463" name="component_pos_y" type="double"/>
       <Option value="234.92983310353728" name="component_width" type="double"/>
       <Option name="dependencies"/>
       <Option value="native:aggregate_7" name="id" type="QString"/>
@@ -798,17 +798,6 @@
                 <Option value="type" name="input" type="QString"/>
                 <Option value="0" name="length" type="int"/>
                 <Option value="Leidingtypen_In_Stelsel" name="name" type="QString"/>
-                <Option value="0" name="precision" type="int"/>
-                <Option value="0" name="sub_type" type="int"/>
-                <Option value="10" name="type" type="int"/>
-                <Option value="text" name="type_name" type="QString"/>
-              </Option>
-              <Option type="Map">
-                <Option value="concatenate_unique" name="aggregate" type="QString"/>
-                <Option value="," name="delimiter" type="QString"/>
-                <Option value="stelseltype" name="input" type="QString"/>
-                <Option value="0" name="length" type="int"/>
-                <Option value="Stelseltypen_In_Stelsel" name="name" type="QString"/>
                 <Option value="0" name="precision" type="int"/>
                 <Option value="0" name="sub_type" type="int"/>
                 <Option value="10" name="type" type="int"/>
@@ -1662,18 +1651,18 @@
       <Option value="native:extractbyexpression" name="alg_id" type="QString"/>
       <Option value="" name="color" type="QString"/>
       <Option name="comment" type="Map">
-        <Option value="255,127,0,255" name="color" type="QString"/>
-        <Option value="Hier wordt nu stelseltype geselecteerd" name="component_description" type="QString"/>
+        <Option value="" name="color" type="QString"/>
+        <Option value="" name="component_description" type="QString"/>
         <Option value="60" name="component_height" type="double"/>
-        <Option value="1000" name="component_pos_x" type="double"/>
-        <Option value="537" name="component_pos_y" type="double"/>
+        <Option value="1271" name="component_pos_x" type="double"/>
+        <Option value="1024" name="component_pos_y" type="double"/>
         <Option value="100" name="component_width" type="double"/>
         <Option value="true" name="outputs_collapsed" type="bool"/>
         <Option value="true" name="parameters_collapsed" type="bool"/>
       </Option>
-      <Option value="Extract by expression Vuilwaterriool en Gemengd - RIOOLSTELSEL" name="component_description" type="QString"/>
+      <Option value="Extract by expression Vuilwaterriool en Gemengd riool" name="component_description" type="QString"/>
       <Option value="64" name="component_height" type="double"/>
-      <Option value="1258.5" name="component_pos_x" type="double"/>
+      <Option value="1258" name="component_pos_x" type="double"/>
       <Option value="531" name="component_pos_y" type="double"/>
       <Option value="200" name="component_width" type="double"/>
       <Option name="dependencies"/>
@@ -1685,7 +1674,7 @@
         <Option name="EXPRESSION" type="List">
           <Option type="Map">
             <Option value="2" name="source" type="int"/>
-            <Option value="(&quot;stelseltype&quot; LIKE '%uilwat%' OR&#xd;&#xa;&quot;stelseltype&quot; LIKE '%emengd%' ) AND &#xd;&#xa;&quot;type&quot; NOT LIKE '%rukrio%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%ersleid%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%acuumlei%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%eesleid%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%ozelei%' AND&#xd;&#xa;&quot;Bemalingsgebied_ID&quot; IS NOT NULL" name="static_value" type="QString"/>
+            <Option value="(&quot;type&quot; LIKE '%erg%' OR&#xd;&#xa;&quot;type&quot; LIKE '%emengd%' OR&#xd;&#xa;&quot;type&quot; LIKE '%uilwate%' ) AND &quot;Bemalingsgebied_ID&quot; IS NOT NULL" name="static_value" type="QString"/>
           </Option>
         </Option>
         <Option name="INPUT" type="List">
@@ -1852,11 +1841,11 @@
       <Option value="native:extractbyexpression" name="alg_id" type="QString"/>
       <Option value="" name="color" type="QString"/>
       <Option name="comment" type="Map">
-        <Option value="255,127,0,255" name="color" type="QString"/>
-        <Option value="Gaat nu op basis van steslseltype" name="component_description" type="QString"/>
+        <Option value="" name="color" type="QString"/>
+        <Option value="" name="component_description" type="QString"/>
         <Option value="60" name="component_height" type="double"/>
-        <Option value="1848" name="component_pos_x" type="double"/>
-        <Option value="181" name="component_pos_y" type="double"/>
+        <Option value="1871" name="component_pos_x" type="double"/>
+        <Option value="1024" name="component_pos_y" type="double"/>
         <Option value="100" name="component_width" type="double"/>
         <Option value="true" name="outputs_collapsed" type="bool"/>
         <Option value="true" name="parameters_collapsed" type="bool"/>
@@ -1911,7 +1900,7 @@
         <Option name="EXPRESSION" type="List">
           <Option type="Map">
             <Option value="2" name="source" type="int"/>
-            <Option value="(&quot;stelseltype&quot; LIKE '%uilwat%' OR&#xd;&#xa;&quot;stelseltype&quot; LIKE '%emengd%' ) AND &#xd;&#xa;&quot;type&quot; NOT LIKE '%rukrio%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%ersleid%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%acuumlei%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%eesleid%' AND&#xd;&#xa;&quot;type&quot; NOT LIKE '%ozelei%' AND&#xd;&#xa;&quot;Bemalingsgebied_ID&quot; IS NULL&#xd;&#xa;" name="static_value" type="QString"/>
+            <Option value="(&quot;type&quot; LIKE '%erg%' OR&#xd;&#xa;&quot;type&quot; LIKE '%emengd%' OR&#xd;&#xa;&quot;type&quot; LIKE '%uilwate%' ) AND &quot;Bemalingsgebied_ID&quot; IS NULL" name="static_value" type="QString"/>
           </Option>
         </Option>
         <Option name="INPUT" type="List">
@@ -3842,16 +3831,16 @@
         <Option value="" name="color" type="QString"/>
         <Option value="" name="component_description" type="QString"/>
         <Option value="60" name="component_height" type="double"/>
-        <Option value="1012" name="component_pos_x" type="double"/>
-        <Option value="541" name="component_pos_y" type="double"/>
+        <Option value="1099" name="component_pos_x" type="double"/>
+        <Option value="850" name="component_pos_y" type="double"/>
         <Option value="100" name="component_width" type="double"/>
         <Option value="true" name="outputs_collapsed" type="bool"/>
         <Option value="true" name="parameters_collapsed" type="bool"/>
       </Option>
       <Option value="Join attributes by location Bemalingsgebied_ID aan leidingen" name="component_description" type="QString"/>
       <Option value="54" name="component_height" type="double"/>
-      <Option value="1128" name="component_pos_x" type="double"/>
-      <Option value="405" name="component_pos_y" type="double"/>
+      <Option value="1126" name="component_pos_x" type="double"/>
+      <Option value="406" name="component_pos_y" type="double"/>
       <Option value="200" name="component_width" type="double"/>
       <Option name="dependencies"/>
       <Option value="native:joinattributesbylocation_1" name="id" type="QString"/>
@@ -5810,7 +5799,6 @@
             <Option value="2" name="source" type="int"/>
             <Option name="static_value" type="StringList">
               <Option value="Leidingtypen_In_Stelsel" type="QString"/>
-              <Option value="Stelseltypen_In_Stelsel" type="QString"/>
               <Option value="Stelselnamen" type="QString"/>
               <Option value="Leidingberging_m3" type="QString"/>
               <Option value="Knooppuntberging_m3" type="QString"/>
@@ -6145,11 +6133,11 @@
       <Option value="native:retainfields" name="alg_id" type="QString"/>
       <Option value="" name="color" type="QString"/>
       <Option name="comment" type="Map">
-        <Option value="255,127,0,255" name="color" type="QString"/>
-        <Option value="Hier is stelseltype toegevoegd" name="component_description" type="QString"/>
+        <Option value="" name="color" type="QString"/>
+        <Option value="" name="component_description" type="QString"/>
         <Option value="60" name="component_height" type="double"/>
-        <Option value="1091" name="component_pos_x" type="double"/>
-        <Option value="213.5" name="component_pos_y" type="double"/>
+        <Option value="1001" name="component_pos_x" type="double"/>
+        <Option value="251.5" name="component_pos_y" type="double"/>
         <Option value="100" name="component_width" type="double"/>
         <Option value="true" name="outputs_collapsed" type="bool"/>
         <Option value="true" name="parameters_collapsed" type="bool"/>
@@ -6173,7 +6161,6 @@
               <Option value="Stelsel" type="QString"/>
               <Option value="naam" type="QString"/>
               <Option value="type" type="QString"/>
-              <Option value="stelseltype" type="QString"/>
               <Option value="beginpunt" type="QString"/>
               <Option value="eindpunt" type="QString"/>
               <Option value="VormLeiding" type="QString"/>
@@ -6333,6 +6320,7 @@
         </Option>
       </Option>
     </Option>
+    <Option value="C:/Users/Jafeth/Desktop/test.gpkg" name="gpkg" type="QString"/>
     <Option name="knooppuntberging_m3" type="QgsProcessingOutputLayerDefinition">
       <Option type="Map">
         <Option name="create_options" type="Map">
@@ -6369,9 +6357,9 @@
         </Option>
       </Option>
     </Option>
-    <Option value="netwerk_knooppunt_bb9b9cce_ce24_433f_91a1_9338dfe0895a" name="netwerk_knooppunt" type="QString"/>
-    <Option value="netwerk_kunstwerk_cc71038c_1263_4773_949a_2958533fb8ff" name="netwerk_kunstwerk" type="QString"/>
-    <Option value="netwerk_verbinding_ad8d3d75_3a27_4aab_8cb1_86adccb42c7d" name="netwerk_verbinding" type="QString"/>
+    <Option value="netwerk_knooppunt_9fd5c0d0_aca9_4fb7_a062_f8129e7acfd7" name="netwerk_knooppunt" type="QString"/>
+    <Option value="netwerk_kunstwerk_5e30d1c2_1eda_46fc_ae55_b920c11dfd54" name="netwerk_kunstwerk" type="QString"/>
+    <Option value="netwerk_verbinding_db525410_7293_4109_acc1_189078651c10" name="netwerk_verbinding" type="QString"/>
     <Option name="resultaat_stap1_afvoerboom" type="QgsProcessingOutputLayerDefinition">
       <Option type="Map">
         <Option name="create_options" type="Map">
@@ -6432,20 +6420,8 @@
         </Option>
       </Option>
     </Option>
-    <Option value="Rioleringsgebieden_f2b8fa3b_fbde_453f_9ab6_60ab6f0adacd" name="rioleringsgebieden" type="QString"/>
+    <Option value="Rioleringsgebieden_6bc8eb0b_4488_4e9b_94ee_0bd2855fac80" name="rioleringsgebieden" type="QString"/>
     <Option name="rioolgemalen" type="QgsProcessingOutputLayerDefinition">
-      <Option type="Map">
-        <Option name="create_options" type="Map">
-          <Option value="windows-1252" name="fileEncoding" type="QString"/>
-        </Option>
-        <Option name="sink" type="Map">
-          <Option value="true" name="active" type="bool"/>
-          <Option value="1" name="type" type="int"/>
-          <Option value="TEMPORARY_OUTPUT" name="val" type="QString"/>
-        </Option>
-      </Option>
-    </Option>
-    <Option name="rioolgemalen_zonder_afvoerrelatie" type="QgsProcessingOutputLayerDefinition">
       <Option type="Map">
         <Option name="create_options" type="Map">
           <Option value="windows-1252" name="fileEncoding" type="QString"/>
@@ -6505,7 +6481,7 @@
         </Option>
       </Option>
     </Option>
-    <Option name="vuilwaterriolen_en_gemengd_riolen_die_niet_meedoen_in_bergingsberekening" type="QgsProcessingOutputLayerDefinition">
+    <Option name="vuilwaterriool_en_gemengd_riool_die_niet_meedoen_in_bergingsberekening" type="QgsProcessingOutputLayerDefinition">
       <Option type="Map">
         <Option name="create_options" type="Map">
           <Option value="windows-1252" name="fileEncoding" type="QString"/>
@@ -6634,7 +6610,7 @@
   <Option value="Version2" name="internal_version" type="QString"/>
   <Option name="modelVariables"/>
   <Option value="GeoDyn GWSW" name="model_group" type="QString"/>
-  <Option value="20240930 GeoDyn GWSW stap 1 - Bepalen assetkenmerken afvoerpunten rioleringsgebieden" name="model_name" type="QString"/>
+  <Option value="20240624 GeoDyn GWSW stap 1 - Bepalen assetkenmerken afvoerpunten rioleringsgebieden" name="model_name" type="QString"/>
   <Option value="" name="outputGroup" type="QString"/>
   <Option name="outputOrder"/>
   <Option name="parameterDefinitions" type="Map">
