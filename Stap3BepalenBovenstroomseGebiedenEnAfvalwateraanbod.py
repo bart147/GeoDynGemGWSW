@@ -66,6 +66,28 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         results = {}
         outputs = {}
 
+        # Retain fields Bemalingsgebied_ID_Afvoerpunt
+        alg_params = {
+            'FIELDS': ['Bemalingsgebied_ID_Afvoerpunt'],
+            'INPUT': parameters['resultaat_stap1_afvoerpunten'],
+            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
+        }
+        outputs['RetainFieldsBemalingsgebied_id_afvoerpunt'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(1)
+        if feedback.isCanceled():
+            return {}
+
+        # Create spatial index
+        alg_params = {
+            'INPUT': parameters['resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied']
+        }
+        outputs['CreateSpatialIndex'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(2)
+        if feedback.isCanceled():
+            return {}
+
         # Field calculator Afvoerrelatie Stap3_datum
         alg_params = {
             'FIELD_LENGTH': 50,
@@ -78,42 +100,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorAfvoerrelatieStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(1)
-        if feedback.isCanceled():
-            return {}
-
-        # Retain fields Bemalingsgebied_ID_Afvoerpunt
-        alg_params = {
-            'FIELDS': ['Bemalingsgebied_ID_Afvoerpunt'],
-            'INPUT': parameters['resultaat_stap1_afvoerpunten'],
-            'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
-        }
-        outputs['RetainFieldsBemalingsgebied_id_afvoerpunt'] = processing.run('native:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(2)
-        if feedback.isCanceled():
-            return {}
-
-        # retainfields Resultaat_Stap1_Afvoerrelatie
-        alg_params = {
-            'inputlayer': outputs['FieldCalculatorAfvoerrelatieStap3_datum']['OUTPUT'],
-            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
-            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerrelatie']
-        }
-        outputs['RetainfieldsResultaat_stap1_afvoerrelatie'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap3_rioleringsgebieden_afvoerrelatie'] = outputs['RetainfieldsResultaat_stap1_afvoerrelatie']['Output_layer']
-
         feedback.setCurrentStep(3)
-        if feedback.isCanceled():
-            return {}
-
-        # Create spatial index
-        alg_params = {
-            'INPUT': parameters['resultaat_stap_2_rioleringsgebieden_met_afvalwateraanbod_uit_eigen_gebied']
-        }
-        outputs['CreateSpatialIndex'] = processing.run('native:createspatialindex', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-
-        feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
@@ -129,20 +116,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
         }
         outputs['FieldCalculatorAfvoerboomStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
-        feedback.setCurrentStep(5)
-        if feedback.isCanceled():
-            return {}
-
-        # retainfields Resultaat_Stap1_Afvoerboom
-        alg_params = {
-            'inputlayer': outputs['FieldCalculatorAfvoerboomStap3_datum']['OUTPUT'],
-            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
-            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerboom']
-        }
-        outputs['RetainfieldsResultaat_stap1_afvoerboom'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        results['Resultaat_stap3_rioleringsgebieden_afvoerboom'] = outputs['RetainfieldsResultaat_stap1_afvoerboom']['Output_layer']
-
-        feedback.setCurrentStep(6)
+        feedback.setCurrentStep(4)
         if feedback.isCanceled():
             return {}
 
@@ -157,6 +131,32 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
         outputs['FieldCalculatorStap3_datum'] = processing.run('native:fieldcalculator', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+
+        feedback.setCurrentStep(5)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields Resultaat_Stap1_Afvoerrelatie
+        alg_params = {
+            'inputlayer': outputs['FieldCalculatorAfvoerrelatieStap3_datum']['OUTPUT'],
+            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
+            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerrelatie']
+        }
+        outputs['RetainfieldsResultaat_stap1_afvoerrelatie'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_afvoerrelatie'] = outputs['RetainfieldsResultaat_stap1_afvoerrelatie']['Output_layer']
+
+        feedback.setCurrentStep(6)
+        if feedback.isCanceled():
+            return {}
+
+        # retainfields Resultaat_Stap1_Afvoerboom
+        alg_params = {
+            'inputlayer': outputs['FieldCalculatorAfvoerboomStap3_datum']['OUTPUT'],
+            'veldenlijst': 'Rioolgemaal;Beginpunt_Afvoerrelatie;Eindpunt_Afvoerrelatie;Bemalingsgebied_ID_Afvoerpunt;Bemalingsgebied_ID_Lozingspunt',
+            'Output_layer': parameters['Resultaat_stap3_rioleringsgebieden_afvoerboom']
+        }
+        outputs['RetainfieldsResultaat_stap1_afvoerboom'] = processing.run('GeoDynTools:retainfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['Resultaat_stap3_rioleringsgebieden_afvoerboom'] = outputs['RetainfieldsResultaat_stap1_afvoerboom']['Output_layer']
 
         feedback.setCurrentStep(7)
         if feedback.isCanceled():
@@ -912,7 +912,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_NAME': 'Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimaal (double)
-            'FORMULA': 'if("Sommatie_DWA_BAG_m3h"=>0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_DWA_BAG_m3h",2),0)',
+            'FORMULA': 'if("Sommatie_DWA_BAG_m3h">=0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_DWA_BAG_m3h",2),0)',
             'INPUT': outputs['FieldCalculatorSommatie_extra_dwa_periode_4050_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }

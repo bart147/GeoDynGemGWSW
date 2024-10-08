@@ -6,7 +6,7 @@
 name=GeoDynGem GWSW
 qgisMinimumVersion=3.28
 description=sewerage prognosis tool for municipalities with support for GWSW-standard
-version=2.1
+version=2.2
 author=bkgis
 email=b.kropf@bkgis.nl
 
@@ -21,6 +21,7 @@ repository=https://github.com/bart147/GeoDynGemGWSW
 hasProcessingProvider=yes
 # Uncomment the following line and add your changelog:
 changelog=
+    2.2 - (2024-10-08) bug fix
     2.1 - (2024-10-08) stable release 2024
 	2.0 - (2024-10-08) stable release 2024
     1.0 - (2023-12-20) first stable release
