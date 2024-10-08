@@ -24,6 +24,6 @@ https://github.com/bart147/GeoDynGemGWSW/blob/master/doc/HandleidingGeoDynGemGWS
 
 # Test data
 Some imaginary data for testing can be downloaded from the repo:
-https://github.com/bart147/GeoDynGemGWSW/blob/main/input_test_gpkg/BergenNH_testdata.zip
+https://github.com/bart147/GeoDynGemGWSW/blob/main/input_test_gpkg/Testbestanden_GeoDyn.zip
 
 

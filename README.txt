@@ -1,10 +1,10 @@
 Plugin Builder Results
 
 Your plugin GeoDynGemGWSW was created in:
-    G:\02_Werkplaatsen\07_IAN\bk\projecten\GeoDynGem\test_plugin\GeoDynGemGWSW
+    .\test_plugin\GeoDynGemGWSW
 
 Your QGIS plugin directory is located at:
-    C:/Users/bkropf/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins
+    ./plugins
 
 What's Next:
 
