@@ -912,7 +912,7 @@ class GeodynGwswStap3BepalenBovenstroomseGebiedenEnAfvalwateraanbod(QgsProcessin
             'FIELD_NAME': 'Afvalwateraanbod_obv_BAG_En_POC_Theorie_m3h',
             'FIELD_PRECISION': 2,
             'FIELD_TYPE': 0,  # Decimaal (double)
-            'FORMULA': 'if("Sommatie_DWA_BAG_m3h">0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_DWA_BAG_m3h",2),0)',
+            'FORMULA': 'if("Sommatie_DWA_BAG_m3h"=>0,round("Sommatie_POC_Theorie_Totaal_m3h"+"Sommatie_DWA_BAG_m3h",2),0)',
             'INPUT': outputs['FieldCalculatorSommatie_extra_dwa_periode_4050_m3h']['OUTPUT'],
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
         }
